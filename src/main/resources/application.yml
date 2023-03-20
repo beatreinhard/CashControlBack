@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: cashcontrol-service
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:TestDB
+    username: sa
+    password:
+  flyway:
+    locations: classpath:db/migration/
+    clean-on-validation-error: true
+    default-schema: CASHCONTROL
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+server:
+  port: 8080
+  servlet:
+    context-path: /cash-control
+  compression:
+    enabled: true
+
+logging:
+  pattern:
+    level: '[%X{correlationId}] %5p'
+  level:
+    ch.reinhard: INFO
+#    org.flywaydb: DEBUG
+
+
