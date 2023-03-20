@@ -47,7 +47,6 @@ public class ZahlungServiceIT {
 
         // THEN
         assertEquals(id, createdZahlung.getId());
-
     }
 
     @Test
@@ -114,7 +113,7 @@ public class ZahlungServiceIT {
     }
 
     @Test
-    public void findById() {
+    public void getZahlungById() {
         // GIVEN
         var empfaenger = "Hans Kummer, Bern";
         var zahlungDto = new ZahlungDetailsDto(

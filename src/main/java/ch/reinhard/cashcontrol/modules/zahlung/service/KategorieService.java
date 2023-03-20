@@ -1,11 +1,20 @@
 package ch.reinhard.cashcontrol.modules.zahlung.service;
 
+import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.JpaKategorieRepository;
+import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.KategorieEntity;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.KategorieDto;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static ch.reinhard.cashcontrol.modules.zahlung.service.KategorieEntityMapper.toKategorieDto;
+import static ch.reinhard.cashcontrol.modules.zahlung.service.KategorieEntityMapper.toKategorieDtoList;
+import static java.lang.String.format;
 
 
 @RequiredArgsConstructor
@@ -14,20 +23,42 @@ public class KategorieService {
 
     private final JpaKategorieRepository kategorieRepository;
 
-//    @Transactional
-//    public KategorieDto createKategorie(KategorieDto kategorieDto) {
-//        var id = IdGenerator.generateId();
-//        kategorieDto.id(id);
-//        var kategorieEntity =  kategorieRepository.save(KategorieEntityMapper.toKategorieEntity(kategorieDto));
-//        return KategorieEntityMapper.toKategorieDto(kategorieEntity);
-//    }
+    @Transactional
+    public String createKategorie(String bezeichnung) {
+        var kategorie = new KategorieEntity(IdGenerator.generateId(), bezeichnung);
+        var kategorieEntity =  kategorieRepository.save(kategorie);
+        return kategorieEntity.getId();
+    }
 
     @Transactional(readOnly = true)
-    public KategorieDto findKategorieById(String id) {
-        var kategorieEntityOptional = kategorieRepository.findById(id);
-        if (kategorieEntityOptional.isPresent()) {
-            return KategorieEntityMapper.toKategorieDto(kategorieEntityOptional.get());
+    public KategorieDto getKategorieById(String id) {
+        var kategorieEntity = kategorieRepository.findById(id).orElseThrow(() -> new NoResultException("Kategorie nicht gefunden mit ID="+id));
+        return toKategorieDto(kategorieEntity);
+    }
+
+    @Transactional(readOnly = true)
+    public List<KategorieDto> getAllKategorie() {
+        var kategorieList = kategorieRepository.findAll();
+        return toKategorieDtoList(kategorieList);
+    }
+
+    @Transactional
+    public void updateKategorie(KategorieDto kategorieDto) {
+        var kategorieEntity = kategorieRepository.findById(kategorieDto.id()).orElseThrow();
+        validateUpdate(kategorieDto, kategorieEntity);
+        kategorieEntity.update(kategorieDto.bezeichnung());
+        kategorieRepository.save(kategorieEntity);
+    }
+
+    @Transactional
+    public void deleteZahlungById(String id) {
+        kategorieRepository.deleteById(id);
+    }
+
+    private void validateUpdate(KategorieDto update, KategorieEntity current) {
+        if (current.getVersion() > update.version()) {
+            throw new OptimisticLockingFailureException(
+                    format("Kategorie with id {0} could not be updated since it was mutated by someone else", update.id()));
         }
-        throw new NoResultException("Kategorie nicht gefunden mit ID="+id);
     }
 }

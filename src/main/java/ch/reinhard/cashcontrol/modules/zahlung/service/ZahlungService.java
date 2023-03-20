@@ -6,6 +6,7 @@ import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.Zahlun
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungUpdateDto;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.zahlung.service.ZahlungEntityMapper.toZahlungEntityDetails;
+import static ch.reinhard.cashcontrol.modules.zahlung.service.ZahlungEntityMapper.*;
 import static java.lang.String.format;
 
 
@@ -23,23 +24,23 @@ public class ZahlungService {
 
     public final JpaZahlungRepository zahlungRepository;
 
-    @Transactional(readOnly = true)
-    public ZahlungDto getZahlungById(String id) {
-        var zahlungEntity =  zahlungRepository.findById(id).orElseThrow();
-        return ZahlungEntityMapper.toZahlungDto(zahlungEntity);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ZahlungDto> getAllZahlung() {
-        var zahlungList = zahlungRepository.findAll();
-        return ZahlungEntityMapper.mapToZahlungDtoList(zahlungList);
-    }
-
     @Transactional
     public String createZahlung(ZahlungDetailsDto zahlungDetailsDto) {
         var zahlung = new ZahlungEntity(IdGenerator.generateId(), toZahlungEntityDetails(zahlungDetailsDto));
         var zahlungEntity =  zahlungRepository.save(zahlung);
         return zahlungEntity.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public ZahlungDto getZahlungById(String id) {
+        var zahlungEntity =  zahlungRepository.findById(id).orElseThrow(() -> new NoResultException("Zahlung nicht gefunden mit ID="+id));
+        return toZahlungDto(zahlungEntity);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ZahlungDto> getAllZahlung() {
+        var zahlungList = zahlungRepository.findAll();
+        return toZahlungDtoList(zahlungList);
     }
 
     @Transactional
@@ -61,6 +62,5 @@ public class ZahlungService {
                     format("Zahlung with id {0} could not be updated since it was mutated by someone else", update.id()));
         }
     }
-
 
 }

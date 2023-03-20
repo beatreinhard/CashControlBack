@@ -41,7 +41,7 @@ public class ZahlungEntityMapper {
         );
     }
 
-    public static List<ZahlungDto> mapToZahlungDtoList(List<ZahlungEntity> zahlungEntityList) {
+    public static List<ZahlungDto> toZahlungDtoList(List<ZahlungEntity> zahlungEntityList) {
         return zahlungEntityList.stream().map(ZahlungEntityMapper::toZahlungDto).toList();
     }
 }

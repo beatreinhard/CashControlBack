@@ -16,6 +16,7 @@ create index index_kategorie_id on zahlung (
 
 create table kategorie (
     id              varchar(255)    not null primary key,
+    version         bigint,
     bezeichnung     varchar(255)    not null
 );
 

@@ -12,14 +12,14 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "VTKG MILO API",
+                title = "CASHCONTROL API",
                 contact = @Contact(
-                        email = "vtkg@bit.admin.ch",
-                        name = "Team VTG-VTKG",
-                        url = "https://confluence.bit.admin.ch/display/VBSFA/VTKG"
+                        email = "cash@control.ch",
+                        name = "Team CASHCONTROL",
+                        url = "https://control.ch/CASHCONTROL"
                 )
         ),
-        externalDocs = @ExternalDocumentation(url = "https://confluence.bit.admin.ch/display/VBSFA/VTKG"),
+        externalDocs = @ExternalDocumentation(url = "https://control.ch/CASHCONTROL"),
         security = {@SecurityRequirement(name = "OIDC_Enduser")}
 )
 @Configuration

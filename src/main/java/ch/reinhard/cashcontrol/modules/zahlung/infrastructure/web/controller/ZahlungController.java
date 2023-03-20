@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class ZahlungController {
     @Operation(summary = "Alle Zahlungen")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Alle Zahlungen gefunden",
-                    content = { @Content(mediaType = "application/json",
+                    content = { @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ZahlungDto.class)) })
     })
     @GetMapping("/zahlung")
@@ -38,8 +39,8 @@ public class ZahlungController {
 
     @Operation(summary = "Zahlung finden mit ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Zahlung gefunden",
-                    content = { @Content(mediaType = "application/json",
+            @ApiResponse(responseCode = "200", description = "Zahlung mit ID gefunden",
+                    content = { @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ZahlungDto.class)) }),
             @ApiResponse(responseCode = "404", description = "Zahlung nicht gefunden",
                     content = @Content)
@@ -53,7 +54,7 @@ public class ZahlungController {
     @Operation(summary = "Neue Zahlung anlegen")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Zahlung erfasst",
-                    content = @Content(mediaType = "text/plain;charset=UTF-8", schema = @Schema(implementation = String.class)))
+                    content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class)))
     })
     @PostMapping
     public ResponseEntity<String> createZahlung(@Valid @RequestBody ZahlungDetailsDto request) {
