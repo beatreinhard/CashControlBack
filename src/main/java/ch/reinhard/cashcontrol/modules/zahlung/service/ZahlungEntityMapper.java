@@ -6,6 +6,7 @@ import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.Zahlun
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ZahlungEntityMapper {
@@ -17,6 +18,7 @@ public class ZahlungEntityMapper {
                 source.datum(),
                 source.empfaenger(),
                 source.kategorieId(),
+                source.text(),
                 source.betrag()
         );
     }
@@ -26,6 +28,7 @@ public class ZahlungEntityMapper {
                 source.datum(),
                 source.empfaenger(),
                 source.kategorieId(),
+                source.text(),
                 source.betrag()
         );
     }
@@ -37,11 +40,18 @@ public class ZahlungEntityMapper {
                 source.getDatum(),
                 source.getEmpfaenger(),
                 source.getKategorieId(),
+                source.getText(),
                 source.getBetrag()
         );
     }
 
     public static List<ZahlungDto> toZahlungDtoList(List<ZahlungEntity> zahlungEntityList) {
         return zahlungEntityList.stream().map(ZahlungEntityMapper::toZahlungDto).toList();
+    }
+
+    public static List<ZahlungDto> toZahlungDtoList(Iterable<ZahlungEntity> zahlungEntityIterable) {
+        var zahlungEntityList = new ArrayList<ZahlungEntity>();
+        zahlungEntityIterable.forEach(zahlungEntityList::add);
+        return toZahlungDtoList(zahlungEntityList);
     }
 }

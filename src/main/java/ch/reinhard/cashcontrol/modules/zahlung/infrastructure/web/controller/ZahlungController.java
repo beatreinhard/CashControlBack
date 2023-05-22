@@ -1,5 +1,6 @@
 package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.controller;
 
+import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.ZahlungView;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
 import ch.reinhard.cashcontrol.modules.zahlung.service.ZahlungService;
@@ -56,9 +57,21 @@ public class ZahlungController {
             @ApiResponse(responseCode = "201", description = "Zahlung erfasst",
                     content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class)))
     })
-    @PostMapping
+    @PostMapping("/zahlung")
     public ResponseEntity<String> createZahlung(@Valid @RequestBody ZahlungDetailsDto request) {
         var id = zahlungService.createZahlung(request);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Zahlungen suchen")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Zahlungen gefunden",
+                    content = { @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ZahlungDto.class)) })
+    })
+    @GetMapping("/zahlung/search")
+    public List<ZahlungView> getSearchZahlung() {
+        // TODO DTO zurückgeben
+        return zahlungService.searchZahlungen();
     }
 }

@@ -30,6 +30,8 @@ public class ZahlungEntity {
 
     String kategorieId;
 
+    String text;
+
     Long betrag;
 
     public ZahlungEntity(String id, ZahlungEntityDetails details) {
@@ -37,6 +39,7 @@ public class ZahlungEntity {
         this.datum = details.datum;
         this.empfaenger = details.empfaenger;
         this.kategorieId = details.kategorieId;
+        this.text = details.text;
         this.betrag = details.betrag;
     }
 
@@ -44,6 +47,7 @@ public class ZahlungEntity {
         this.datum = details.datum;
         this.empfaenger = details.empfaenger;
         this.kategorieId = details.kategorieId;
+        this.text = details.text;
         this.betrag = details.betrag;
         return this;
     }
@@ -53,6 +57,7 @@ public class ZahlungEntity {
                 this.datum,
                 this.empfaenger,
                 this.kategorieId,
+                this.text,
                 this.betrag
         );
     }

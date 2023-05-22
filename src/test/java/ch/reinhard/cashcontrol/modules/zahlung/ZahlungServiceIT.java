@@ -38,6 +38,7 @@ public class ZahlungServiceIT {
                 LocalDate.now(),
                 "Beat Reinhard, Frutigen",
                 "K1",
+                "Lohn",
                 Long.valueOf("150060")
         );
 
@@ -56,6 +57,7 @@ public class ZahlungServiceIT {
                 LocalDate.now(),
                 "Beat Reinhard, Frutigen",
                 "K1",
+                "Lohn",
                 Long.valueOf("150060")
         );
         var id = zahlungService.createZahlung(zahlungDto);
@@ -67,6 +69,7 @@ public class ZahlungServiceIT {
         var zahlungDetails = new ZahlungDetailsDto(
            createdZahlung.datum(),
            "Neu",
+           "Lohn",
            createdZahlung.kategorieId(),
            createdZahlung.betrag()
         );
@@ -94,12 +97,14 @@ public class ZahlungServiceIT {
                 LocalDate.now(),
                 "Hans Kummer, Bern",
                 "K2",
+                "Lohn",
                 Long.valueOf("159995")
         );
         var zahlungDto2 = new ZahlungDetailsDto(
                 LocalDate.now(),
                 "Beat Reinhard, Frutigen",
                 "K1",
+                "Lohn",
                 Long.valueOf("8310")
         );
         zahlungService.createZahlung(zahlungDto1);
@@ -120,6 +125,7 @@ public class ZahlungServiceIT {
                 LocalDate.now(),
                 empfaenger,
                 "K2",
+                "Lohn",
                 Long.valueOf("159995")
         );
         zahlungService.createZahlung(zahlungDto);
@@ -142,6 +148,7 @@ public class ZahlungServiceIT {
                 LocalDate.now(),
                 empfaenger,
                 "K2",
+                "Lohn",
                 Long.valueOf("159995")
         );
         zahlungService.createZahlung(zahlungDto);
@@ -154,5 +161,33 @@ public class ZahlungServiceIT {
 
         // THEN
         assertThat(zahlungListAfterDelete.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void searchZahlungen() {
+        // GIVEN
+        var zahlungDto1 = new ZahlungDetailsDto(
+                LocalDate.now(),
+                "Hans Kummer, Bern",
+                "K2",
+                "Lohn",
+                Long.valueOf("159995")
+        );
+        var zahlungDto2 = new ZahlungDetailsDto(
+                LocalDate.now(),
+                "Beat Reinhard, Frutigen",
+                "K1",
+                "Lohn",
+                Long.valueOf("8310")
+        );
+        zahlungService.createZahlung(zahlungDto1);
+        zahlungService.createZahlung(zahlungDto2);
+
+        // WHEN
+        var searchEmpfaenger = "Reinhard";
+        var zahlungList = zahlungService.searchZahlungen(searchEmpfaenger);
+
+        // THEN
+        assertEquals(zahlungList.size(), 1);
     }
 }

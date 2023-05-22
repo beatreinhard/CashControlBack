@@ -15,5 +15,6 @@ public class ZahlungEntityDetails {
     LocalDate datum;
     String empfaenger;
     String kategorieId;
+    String text;
     Long betrag;
 }

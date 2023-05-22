@@ -11,5 +11,6 @@ public record ZahlungDto(
     LocalDate datum,
     String empfaenger,
     String kategorieId,
+    String text,
     Long betrag
 ){}

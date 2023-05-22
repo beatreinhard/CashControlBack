@@ -2,8 +2,6 @@ package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface JpaZahlungRepository extends JpaRepository<ZahlungEntity, String>, QuerydslPredicateExecutor<ZahlungEntity> {
+public interface JpaZahlungViewRepository extends JpaRepository<ZahlungView, String>, QuerydslPredicateExecutor<ZahlungView> {
 }

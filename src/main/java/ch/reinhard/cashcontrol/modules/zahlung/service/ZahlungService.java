@@ -1,11 +1,11 @@
 package ch.reinhard.cashcontrol.modules.zahlung.service;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.JpaZahlungRepository;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.ZahlungEntity;
+import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.*;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
 import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungUpdateDto;
+import com.querydsl.core.BooleanBuilder;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -23,6 +23,7 @@ import static java.lang.String.format;
 public class ZahlungService {
 
     public final JpaZahlungRepository zahlungRepository;
+    public final JpaZahlungViewRepository zahlungViewRepository;
 
     @Transactional
     public String createZahlung(ZahlungDetailsDto zahlungDetailsDto) {
@@ -61,6 +62,26 @@ public class ZahlungService {
             throw new OptimisticLockingFailureException(
                     format("Zahlung with id {0} could not be updated since it was mutated by someone else", update.id()));
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<ZahlungDto> searchZahlungen(String empfaenger) {
+
+        var zahlungQuery = QZahlungEntity.zahlungEntity;
+        var booleanBuilder = new BooleanBuilder();
+        if (empfaenger != null) {
+            booleanBuilder.and(zahlungQuery.empfaenger.contains(empfaenger));
+        }
+        var predicate = booleanBuilder.getValue();
+
+        assert booleanBuilder.getValue() != null;
+        var zahlungEntityIterable = zahlungRepository.findAll(predicate);
+
+        return toZahlungDtoList(zahlungEntityIterable);
+    }
+
+    public List<ZahlungView> searchZahlungen() {
+        return zahlungViewRepository.findAll();
     }
 
 }
