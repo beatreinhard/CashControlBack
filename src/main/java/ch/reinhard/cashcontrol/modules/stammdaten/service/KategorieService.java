@@ -1,9 +1,9 @@
-package ch.reinhard.cashcontrol.modules.zahlung.service;
+package ch.reinhard.cashcontrol.modules.stammdaten.service;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.JpaKategorieRepository;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.KategorieEntity;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.KategorieDto;
+import ch.reinhard.cashcontrol.modules.stammdaten.domain.JpaKategorieRepository;
+import ch.reinhard.cashcontrol.modules.stammdaten.domain.KategorieEntity;
+import ch.reinhard.cashcontrol.modules.stammdaten.service.api.KategorieDto;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.zahlung.service.KategorieEntityMapper.toKategorieDto;
-import static ch.reinhard.cashcontrol.modules.zahlung.service.KategorieEntityMapper.toKategorieDtoList;
+import static ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieEntityMapper.toKategorieDto;
+import static ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieEntityMapper.toKategorieDtoList;
 import static java.lang.String.format;
 
 
@@ -37,6 +37,12 @@ public class KategorieService {
     }
 
     @Transactional(readOnly = true)
+    public KategorieEntity getKategorieEntityById(String id) {
+        var kategorieEntity = kategorieRepository.findById(id).orElseThrow(() -> new NoResultException("Kategorie nicht gefunden mit ID="+id));
+        return kategorieEntity;
+    }
+
+    @Transactional(readOnly = true)
     public List<KategorieDto> getAllKategorie() {
         var kategorieList = kategorieRepository.findAll();
         return toKategorieDtoList(kategorieList);
@@ -51,7 +57,7 @@ public class KategorieService {
     }
 
     @Transactional
-    public void deleteZahlungById(String id) {
+    public void deleteKategorieById(String id) {
         kategorieRepository.deleteById(id);
     }
 

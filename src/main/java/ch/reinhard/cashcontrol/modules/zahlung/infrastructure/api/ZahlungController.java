@@ -1,9 +1,9 @@
-package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.controller;
+package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.api;
 
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.ZahlungView;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDetailsDto;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
+import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungView;
 import ch.reinhard.cashcontrol.modules.zahlung.service.ZahlungService;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDetailsDto;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

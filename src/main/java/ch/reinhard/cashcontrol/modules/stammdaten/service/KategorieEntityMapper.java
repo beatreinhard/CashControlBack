@@ -1,7 +1,7 @@
-package ch.reinhard.cashcontrol.modules.zahlung.service;
+package ch.reinhard.cashcontrol.modules.stammdaten.service;
 
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.KategorieEntity;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.KategorieDto;
+import ch.reinhard.cashcontrol.modules.stammdaten.domain.KategorieEntity;
+import ch.reinhard.cashcontrol.modules.stammdaten.service.api.KategorieDto;
 
 import java.util.List;
 

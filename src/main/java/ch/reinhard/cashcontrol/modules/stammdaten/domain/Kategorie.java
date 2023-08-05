@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.zahlung.domain;
+package ch.reinhard.cashcontrol.modules.stammdaten.domain;
 
 import lombok.Data;
 

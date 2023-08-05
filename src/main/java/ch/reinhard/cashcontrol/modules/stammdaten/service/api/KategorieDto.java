@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api;
+package ch.reinhard.cashcontrol.modules.stammdaten.service.api;
 
 public record KategorieDto(
     String id,

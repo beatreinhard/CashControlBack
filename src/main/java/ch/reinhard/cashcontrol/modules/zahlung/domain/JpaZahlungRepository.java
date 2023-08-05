@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence;
+package ch.reinhard.cashcontrol.modules.zahlung.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

@@ -1,8 +1,8 @@
-package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.controller;
+package ch.reinhard.cashcontrol.modules.stammdaten.infrastructure.api;
 
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.KategorieDto;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
-import ch.reinhard.cashcontrol.modules.zahlung.service.KategorieService;
+import ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieService;
+import ch.reinhard.cashcontrol.modules.stammdaten.service.api.KategorieDto;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

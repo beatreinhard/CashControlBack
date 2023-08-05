@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence;
+package ch.reinhard.cashcontrol.modules.stammdaten.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

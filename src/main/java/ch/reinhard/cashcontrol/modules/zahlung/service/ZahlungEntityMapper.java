@@ -1,10 +1,10 @@
 package ch.reinhard.cashcontrol.modules.zahlung.service;
 
 
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.ZahlungEntity;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.ZahlungEntityDetails;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDetailsDto;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
+import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungEntity;
+import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungEntityDetails;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDetailsDto;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDto;
 
 import java.util.ArrayList;
 import java.util.List;

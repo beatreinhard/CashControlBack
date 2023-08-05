@@ -1,6 +1,7 @@
 package ch.reinhard.cashcontrol.modules.zahlung.domain;
 
 
+import ch.reinhard.cashcontrol.modules.stammdaten.domain.Kategorie;
 import lombok.Data;
 
 import java.time.LocalDate;

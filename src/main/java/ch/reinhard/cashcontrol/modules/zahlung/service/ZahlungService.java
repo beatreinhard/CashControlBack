@@ -1,10 +1,10 @@
 package ch.reinhard.cashcontrol.modules.zahlung.service;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.*;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDetailsDto;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungDto;
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.web.api.ZahlungUpdateDto;
+import ch.reinhard.cashcontrol.modules.zahlung.domain.*;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDetailsDto;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDto;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungUpdateDto;
 import com.querydsl.core.BooleanBuilder;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
@@ -80,6 +80,7 @@ public class ZahlungService {
         return toZahlungDtoList(zahlungEntityIterable);
     }
 
+    @Transactional(readOnly = true)
     public List<ZahlungView> searchZahlungen() {
         return zahlungViewRepository.findAll();
     }

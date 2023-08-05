@@ -1,18 +1,20 @@
-package ch.reinhard.cashcontrol.modules.zahlung;
+package ch.reinhard.cashcontrol.modules.stammdaten;
 
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.JpaKategorieRepository;
-import ch.reinhard.cashcontrol.modules.zahlung.service.KategorieEntityMapper;
-import ch.reinhard.cashcontrol.modules.zahlung.service.KategorieService;
+import ch.reinhard.cashcontrol.modules.stammdaten.domain.JpaKategorieRepository;
+import ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieEntityMapper;
+import ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@ExtendWith(SpringExtension.class)
+@ExtendWith(SpringExtension.class)
 @EnableAutoConfiguration
 @ContextConfiguration(classes = {KategorieService.class})
 @DataJpaTest
@@ -96,7 +98,7 @@ public class KategorieServiceIT {
 
         // WHEN
         var id = kategorieList.get(0).id();
-        kategorieService.deleteZahlungById(id);
+        kategorieService.deleteKategorieById(id);
         var kategorieListAfterDelete = kategorieService.getAllKategorie();
 
         // THEN

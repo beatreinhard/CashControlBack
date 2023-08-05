@@ -1,6 +1,6 @@
 package ch.reinhard.cashcontrol;
 
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence.JpaZahlungRepository;
+import ch.reinhard.cashcontrol.modules.zahlung.domain.JpaZahlungRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

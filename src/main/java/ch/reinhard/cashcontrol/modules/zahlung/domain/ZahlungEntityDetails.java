@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.persistence;
+package ch.reinhard.cashcontrol.modules.zahlung.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
