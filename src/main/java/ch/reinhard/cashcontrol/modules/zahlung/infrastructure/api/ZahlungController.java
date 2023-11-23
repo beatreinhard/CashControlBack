@@ -1,9 +1,9 @@
 package ch.reinhard.cashcontrol.modules.zahlung.infrastructure.api;
 
-import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungView;
 import ch.reinhard.cashcontrol.modules.zahlung.service.ZahlungService;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDto;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungViewDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -67,11 +67,10 @@ public class ZahlungController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Zahlungen gefunden",
                     content = { @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ZahlungDto.class)) })
+                            schema = @Schema(implementation = ZahlungViewDto.class)) })
     })
     @GetMapping("/zahlung/search")
-    public List<ZahlungView> getSearchZahlung() {
-        // TODO DTO zurückgeben
+    public List<ZahlungViewDto> getSearchZahlung() {
         return zahlungService.searchZahlungen();
     }
 }

@@ -3,8 +3,10 @@ package ch.reinhard.cashcontrol.modules.zahlung.service;
 
 import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungEntity;
 import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungEntityDetails;
+import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungView;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDto;
+import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungViewDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +47,26 @@ public class ZahlungEntityMapper {
         );
     }
 
+    public static ZahlungViewDto toZahlungViewDto(ZahlungView source) {
+        return new ZahlungViewDto(
+                source.getId(),
+                source.getVersion(),
+                source.getDatum(),
+                source.getEmpfaenger(),
+                source.getKategorieId(),
+                source.getKategorie_bezeichnung(),
+                source.getText(),
+                source.getBetrag()
+        );
+    }
+
+
     public static List<ZahlungDto> toZahlungDtoList(List<ZahlungEntity> zahlungEntityList) {
         return zahlungEntityList.stream().map(ZahlungEntityMapper::toZahlungDto).toList();
+    }
+
+    public static List<ZahlungViewDto> toZahlungViewDtoList(List<ZahlungView> zahlungViewList) {
+        return zahlungViewList.stream().map(ZahlungEntityMapper::toZahlungViewDto).toList();
     }
 
     public static List<ZahlungDto> toZahlungDtoList(Iterable<ZahlungEntity> zahlungEntityIterable) {

@@ -163,7 +163,7 @@ public class ZahlungServiceIT {
     }
 
     @Test
-    public void searchZahlungen() {
+    public void searchZahlungenMitSuchkriterium() {
         // GIVEN
         var zahlungDto1 = new ZahlungDetailsDto(
                 LocalDate.now(),
@@ -188,5 +188,32 @@ public class ZahlungServiceIT {
 
         // THEN
         assertEquals(zahlungList.size(), 1);
+    }
+
+    @Test
+    public void searchZahlungenMitView() {
+        // GIVEN
+        var zahlungDto1 = new ZahlungDetailsDto(
+                LocalDate.now(),
+                "Hans Kummer, Bern",
+                "K2",
+                "Lohn",
+                Long.valueOf("159995")
+        );
+        var zahlungDto2 = new ZahlungDetailsDto(
+                LocalDate.now(),
+                "Beat Reinhard, Frutigen",
+                "K1",
+                "Lohn",
+                Long.valueOf("8310")
+        );
+        zahlungService.createZahlung(zahlungDto1);
+        zahlungService.createZahlung(zahlungDto2);
+
+        // WHEN
+        var zahlungList = zahlungService.searchZahlungen();
+
+        // THEN
+        assertEquals(zahlungList.size(), 2);
     }
 }

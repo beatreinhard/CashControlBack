@@ -27,8 +27,9 @@ public class ZahlungView {
     String empfaenger;
 
     String kategorieId;
+    String kategorie_bezeichnung;
 
     String text;
+    Long betrag;
 
-    String kategorie_bezeichnung;
 }

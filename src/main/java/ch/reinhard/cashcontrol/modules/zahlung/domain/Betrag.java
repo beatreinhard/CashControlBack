@@ -1,10 +1,10 @@
 package ch.reinhard.cashcontrol.modules.zahlung.domain;
 
-import lombok.Value;
+import jakarta.persistence.Embeddable;
 
 import java.math.BigDecimal;
 
-@Value
+@Embeddable
 public class Betrag {
     BigDecimal value;
 }
