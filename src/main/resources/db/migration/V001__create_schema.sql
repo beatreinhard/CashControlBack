@@ -1,4 +1,5 @@
 create schema if not exists cashcontrol;
+ALTER SCHEMA cashcontrol OWNER TO cashcontrol;
 
 create table zahlung (
     id              varchar(255)    not null primary key,
@@ -33,8 +34,8 @@ SELECT
     z.text,
     k.bezeichnung AS kategorie_bezeichnung
 FROM
-    cashcontrol.zahlung z
+    zahlung z
         JOIN
-    cashcontrol.kategorie k ON z.kategorie_id = k.id;
+    kategorie k ON z.kategorie_id = k.id;
 
 

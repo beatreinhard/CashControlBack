@@ -2,20 +2,18 @@ spring:
   application:
     name: cashcontrol-service
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:TestDB
-    username: sa
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/cashcontrol
+    username: cashcontrol
+    password: secret
   flyway:
     locations: classpath:db/migration/
     clean-on-validation-error: true
-    default-schema: CASHCONTROL
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    default-schema: cashcontrol
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8080
   servlet:
