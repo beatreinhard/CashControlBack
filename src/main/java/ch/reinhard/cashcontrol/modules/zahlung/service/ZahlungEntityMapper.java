@@ -65,13 +65,9 @@ public class ZahlungEntityMapper {
         return zahlungEntityList.stream().map(ZahlungEntityMapper::toZahlungDto).toList();
     }
 
-    public static List<ZahlungViewDto> toZahlungViewDtoList(List<ZahlungView> zahlungViewList) {
+    public static List<ZahlungViewDto> toZahlungViewDtoList(Iterable<ZahlungView> zahlungViewIterable) {
+        var zahlungViewList = new ArrayList<ZahlungView>();
+        zahlungViewIterable.forEach(zahlungViewList::add);
         return zahlungViewList.stream().map(ZahlungEntityMapper::toZahlungViewDto).toList();
-    }
-
-    public static List<ZahlungDto> toZahlungDtoList(Iterable<ZahlungEntity> zahlungEntityIterable) {
-        var zahlungEntityList = new ArrayList<ZahlungEntity>();
-        zahlungEntityIterable.forEach(zahlungEntityList::add);
-        return toZahlungDtoList(zahlungEntityList);
     }
 }

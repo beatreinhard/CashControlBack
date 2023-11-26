@@ -1,8 +1,8 @@
-package ch.reinhard.cashcontrol.modules.stammdaten;
+package ch.reinhard.cashcontrol.modules.shared.stammdaten;
 
-import ch.reinhard.cashcontrol.modules.stammdaten.domain.JpaKategorieRepository;
-import ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieEntityMapper;
-import ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieService;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.domain.JpaKategorieRepository;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.service.KategorieEntityMapper;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.service.KategorieService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

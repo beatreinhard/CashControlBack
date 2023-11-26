@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.stammdaten.domain;
+package ch.reinhard.cashcontrol.modules.shared.stammdaten.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

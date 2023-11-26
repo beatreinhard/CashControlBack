@@ -1,9 +1,9 @@
-package ch.reinhard.cashcontrol.modules.stammdaten.service;
+package ch.reinhard.cashcontrol.modules.shared.stammdaten.service;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
-import ch.reinhard.cashcontrol.modules.stammdaten.domain.JpaKategorieRepository;
-import ch.reinhard.cashcontrol.modules.stammdaten.domain.KategorieEntity;
-import ch.reinhard.cashcontrol.modules.stammdaten.service.api.KategorieDto;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.domain.JpaKategorieRepository;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.domain.KategorieEntity;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.service.api.KategorieDto;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieEntityMapper.toKategorieDto;
-import static ch.reinhard.cashcontrol.modules.stammdaten.service.KategorieEntityMapper.toKategorieDtoList;
+import static ch.reinhard.cashcontrol.modules.shared.stammdaten.service.KategorieEntityMapper.toKategorieDto;
+import static ch.reinhard.cashcontrol.modules.shared.stammdaten.service.KategorieEntityMapper.toKategorieDtoList;
 import static java.lang.String.format;
 
 

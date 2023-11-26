@@ -3,7 +3,7 @@ package ch.reinhard.cashcontrol.modules.zahlung.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.zahlung.domain.JpaZahlungRepository;
 import ch.reinhard.cashcontrol.modules.zahlung.domain.JpaZahlungViewRepository;
-import ch.reinhard.cashcontrol.modules.zahlung.domain.QZahlungEntity;
+import ch.reinhard.cashcontrol.modules.zahlung.domain.QZahlungView;
 import ch.reinhard.cashcontrol.modules.zahlung.domain.ZahlungEntity;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDto;
@@ -69,25 +69,18 @@ public class ZahlungService {
     }
 
     @Transactional(readOnly = true)
-    public List<ZahlungDto> searchZahlungen(String empfaenger) {
-
-        var zahlungQuery = QZahlungEntity.zahlungEntity;
+    public List<ZahlungViewDto> searchZahlungen(String empfaenger) {
+        var zahlungViewQuery = QZahlungView.zahlungView;
         var booleanBuilder = new BooleanBuilder();
         if (empfaenger != null) {
-            booleanBuilder.and(zahlungQuery.empfaenger.contains(empfaenger));
+            booleanBuilder.and(zahlungViewQuery.empfaenger.contains(empfaenger));
         }
         var predicate = booleanBuilder.getValue();
 
         assert booleanBuilder.getValue() != null;
-        var zahlungEntityIterable = zahlungRepository.findAll(predicate);
+        var zahlungViewIterable = zahlungViewRepository.findAll(predicate);
 
-        return toZahlungDtoList(zahlungEntityIterable);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ZahlungViewDto> searchZahlungen() {
-        var zahlungViewList = zahlungViewRepository.findAll();
-        return toZahlungViewDtoList(zahlungViewList);
+        return toZahlungViewDtoList(zahlungViewIterable);
     }
 
 }

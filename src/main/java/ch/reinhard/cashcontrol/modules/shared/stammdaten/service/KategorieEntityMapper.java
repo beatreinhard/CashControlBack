@@ -1,7 +1,7 @@
-package ch.reinhard.cashcontrol.modules.stammdaten.service;
+package ch.reinhard.cashcontrol.modules.shared.stammdaten.service;
 
-import ch.reinhard.cashcontrol.modules.stammdaten.domain.KategorieEntity;
-import ch.reinhard.cashcontrol.modules.stammdaten.service.api.KategorieDto;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.domain.KategorieEntity;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.service.api.KategorieDto;
 
 import java.util.List;
 

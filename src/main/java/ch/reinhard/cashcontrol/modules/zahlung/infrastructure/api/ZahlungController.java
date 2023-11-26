@@ -70,7 +70,11 @@ public class ZahlungController {
                             schema = @Schema(implementation = ZahlungViewDto.class)) })
     })
     @GetMapping("/zahlung/search")
-    public List<ZahlungViewDto> getSearchZahlung() {
-        return zahlungService.searchZahlungen();
+    public List<ZahlungViewDto> searchZahlungen() {
+
+        // TODO Dto als Suchfilter übergeben
+        var empfaenger = "Spotify";
+
+        return zahlungService.searchZahlungen(empfaenger);
     }
 }

@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start:Backend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="cashcontrol" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.reinhard.cashcontrol.CashcontrolApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="start:Database" run_configuration_type="docker-deploy" />
+    </method>
+  </configuration>
+</component>

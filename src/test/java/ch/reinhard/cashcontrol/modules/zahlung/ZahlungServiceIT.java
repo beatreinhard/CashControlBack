@@ -211,7 +211,7 @@ public class ZahlungServiceIT {
         zahlungService.createZahlung(zahlungDto2);
 
         // WHEN
-        var zahlungList = zahlungService.searchZahlungen();
+        var zahlungList = zahlungService.searchZahlungen("Reinhard");
 
         // THEN
         assertEquals(zahlungList.size(), 2);

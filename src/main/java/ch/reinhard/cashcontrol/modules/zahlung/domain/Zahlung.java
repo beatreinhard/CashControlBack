@@ -1,7 +1,7 @@
 package ch.reinhard.cashcontrol.modules.zahlung.domain;
 
 
-import ch.reinhard.cashcontrol.modules.stammdaten.domain.Kategorie;
+import ch.reinhard.cashcontrol.modules.shared.stammdaten.domain.Kategorie;
 import jakarta.persistence.Embedded;
 import lombok.Data;
 

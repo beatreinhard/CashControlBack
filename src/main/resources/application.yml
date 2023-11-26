@@ -8,7 +8,7 @@ spring:
     password: secret
   flyway:
     locations: classpath:db/migration/
-    clean-on-validation-error: true
+    clean-on-validation-error: false
     default-schema: cashcontrol
   jpa:
     show-sql: true
