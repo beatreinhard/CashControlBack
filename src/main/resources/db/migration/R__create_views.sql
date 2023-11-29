@@ -1,4 +1,5 @@
-DROP VIEW zahlung_view;
+DROP VIEW IF EXISTS zahlung_view;
+
 CREATE VIEW zahlung_view AS
 SELECT
     z.id,

@@ -1,5 +1,8 @@
 create schema if not exists cashcontrol;
-ALTER SCHEMA cashcontrol OWNER TO cashcontrol;
+
+-- Schema-wechsel
+SET search_path = cashcontrol;
+
 
 create table zahlung (
     id              varchar(255)    not null primary key,

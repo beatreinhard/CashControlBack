@@ -4,13 +4,16 @@ import ch.reinhard.cashcontrol.modules.zahlung.domain.JpaZahlungRepository;
 import ch.reinhard.cashcontrol.modules.zahlung.service.ZahlungService;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungDetailsDto;
 import ch.reinhard.cashcontrol.modules.zahlung.service.api.ZahlungUpdateDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.time.LocalDate;
 
@@ -18,17 +21,42 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-@ExtendWith(SpringExtension.class)
-@EnableAutoConfiguration
-@ContextConfiguration(classes = {ZahlungService.class})
-@DataJpaTest
+// @ExtendWith(SpringExtension.class)
+// @EnableAutoConfiguration
+// @DataJpaTest
+
+// @ContextConfiguration(classes = {ZahlungService.class})
+// @TestPropertySource(properties = {"spring.datasource.url=jdbc:tc:postgresql://localhost:5432/cashcontrol"})
+
+
+// https://medium.com/wearewaes/perform-integration-tests-anywhere-using-testcontainers-49d12219e3d
+
+
+
+@SpringBootTest
+@Testcontainers
 public class ZahlungServiceIT {
+
+    @Container
+    static PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
+
+    @DynamicPropertySource
+    static void registerMySQLProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgresContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgresContainer::getUsername);
+        registry.add("spring.datasource.password", postgresContainer::getPassword);
+    }
 
     @Autowired
     private ZahlungService zahlungService;
 
     @Autowired
     public JpaZahlungRepository zahlungRepository;
+
+    @BeforeEach
+    public void deleteAllZahlungen() {
+        zahlungRepository.deleteAll();
+    }
 
     @Test
     public void createZahlung() {
@@ -214,6 +242,6 @@ public class ZahlungServiceIT {
         var zahlungList = zahlungService.searchZahlungen("Reinhard");
 
         // THEN
-        assertEquals(zahlungList.size(), 2);
+        assertEquals(zahlungList.size(), 1);
     }
 }
