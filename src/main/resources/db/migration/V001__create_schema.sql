@@ -7,7 +7,7 @@ SET search_path = cashcontrol;
 create table zahlung (
     id              varchar(255)    not null primary key,
     version         bigint,
-    betrag          numeric,
+    betrag          decimal         not null,
     datum           date            not null,
     empfaenger      varchar(255)    not null,
     kategorie_id    varchar(255)    not null,
@@ -24,5 +24,82 @@ create table kategorie (
     bezeichnung     varchar(255)    not null
 );
 
+create table vermoegenswert (
+    id              varchar(255)    not null primary key,
+    version         bigint,
+    jahr            integer         not null,
+    art             varchar(255)    not null,
+    anschaffungsjahr  integer       not null,
+    anschaffungspreis decimal       not null
+);
 
+create table schuld (
+    id              varchar(255)    not null primary key,
+    version         bigint,
+    jahr            integer         not null,
+    glaeubiger      varchar(255)    not null,
+    art             varchar(255)    not null,
+    betrag          decimal         not null,
+    zinsen          decimal
+);
 
+create table kosten (
+    id              varchar(255)    not null primary key,
+    version         bigint,
+    jahr            integer         not null,
+    art             varchar(255)    not null,
+    empfaenger      varchar(255)    not null,
+    zahler          varchar(255)    not null,
+    betrag          decimal         not null,
+    bemerkung       varchar(255)
+);
+
+create table beruf (
+    id                          varchar(255)    not null primary key,
+    version                     bigint,
+    jahr                        integer         not null,
+    arbeitnehmer                varchar(255)    not null,
+    arbeitgeber                 varchar(255)    not null,
+    arbeitsort                  varchar(255)    not null,
+    beschaeftigungsgrad         integer         not null,
+    arbeitstage                 integer         not null,
+    fahrtkilometer_pro_tag      integer,
+    grund_autobenutzung         varchar(255),
+    ansatz_auswaertige_verpflegung    decimal,
+    bemerkung                   varchar(255)
+);
+
+create table erbschaft (
+    id                          varchar(255)    not null primary key,
+    version                     bigint,
+    jahr                        integer         not null,
+    art                         varchar(255)    not null,
+    betrag                      decimal         not null,
+    datum                       date            not null,
+    geber                       varchar(255)    not null,
+    verwandtschaftsverhaeltnis  varchar(255)    not null,
+    gegenstand                  varchar(255)    not null,
+    bemerkung                   varchar(255)
+);
+
+create table grundstueckunterhalt (
+    id                          varchar(255)    not null primary key,
+    version                     bigint,
+    jahr                        integer         not null,
+    rgDatum                     date            not null,
+    ausfuehrende_firma          varchar(255)    not null,
+    arbeits_art                 varchar(255)    not null,
+    betrag_netto                decimal         not null,
+    anteil_andere_kosten        decimal         not null,
+    anteil_unterhalt            decimal         not null        -- BetragNetto minus AnteilAndereKosten
+);
+
+create table vergabung
+(
+    id            varchar(255) not null primary key,
+    version       bigint,
+    jahr          integer      not null,
+    zahlungsdatum date         not null,
+    empfaenger    varchar(255) not null,
+    betrag        decimal      not null
+);

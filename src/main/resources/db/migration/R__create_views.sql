@@ -1,3 +1,6 @@
+-- Schema-wechsel
+SET search_path = cashcontrol;
+
 DROP VIEW IF EXISTS zahlung_view;
 
 CREATE VIEW zahlung_view AS
