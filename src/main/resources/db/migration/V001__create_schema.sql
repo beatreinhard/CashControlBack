@@ -25,12 +25,12 @@ create table kategorie (
 );
 
 create table vermoegenswert (
-    id              varchar(255)    not null primary key,
-    version         bigint,
-    jahr            integer         not null,
-    art             varchar(255)    not null,
-    anschaffungsjahr  integer       not null,
-    anschaffungspreis decimal       not null
+    id               varchar(255)    not null primary key,
+    version          bigint,
+    jahr             integer         not null,
+    bezeichnung       varchar(255)   not null,
+    anschaffungsjahr  integer        not null,
+    anschaffungspreis decimal        not null
 );
 
 create table schuld (
@@ -49,7 +49,7 @@ create table kosten (
     jahr            integer         not null,
     art             varchar(255)    not null,
     empfaenger      varchar(255)    not null,
-    zahler          varchar(255)    not null,
+    bezahler        varchar(255)    not null,
     betrag          decimal         not null,
     bemerkung       varchar(255)
 );
@@ -65,7 +65,7 @@ create table beruf (
     arbeitstage                 integer         not null,
     fahrtkilometer_pro_tag      integer,
     grund_autobenutzung         varchar(255),
-    ansatz_auswaertige_verpflegung    decimal,
+    ansatz_auswaertige_verpflegung    decimal   not null,
     bemerkung                   varchar(255)
 );
 
@@ -86,20 +86,20 @@ create table grundstueckunterhalt (
     id                          varchar(255)    not null primary key,
     version                     bigint,
     jahr                        integer         not null,
-    rgDatum                     date            not null,
+    rg_datum                     date            not null,
     ausfuehrende_firma          varchar(255)    not null,
     arbeits_art                 varchar(255)    not null,
-    betrag_netto                decimal         not null,
-    anteil_andere_kosten        decimal         not null,
-    anteil_unterhalt            decimal         not null        -- BetragNetto minus AnteilAndereKosten
+    betrag_netto                decimal         not null,   -- effektiver Rechnungsbetrag
+    anteil_andere_kosten        decimal,                    -- nicht für die Steuerrechnung relevanter Anteil
+    anteil_unterhalt            decimal         not null    -- betrag_netto minus anteil_andere_kosten
 );
 
 create table vergabung
 (
-    id            varchar(255) not null primary key,
-    version       bigint,
-    jahr          integer      not null,
-    zahlungsdatum date         not null,
-    empfaenger    varchar(255) not null,
-    betrag        decimal      not null
+    id             varchar(255) not null primary key,
+    version        bigint,
+    jahr           integer      not null,
+    zahlungs_datum date         not null,
+    empfaenger     varchar(255) not null,
+    betrag         decimal      not null
 );

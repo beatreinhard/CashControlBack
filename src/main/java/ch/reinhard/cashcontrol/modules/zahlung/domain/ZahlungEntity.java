@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -32,7 +33,7 @@ public class ZahlungEntity {
 
     String text;
 
-    Long betrag;
+    BigDecimal betrag;
 
     public ZahlungEntity(String id, ZahlungEntityDetails details) {
         this.id = id;

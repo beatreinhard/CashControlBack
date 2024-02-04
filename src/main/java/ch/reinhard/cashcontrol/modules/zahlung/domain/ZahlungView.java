@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -30,6 +31,6 @@ public class ZahlungView {
     String kategorie_bezeichnung;
 
     String text;
-    Long betrag;
+    BigDecimal betrag;
 
 }
