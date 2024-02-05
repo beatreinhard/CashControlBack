@@ -1,20 +1,20 @@
 package ch.reinhard.cashcontrol;
 
-import ch.reinhard.cashcontrol.modules.zahlung.domain.JpaZahlungRepository;
-import org.junit.jupiter.api.Disabled;
+import ch.reinhard.cashcontrol.modules.finanzen.impl.domain.JpaZahlungRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
-//@EnableAutoConfiguration
-//@ContextConfiguration(classes = {JpaZahlungRepository .class})
-@DataJpaTest
+// TODO müsste doch auch mit @DataJpaTest möglich sein!!!
+// @DataJpaTest
+@SpringBootTest
+@ContextConfiguration(initializers = PostgreSQLContainerInitializer.class)
 public class JpaTest {
 
     @Autowired
     private JpaZahlungRepository zahlungRepository;
 
-    @Disabled
     @Test
     public void testJpa() {
         zahlungRepository.findAll();

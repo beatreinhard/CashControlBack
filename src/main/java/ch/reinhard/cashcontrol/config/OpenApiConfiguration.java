@@ -1,6 +1,6 @@
 package ch.reinhard.cashcontrol.config;
 
-import ch.reinhard.cashcontrol.modules.zahlung.infrastructure.api.ZahlungController;
+import ch.reinhard.cashcontrol.modules.finanzen.impl.controller.ZahlungController;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
