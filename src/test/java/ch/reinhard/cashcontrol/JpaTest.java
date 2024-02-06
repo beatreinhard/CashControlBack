@@ -1,6 +1,6 @@
 package ch.reinhard.cashcontrol;
 
-import ch.reinhard.cashcontrol.modules.finanzen.impl.domain.JpaZahlungRepository;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.JpaZahlungRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
