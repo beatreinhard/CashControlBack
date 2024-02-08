@@ -7,6 +7,7 @@ import ch.reinhard.cashcontrol.modules.steuern.application.domain.Beruf;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaBerufRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import static java.lang.String.format;
 @Service
 public class BerufServiceImpl implements BerufService {
 
+    @Autowired
     private JpaBerufRepository jpaBerufRepository;
 
     @Transactional
