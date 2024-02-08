@@ -19,30 +19,30 @@ import java.time.LocalDate;
 @Setter
 public class Grundstueckunterhalt {
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer jahr;
+    private Integer jahr;
 
     @NotNull
-    LocalDate rgDatum;
+    private LocalDate rgDatum;
 
     @NotNull
-    String ausfuehrendeFirma;
+    private String ausfuehrendeFirma;
 
     @NotNull
-    String arbeitsArt;
+    private String arbeitsArt;
 
     @NotNull
-    BigDecimal betragNetto; // effektiver Rechnungsbetrag
+    private BigDecimal betragNetto; // effektiver Rechnungsbetrag
 
     @NotNull
-    BigDecimal anteilAndereKosten; // nicht für die Steuerrechnung relevanter Anteil
+    private BigDecimal anteilAndereKosten; // nicht für die Steuerrechnung relevanter Anteil
 
     @NotNull
-    BigDecimal anteilUnterhalt; // betragNetto minus anteilAndereKosten
+    private BigDecimal anteilUnterhalt; // betragNetto minus anteilAndereKosten
 }

@@ -19,17 +19,17 @@ import java.time.LocalDate;
 @Setter
 public class ZahlungView {
     @Id
-    String id;
+    private String id;
 
-    Long version;
+    private Long version;
 
-    LocalDate datum;
+    private LocalDate datum;
 
-    String empfaenger;
+    private String empfaenger;
 
-    String kategorieId;
-    String kategorie_bezeichnung;
+    private String kategorieId;
+    private String kategorie_bezeichnung;
 
-    String text;
-    BigDecimal betrag;
+    private String text;
+    private BigDecimal betrag;
 }

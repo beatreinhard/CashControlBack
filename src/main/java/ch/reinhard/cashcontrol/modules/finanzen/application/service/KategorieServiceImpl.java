@@ -5,7 +5,7 @@ import ch.reinhard.cashcontrol.modules.finanzen.api.KategorieDto;
 import ch.reinhard.cashcontrol.modules.finanzen.api.KategorieService;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.JpaKategorieRepository;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.KategorieEntity;
-import jakarta.persistence.NoResultException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class KategorieServiceImpl implements KategorieService {
     public KategorieDto getKategorieById(String id) {
         var kategorieEntity = kategorieRepository
                 .findById(id)
-                .orElseThrow(() -> new NoResultException("Kategorie nicht gefunden mit ID=" + id));
+                .orElseThrow(() -> new EntityNotFoundException("Kategorie nicht gefunden mit ID=" + id));
         return toKategorieDto(kategorieEntity);
     }
 
@@ -42,7 +42,7 @@ public class KategorieServiceImpl implements KategorieService {
     public KategorieEntity getKategorieEntityById(String id) {
         var kategorieEntity = kategorieRepository
                 .findById(id)
-                .orElseThrow(() -> new NoResultException("Kategorie nicht gefunden mit ID=" + id));
+                .orElseThrow(() -> new EntityNotFoundException("Kategorie nicht gefunden mit ID=" + id));
         return kategorieEntity;
     }
 

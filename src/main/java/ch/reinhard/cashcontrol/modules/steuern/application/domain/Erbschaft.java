@@ -17,33 +17,33 @@ import java.time.LocalDate;
 public class Erbschaft {
 
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer jahr;
+    private Integer jahr;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    ErbschaftArt art;
+    private ErbschaftArt art;
 
     @NotNull
-    BigDecimal betrag;
+    private BigDecimal betrag;
 
     @NotNull
-    LocalDate datum;
+    private LocalDate datum;
 
     @NotNull
-    String geber;
+    private String geber;
 
     @NotNull
-    String verwandtschaftsverhaeltnis;
+    private String verwandtschaftsverhaeltnis;
 
     @NotNull
-    String gegenstand;
+    private String gegenstand;
 
-    String bemerkung;
+    private String bemerkung;
 }

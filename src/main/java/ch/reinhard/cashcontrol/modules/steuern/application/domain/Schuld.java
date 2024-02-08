@@ -15,24 +15,24 @@ import java.math.BigDecimal;
 @Setter
 public class Schuld {
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer jahr;
+    private Integer jahr;
 
     @NotNull
-    String glaeubiger;
+    private String glaeubiger;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    SchuldArt art;
+    private SchuldArt art;
 
     @NotNull
-    BigDecimal betrag;
+    private BigDecimal betrag;
 
-    BigDecimal zinsen;
+    private BigDecimal zinsen;
 }

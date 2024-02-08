@@ -20,20 +20,20 @@ import java.time.LocalDate;
 @Setter
 public class ZahlungEntity {
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
-    LocalDate datum;
+    private LocalDate datum;
 
-    String empfaenger;
+    private String empfaenger;
 
-    String kategorieId;
+    private String kategorieId;
 
-    String text;
+    private String text;
 
-    BigDecimal betrag;
+    private BigDecimal betrag;
 
     public ZahlungEntity(String id, ZahlungEntityDetails details) {
         this.id = id;

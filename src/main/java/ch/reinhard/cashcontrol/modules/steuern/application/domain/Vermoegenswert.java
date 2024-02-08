@@ -18,22 +18,22 @@ import java.math.BigDecimal;
 @Setter
 public class Vermoegenswert {
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer jahr;
+    private Integer jahr;
 
     @NotNull
-    String bezeichnung;
+    private String bezeichnung;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer anschaffungsjahr;
+    private Integer anschaffungsjahr;
 
     @NotNull
-    BigDecimal anschaffungspreis;
+    private BigDecimal anschaffungspreis;
 }

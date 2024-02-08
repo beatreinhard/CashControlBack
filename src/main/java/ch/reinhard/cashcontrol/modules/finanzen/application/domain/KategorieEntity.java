@@ -18,12 +18,12 @@ import lombok.Setter;
 public class KategorieEntity {
 
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
-    String bezeichnung;
+    private String bezeichnung;
 
     public KategorieEntity(String id, String bezeichnung) {
         this.id = id;

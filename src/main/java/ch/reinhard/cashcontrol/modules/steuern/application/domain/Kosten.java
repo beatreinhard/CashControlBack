@@ -15,27 +15,27 @@ import java.math.BigDecimal;
 @Setter
 public class Kosten {
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer jahr;
+    private Integer jahr;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    KostenArt art;
+    private KostenArt art;
 
     @NotNull
-    String empfaenger;
+    private String empfaenger;
 
     @NotNull
-    String bezahler;
+    private String bezahler;
 
     @NotNull
-    BigDecimal betrag;
+    private BigDecimal betrag;
 
-    String bemerkung;
+    private String bemerkung;
 }

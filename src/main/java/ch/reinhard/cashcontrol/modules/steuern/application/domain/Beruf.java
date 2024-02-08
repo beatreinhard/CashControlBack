@@ -18,36 +18,49 @@ import java.math.BigDecimal;
 @Setter
 public class Beruf {
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer jahr;
+    private Integer jahr;
 
     @NotNull
-    String arbeitnehmer;
+    private String arbeitnehmer;
 
     @NotNull
-    String arbeitgeber;
+    private String arbeitgeber;
 
     @NotNull
-    String arbeitsort;
+    private String arbeitsort;
 
     @NotNull
-    Integer beschaeftigungsgrad;
+    private Integer beschaeftigungsgrad;
 
     @NotNull
-    Integer arbeitstage;
+    private Integer arbeitstage;
 
-    Integer fahrtkilometerProTag;
+    private Integer fahrtkilometerProTag;
 
-    String grundAutobenutzung;
+    private String grundAutobenutzung;
 
     @NotNull
-    BigDecimal ansatzAuswaertigeVerpflegung;
+    private BigDecimal ansatzAuswaertigeVerpflegung;
 
-    String bemerkung;
+    private String bemerkung;
+
+    public void update(Beruf beruf) {
+        jahr = beruf.jahr;
+        arbeitnehmer = beruf.arbeitnehmer;
+        arbeitgeber = beruf.arbeitgeber;
+        arbeitsort = beruf.arbeitsort;
+        beschaeftigungsgrad = beruf.beschaeftigungsgrad;
+        arbeitstage = beruf.arbeitstage;
+        fahrtkilometerProTag = beruf.fahrtkilometerProTag;
+        grundAutobenutzung = beruf.grundAutobenutzung;
+        ansatzAuswaertigeVerpflegung = beruf.ansatzAuswaertigeVerpflegung;
+        bemerkung = beruf.bemerkung;
+    }
 }

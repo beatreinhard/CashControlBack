@@ -19,21 +19,21 @@ import java.time.LocalDate;
 @Setter
 public class Vergabung {
     @Id
-    String id;
+    private String id;
 
     @Version
-    Long version;
+    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
-    Integer jahr;
+    private Integer jahr;
 
     @NotNull
-    LocalDate zahlungsDatum;
+    private LocalDate zahlungsDatum;
 
     @NotNull
-    String empfaenger;
+    private String empfaenger;
 
     @NotNull
-    BigDecimal betrag;
+    private BigDecimal betrag;
 }

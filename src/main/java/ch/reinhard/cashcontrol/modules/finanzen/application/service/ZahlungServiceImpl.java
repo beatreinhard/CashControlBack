@@ -7,7 +7,7 @@ import ch.reinhard.cashcontrol.modules.finanzen.application.domain.JpaZahlungVie
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.QZahlungView;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.ZahlungEntity;
 import com.querydsl.core.BooleanBuilder;
-import jakarta.persistence.NoResultException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class ZahlungServiceImpl implements ZahlungService {
     public ZahlungDto getZahlungById(String id) {
         var zahlungEntity = zahlungRepository
                 .findById(id)
-                .orElseThrow(() -> new NoResultException("Zahlung nicht gefunden mit ID=" + id));
+                .orElseThrow(() -> new EntityNotFoundException("Zahlung nicht gefunden mit ID=" + id));
         return toZahlungDto(zahlungEntity);
     }
 
