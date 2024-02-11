@@ -38,4 +38,13 @@ public class Kosten {
     private BigDecimal betrag;
 
     private String bemerkung;
+
+    public void update(Kosten kosten) {
+        jahr = kosten.jahr;
+        art = kosten.art;
+        empfaenger = kosten.empfaenger;
+        bezahler = kosten.bezahler;
+        betrag = kosten.betrag;
+        bemerkung = kosten.bemerkung;
+    }
 }

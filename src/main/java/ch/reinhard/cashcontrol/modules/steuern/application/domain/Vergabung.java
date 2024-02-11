@@ -36,4 +36,11 @@ public class Vergabung {
 
     @NotNull
     private BigDecimal betrag;
+
+    public void update(Vergabung vergabung) {
+        jahr = vergabung.jahr;
+        zahlungsDatum = vergabung.zahlungsDatum;
+        empfaenger = vergabung.empfaenger;
+        betrag = vergabung.betrag;
+    }
 }

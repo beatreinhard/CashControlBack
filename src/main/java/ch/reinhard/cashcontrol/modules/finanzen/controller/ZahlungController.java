@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/zahlung")
 @Tag(name = "ZahlungController", description = "Endpoints für Zahlungen")
 public class ZahlungController {
 
@@ -39,7 +39,7 @@ public class ZahlungController {
                                     schema = @Schema(implementation = ZahlungDto.class))
                         })
             })
-    @GetMapping("/zahlung")
+    @GetMapping
     public List<ZahlungDto> getAllZahlung() {
         return zahlungService.getAllZahlung();
     }
@@ -57,7 +57,7 @@ public class ZahlungController {
                         }),
                 @ApiResponse(responseCode = "404", description = "Zahlung nicht gefunden", content = @Content)
             })
-    @GetMapping("/zahlung/{id}")
+    @GetMapping("/{id}")
     public ZahlungDto getZahlungById(@PathVariable String id) {
         return zahlungService.getZahlungById(id);
     }
@@ -73,7 +73,7 @@ public class ZahlungController {
                                         mediaType = MediaType.TEXT_PLAIN_VALUE,
                                         schema = @Schema(implementation = String.class)))
             })
-    @PostMapping("/zahlung")
+    @PostMapping
     public ResponseEntity<String> createZahlung(@Valid @RequestBody ZahlungDetailsDto request) {
         var id = zahlungService.createZahlung(request);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
@@ -91,7 +91,7 @@ public class ZahlungController {
                                     schema = @Schema(implementation = ZahlungViewDto.class))
                         })
             })
-    @GetMapping("/zahlung/search")
+    @GetMapping("/search")
     public List<ZahlungViewDto> searchZahlungen() {
 
         // TODO Dto als Suchfilter übergeben

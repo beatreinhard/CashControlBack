@@ -4,12 +4,15 @@ import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.KostenDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.KostenService;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaKostenRepository;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.Kosten;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.steuern.application.service.KostenMapper.toKosten;
+import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
+import static ch.reinhard.cashcontrol.modules.steuern.application.service.KostenMapper.*;
 
 class KostenServiceImpl implements KostenService {
 
@@ -28,20 +31,33 @@ class KostenServiceImpl implements KostenService {
     @Override
     @Transactional(readOnly = true)
     public KostenDto getKostenById(String id) {
-        return null;
+        var entity = jpaKostenRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Kosten nicht gefunden mit ID=" + id));
+        return toKostenDto(entity);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<KostenDto> getAllKosten() {
-        return null;
+        var kostenList = jpaKostenRepository.findAll();
+        return toKostenDtoList(kostenList);
     }
 
     @Override
     @Transactional
-    public void updateKosten(KostenDto source) {}
+    public void updateKosten(KostenDto source) {
+        var kostenEntity = jpaKostenRepository
+                .findById(source.id())
+                .orElseThrow(() -> new EntityNotFoundException("Kosten nicht gefunden mit ID=" + source.id()));
+        validateOptimisticLocking(source.version(), kostenEntity.getVersion(), Kosten.class);
+        kostenEntity.update(toKosten(source));
+        jpaKostenRepository.save(kostenEntity);
+    }
 
     @Override
     @Transactional
-    public void deleteKostenById(String id) {}
+    public void deleteKostenById(String id) {
+        jpaKostenRepository.deleteById(id);
+    }
 }

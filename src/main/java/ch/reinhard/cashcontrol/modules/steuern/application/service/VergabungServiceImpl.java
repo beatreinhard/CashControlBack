@@ -3,13 +3,16 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.VergabungDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.VergabungService;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaVergabungRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.steuern.application.service.VergabungMapper.toVergabung;
+import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
+import static ch.reinhard.cashcontrol.modules.steuern.application.service.VergabungMapper.*;
 
 class VergabungServiceImpl implements VergabungService {
 
@@ -28,20 +31,33 @@ class VergabungServiceImpl implements VergabungService {
     @Override
     @Transactional(readOnly = true)
     public VergabungDto getVergabungById(String id) {
-        return null;
+        var entity = jpaVergabungRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + id));
+        return toVergabungDto(entity);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<VergabungDto> getAllVergabung() {
-        return null;
+        var vergabungList = jpaVergabungRepository.findAll();
+        return toVergabungDtoList(vergabungList);
     }
 
     @Override
     @Transactional
-    public void updateVergabung(VergabungDto source) {}
+    public void updateVergabung(VergabungDto source) {
+        var vergabungEntity = jpaVergabungRepository
+                .findById(source.id())
+                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.id()));
+        validateOptimisticLocking(source.version(), vergabungEntity.getVersion(), Erbschaft.class);
+        vergabungEntity.update(toVergabung(source));
+        jpaVergabungRepository.save(vergabungEntity);
+    }
 
     @Override
     @Transactional
-    public void deleteVergabungById(String id) {}
+    public void deleteVergabungById(String id) {
+        jpaVergabungRepository.deleteById(id);
+    }
 }

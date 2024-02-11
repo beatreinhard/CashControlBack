@@ -35,7 +35,7 @@ class KostenMapper {
                 source.getBemerkung());
     }
 
-    public static List<KostenDto> toGrundstueckunterhaltDtoList(List<Kosten> entityList) {
+    public static List<KostenDto> toKostenDtoList(List<Kosten> entityList) {
         return entityList.stream().map(KostenMapper::toKostenDto).toList();
     }
 }

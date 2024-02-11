@@ -45,4 +45,14 @@ public class Grundstueckunterhalt {
 
     @NotNull
     private BigDecimal anteilUnterhalt; // betragNetto minus anteilAndereKosten
+
+    public void update(Grundstueckunterhalt grundstueckunterhalt) {
+        jahr = grundstueckunterhalt.jahr;
+        rgDatum = grundstueckunterhalt.rgDatum;
+        ausfuehrendeFirma = grundstueckunterhalt.ausfuehrendeFirma;
+        arbeitsArt = grundstueckunterhalt.arbeitsArt;
+        betragNetto = grundstueckunterhalt.betragNetto;
+        anteilAndereKosten = grundstueckunterhalt.anteilAndereKosten;
+        anteilUnterhalt = grundstueckunterhalt.anteilUnterhalt;
+    }
 }

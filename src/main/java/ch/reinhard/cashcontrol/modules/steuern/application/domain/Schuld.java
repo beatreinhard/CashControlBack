@@ -35,4 +35,12 @@ public class Schuld {
     private BigDecimal betrag;
 
     private BigDecimal zinsen;
+
+    public void update(Schuld schuld) {
+        jahr = schuld.jahr;
+        art = schuld.art;
+        glaeubiger = schuld.glaeubiger;
+        betrag = schuld.betrag;
+        zinsen = schuld.zinsen;
+    }
 }

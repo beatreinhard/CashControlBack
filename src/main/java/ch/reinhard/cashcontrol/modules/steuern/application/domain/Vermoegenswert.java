@@ -36,4 +36,11 @@ public class Vermoegenswert {
 
     @NotNull
     private BigDecimal anschaffungspreis;
+
+    public void update(Vermoegenswert vermoegenswert) {
+        jahr = vermoegenswert.jahr;
+        bezeichnung = vermoegenswert.bezeichnung;
+        anschaffungsjahr = vermoegenswert.anschaffungsjahr;
+        anschaffungspreis = vermoegenswert.anschaffungspreis;
+    }
 }

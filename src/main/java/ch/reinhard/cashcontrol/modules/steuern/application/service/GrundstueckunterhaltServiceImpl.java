@@ -3,13 +3,16 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.GrundstueckunterhaltDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.GrundstueckunterhaltService;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.Grundstueckunterhalt;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaGrundstueckunterhaltRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.steuern.application.service.GrundstueckunterhaltMapper.toGrundstueckunterhalt;
+import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
+import static ch.reinhard.cashcontrol.modules.steuern.application.service.GrundstueckunterhaltMapper.*;
 
 public class GrundstueckunterhaltServiceImpl implements GrundstueckunterhaltService {
 
@@ -28,20 +31,35 @@ public class GrundstueckunterhaltServiceImpl implements GrundstueckunterhaltServ
     @Override
     @Transactional(readOnly = true)
     public GrundstueckunterhaltDto getGrundstueckunterhaltById(String id) {
-        return null;
+        var entity = jpaGrundstueckunterhaltRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Grundstueckunterhalt nicht gefunden mit ID=" + id));
+        return toGrundstueckunterhaltDto(entity);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<GrundstueckunterhaltDto> getAllGrundstueckunterhalt() {
-        return null;
+        var grundstueckunterhaltList = jpaGrundstueckunterhaltRepository.findAll();
+        return toGrundstueckunterhaltDtoList(grundstueckunterhaltList);
     }
 
     @Override
     @Transactional
-    public void updateGrundstueckunterhalt(GrundstueckunterhaltDto source) {}
+    public void updateGrundstueckunterhalt(GrundstueckunterhaltDto source) {
+        var grundstueckunterhaltEntity = jpaGrundstueckunterhaltRepository
+                .findById(source.id())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Grundstueckunterhalt nicht gefunden mit ID=" + source.id()));
+        validateOptimisticLocking(
+                source.version(), grundstueckunterhaltEntity.getVersion(), Grundstueckunterhalt.class);
+        grundstueckunterhaltEntity.update(toGrundstueckunterhalt(source));
+        jpaGrundstueckunterhaltRepository.save(grundstueckunterhaltEntity);
+    }
 
     @Override
     @Transactional
-    public void deleteGrundstueckunterhaltById(String id) {}
+    public void deleteGrundstueckunterhaltById(String id) {
+        jpaGrundstueckunterhaltRepository.deleteById(id);
+    }
 }

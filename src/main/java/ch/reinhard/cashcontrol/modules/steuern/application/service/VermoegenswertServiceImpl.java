@@ -3,13 +3,16 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertService;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaVermoegenswertRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.steuern.application.service.VermoegenswertMapper.toVermoegenswert;
+import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
+import static ch.reinhard.cashcontrol.modules.steuern.application.service.VermoegenswertMapper.*;
 
 class VermoegenswertServiceImpl implements VermoegenswertService {
     @Autowired
@@ -27,20 +30,33 @@ class VermoegenswertServiceImpl implements VermoegenswertService {
     @Override
     @Transactional(readOnly = true)
     public VermoegenswertDto getVermoegenswertById(String id) {
-        return null;
+        var entity = jpaVermoegenswertRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vermögenswert nicht gefunden mit ID=" + id));
+        return toVermoegenswertDto(entity);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<VermoegenswertDto> getAllVermoegenswert() {
-        return null;
+        var vermoegenswertList = jpaVermoegenswertRepository.findAll();
+        return toVermoegenswertDtoList(vermoegenswertList);
     }
 
     @Override
     @Transactional
-    public void updateVermoegenswert(VermoegenswertDto source) {}
+    public void updateVermoegenswert(VermoegenswertDto source) {
+        var vermoegenswertEntity = jpaVermoegenswertRepository
+                .findById(source.id())
+                .orElseThrow(() -> new EntityNotFoundException("Vermoegenswert nicht gefunden mit ID=" + source.id()));
+        validateOptimisticLocking(source.version(), vermoegenswertEntity.getVersion(), Erbschaft.class);
+        vermoegenswertEntity.update(toVermoegenswert(source));
+        jpaVermoegenswertRepository.save(vermoegenswertEntity);
+    }
 
     @Override
     @Transactional
-    public void deleteVermoegenswertById(String id) {}
+    public void deleteVermoegenswertById(String id) {
+        jpaVermoegenswertRepository.deleteById(id);
+    }
 }

@@ -46,4 +46,15 @@ public class Erbschaft {
     private String gegenstand;
 
     private String bemerkung;
+
+    public void update(Erbschaft erbschaft) {
+        jahr = erbschaft.jahr;
+        art = erbschaft.art;
+        betrag = erbschaft.betrag;
+        datum = erbschaft.datum;
+        geber = erbschaft.geber;
+        verwandtschaftsverhaeltnis = erbschaft.verwandtschaftsverhaeltnis;
+        gegenstand = erbschaft.gegenstand;
+        bemerkung = erbschaft.bemerkung;
+    }
 }
