@@ -25,11 +25,11 @@ public class Schuld {
     private Integer jahr;
 
     @NotNull
-    private String glaeubiger;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
     private SchuldArt art;
+
+    @NotNull
+    private String glaeubiger;
 
     @NotNull
     private BigDecimal betrag;

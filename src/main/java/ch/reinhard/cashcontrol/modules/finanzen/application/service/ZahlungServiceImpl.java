@@ -9,14 +9,13 @@ import ch.reinhard.cashcontrol.modules.finanzen.application.domain.ZahlungEntity
 import com.querydsl.core.BooleanBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.finanzen.application.service.ZahlungEntityMapper.*;
-import static java.lang.String.format;
 
 @RequiredArgsConstructor
 @Service
@@ -47,23 +46,16 @@ public class ZahlungServiceImpl implements ZahlungService {
     }
 
     @Transactional
-    public void updateZahlung(ZahlungUpdateDto zahlungUpdateDto) {
-        var zahlungEntity = zahlungRepository.findById(zahlungUpdateDto.id()).orElseThrow();
-        validateUpdate(zahlungUpdateDto, zahlungEntity);
-        zahlungEntity.update(toZahlungEntityDetails(zahlungUpdateDto.details()));
+    public void updateZahlung(ZahlungUpdateDto source) {
+        var zahlungEntity = zahlungRepository.findById(source.id()).orElseThrow();
+        validateOptimisticLocking(source.version(), zahlungEntity.getVersion(), ZahlungEntity.class);
+        zahlungEntity.update(toZahlungEntityDetails(source.details()));
         zahlungRepository.save(zahlungEntity);
     }
 
     @Transactional
     public void deleteZahlungById(String id) {
         zahlungRepository.deleteById(id);
-    }
-
-    private void validateUpdate(ZahlungUpdateDto update, ZahlungEntity current) {
-        if (current.getVersion() > update.version()) {
-            throw new OptimisticLockingFailureException(format(
-                    "Zahlung with id {0} could not be updated since it was mutated by someone else", update.id()));
-        }
     }
 
     @Transactional(readOnly = true)

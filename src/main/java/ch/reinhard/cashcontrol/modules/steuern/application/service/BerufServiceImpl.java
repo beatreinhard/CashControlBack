@@ -8,18 +8,17 @@ import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaBerufReposi
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.application.service.BerufMapper.*;
-import static java.lang.String.format;
 
 @RequiredArgsConstructor
 @Service
-public class BerufServiceImpl implements BerufService {
+class BerufServiceImpl implements BerufService {
 
     @Autowired
     private JpaBerufRepository jpaBerufRepository;
@@ -51,7 +50,7 @@ public class BerufServiceImpl implements BerufService {
         var berufEntity = jpaBerufRepository
                 .findById(source.id())
                 .orElseThrow(() -> new EntityNotFoundException("Beruf nicht gefunden mit ID=" + source.id()));
-        validateUpdate(source, berufEntity);
+        validateOptimisticLocking(source.version(), berufEntity.getVersion(), Beruf.class);
         berufEntity.update(toBeruf(source));
         jpaBerufRepository.save(berufEntity);
     }
@@ -59,13 +58,5 @@ public class BerufServiceImpl implements BerufService {
     @Transactional
     public void deleteBerufById(String id) {
         jpaBerufRepository.deleteById(id);
-    }
-
-    // TODO evtl. in Core verschieben als Static-Methode
-    private void validateUpdate(BerufDto update, Beruf current) {
-        if (current.getVersion() > update.version()) {
-            throw new OptimisticLockingFailureException(
-                    format("Beruf with id {0} could not be updated since it was mutated by someone else", update.id()));
-        }
     }
 }

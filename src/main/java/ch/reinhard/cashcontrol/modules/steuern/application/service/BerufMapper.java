@@ -5,7 +5,7 @@ import ch.reinhard.cashcontrol.modules.steuern.application.domain.Beruf;
 
 import java.util.List;
 
-public class BerufMapper {
+class BerufMapper {
 
     public static Beruf toBeruf(BerufDto source) {
         return new Beruf(
@@ -39,7 +39,7 @@ public class BerufMapper {
                 source.getBemerkung());
     }
 
-    public static List<BerufDto> toBerufDtoList(List<Beruf> berufEntityList) {
-        return berufEntityList.stream().map(BerufMapper::toBerufDto).toList();
+    public static List<BerufDto> toBerufDtoList(List<Beruf> entityList) {
+        return entityList.stream().map(BerufMapper::toBerufDto).toList();
     }
 }

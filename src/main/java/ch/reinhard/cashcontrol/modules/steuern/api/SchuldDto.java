@@ -10,7 +10,7 @@ public record SchuldDto(
         String id,
         Long version,
         @NotNull Integer jahr,
-        @NotNull String glaeubiger,
         @NotNull SchuldArtDto art,
+        @NotNull String glaeubiger,
         @NotNull BigDecimal betrag,
         BigDecimal zinsen) {}
