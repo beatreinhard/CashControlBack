@@ -7,7 +7,7 @@ import java.util.List;
 
 class VergabungMapper {
 
-    public static Vergabung toKosten(VergabungDto source) {
+    public static Vergabung toVergabung(VergabungDto source) {
         return new Vergabung(
                 source.id(),
                 source.version(),

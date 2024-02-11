@@ -7,7 +7,7 @@ import java.util.List;
 
 public class VermoegenswertMapper {
 
-    public static Vermoegenswert toKosten(VermoegenswertDto source) {
+    public static Vermoegenswert toVermoegenswert(VermoegenswertDto source) {
         return new Vermoegenswert(
                 source.id(),
                 source.version(),

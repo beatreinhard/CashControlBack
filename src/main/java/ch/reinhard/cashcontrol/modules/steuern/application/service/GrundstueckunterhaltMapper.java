@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GrundstueckunterhaltMapper {
 
-    public static Grundstueckunterhalt toBeruf(GrundstueckunterhaltDto source) {
+    public static Grundstueckunterhalt toGrundstueckunterhalt(GrundstueckunterhaltDto source) {
         return new Grundstueckunterhalt(
                 source.id(),
                 source.version(),
