@@ -1,6 +1,5 @@
 package ch.reinhard.cashcontrol.config;
 
-import ch.reinhard.cashcontrol.modules.finanzen.controller.ZahlungController;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -28,7 +27,7 @@ public class OpenApiConfiguration {
     public GroupedOpenApi apiV1() {
         return GroupedOpenApi.builder()
                 .group("v1")
-                .packagesToScan(ZahlungController.class.getPackageName())
+                .packagesToScan("ch.reinhard.cashcontrol.modules.finanzen.controller", "ch.reinhard.cashcontrol.modules.steuern.controller")
                 .pathsToMatch("/api/v1/**")
                 .build();
     }

@@ -6,7 +6,9 @@ import ch.reinhard.cashcontrol.modules.steuern.api.SchuldService;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaSchuldRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.application.service.SchuldMapper.*;
 
+@RequiredArgsConstructor
+@Service
 class SchuldServiceImpl implements SchuldService {
     @Autowired
     private JpaSchuldRepository jpaSchuldRepository;

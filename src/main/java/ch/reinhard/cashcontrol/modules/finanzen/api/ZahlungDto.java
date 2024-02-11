@@ -1,6 +1,7 @@
 package ch.reinhard.cashcontrol.modules.finanzen.api;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,9 +10,9 @@ import java.time.LocalDate;
 public record ZahlungDto(
     String id,
     Long version,
-    LocalDate datum,
-    String empfaenger,
-    String kategorieId,
-    String text,
-    BigDecimal betrag
+    @NotNull LocalDate datum,
+    @NotNull String empfaenger,
+    @NotNull String kategorieId,
+    @NotNull String text,
+    @NotNull BigDecimal betrag
 ){}

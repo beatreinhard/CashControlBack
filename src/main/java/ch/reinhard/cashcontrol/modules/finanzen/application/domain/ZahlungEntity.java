@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,20 +20,26 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class ZahlungEntity {
+    @NotNull
     @Id
     private String id;
 
     @Version
     private Long version;
 
+    @NotNull
     private LocalDate datum;
 
+    @NotNull
     private String empfaenger;
 
+    @NotNull
     private String kategorieId;
 
+    @NotNull
     private String text;
 
+    @NotNull
     private BigDecimal betrag;
 
     public ZahlungEntity(String id, ZahlungEntityDetails details) {

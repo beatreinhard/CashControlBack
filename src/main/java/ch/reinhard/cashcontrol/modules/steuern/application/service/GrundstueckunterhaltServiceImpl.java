@@ -6,7 +6,9 @@ import ch.reinhard.cashcontrol.modules.steuern.api.GrundstueckunterhaltService;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.Grundstueckunterhalt;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaGrundstueckunterhaltRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.application.service.GrundstueckunterhaltMapper.*;
 
+@RequiredArgsConstructor
+@Service
 public class GrundstueckunterhaltServiceImpl implements GrundstueckunterhaltService {
 
     @Autowired

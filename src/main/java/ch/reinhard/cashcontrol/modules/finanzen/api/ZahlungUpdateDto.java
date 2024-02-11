@@ -1,7 +1,9 @@
 package ch.reinhard.cashcontrol.modules.finanzen.api;
 
+import jakarta.validation.constraints.NotNull;
+
 public record ZahlungUpdateDto(
     String id,
     Long version,
-    ZahlungDetailsDto details
+    @NotNull ZahlungDetailsDto details
 ){}
