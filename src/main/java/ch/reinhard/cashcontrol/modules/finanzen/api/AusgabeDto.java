@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Schema(name = "Zahlung")
-public record ZahlungDto(
+public record AusgabeDto(
     String id,
     Long version,
     @NotNull LocalDate datum,
     @NotNull String empfaenger,
-    @NotNull String kategorieId,
+    @NotNull AusgabeKategorieDto kategorie,
     @NotNull String text,
     @NotNull BigDecimal betrag
 ){}

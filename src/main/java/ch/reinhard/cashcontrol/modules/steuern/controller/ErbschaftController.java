@@ -59,7 +59,7 @@ public class ErbschaftController {
         return erbschaftService.getErbschaftById(id);
     }
 
-    @Operation(summary = "Neue Erbschaft anlegen")
+    @Operation(summary = "Neue Erbschaft erfassen")
     @ApiResponses(
             value = {
                 @ApiResponse(

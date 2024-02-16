@@ -28,7 +28,7 @@ logging:
     level: '[%X{correlationId}] %5p'
   level:
     ch.reinhard: INFO
-    org.springframework: INFO
+    org.springframework: DEBUG
 #    org.flywaydb: DEBUG
 
 

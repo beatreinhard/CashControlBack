@@ -1,7 +1,7 @@
 package ch.reinhard.cashcontrol.modules.finanzen.controller;
 
-import ch.reinhard.cashcontrol.modules.finanzen.api.KategorieDto;
-import ch.reinhard.cashcontrol.modules.finanzen.api.KategorieService;
+import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeKategorieDto;
+import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +23,7 @@ import java.util.List;
 public class KategorieController {
 
     @Autowired
-    private KategorieService kategorieService;
+    private AusgabeService kategorieService;
 
     @Operation(summary = "Alle Kategorien")
     @ApiResponses(
@@ -34,12 +34,12 @@ public class KategorieController {
                         content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = KategorieDto.class))
+                                    schema = @Schema(implementation = AusgabeKategorieDto.class))
                         })
             })
 
     @GetMapping
-    public List<KategorieDto> getAllKategorie() {
+    public List<AusgabeKategorieDto> getAllKategorie() {
         return kategorieService.getAllKategorie();
     }
 

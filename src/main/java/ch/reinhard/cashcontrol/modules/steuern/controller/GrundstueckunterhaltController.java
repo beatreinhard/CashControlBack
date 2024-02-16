@@ -62,7 +62,7 @@ public class GrundstueckunterhaltController {
         return grundstueckunterhaltService.getGrundstueckunterhaltById(id);
     }
 
-    @Operation(summary = "Neue Grundstueckunterhalt anlegen")
+    @Operation(summary = "Neue Grundstueckunterhalt erfassen")
     @ApiResponses(
             value = {
                 @ApiResponse(

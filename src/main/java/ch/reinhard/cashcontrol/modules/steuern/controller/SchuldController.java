@@ -59,7 +59,7 @@ public class SchuldController {
         return schuldService.getSchuldById(id);
     }
 
-    @Operation(summary = "Neue Schuld anlegen")
+    @Operation(summary = "Neue Schuld erfassen")
     @ApiResponses(
             value = {
                 @ApiResponse(

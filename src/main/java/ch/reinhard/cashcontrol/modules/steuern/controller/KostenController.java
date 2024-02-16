@@ -60,7 +60,7 @@ public class KostenController {
         return kostenService.getKostenById(id);
     }
 
-    @Operation(summary = "Neue Kosten anlegen")
+    @Operation(summary = "Neue Kosten erfassen")
     @ApiResponses(
             value = {
                 @ApiResponse(

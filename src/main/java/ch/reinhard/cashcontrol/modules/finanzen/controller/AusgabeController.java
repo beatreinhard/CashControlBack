@@ -1,8 +1,7 @@
-package ch.reinhard.cashcontrol.modules.steuern.controller;
+package ch.reinhard.cashcontrol.modules.finanzen.controller;
 
-import ch.reinhard.cashcontrol.modules.steuern.api.VergabungDto;
-import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertDto;
-import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertService;
+import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeDto;
+import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,61 +18,63 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/vermoegenswert")
-@Tag(name = "VermoegenswertController", description = "Endpoints für Vermoegenswert")
-public class VermoegenswertController {
-    @Autowired
-    private VermoegenswertService vermoegenswertService;
+@RequestMapping("/api/v1/ausgabe")
+@Tag(name = "AusgabeController", description = "Endpoints für Ausgaben")
+public class AusgabeController {
 
-    @Operation(summary = "Alle Vermoegenswerte")
+    @Autowired
+    private AusgabeService ausgabeService;
+
+    @Operation(summary = "Alle Ausgaben")
     @ApiResponses(
             value = {
                 @ApiResponse(
                         responseCode = "200",
-                        description = "Alle Vermoegenswerte gefunden",
+                        description = "Alle Ausgaben gefunden",
                         content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = VermoegenswertDto.class))
+                                    schema = @Schema(implementation = AusgabeDto.class))
                         })
             })
     @GetMapping
-    public List<VermoegenswertDto> getAllVermoegenswerte() {
-        return vermoegenswertService.getAllVermoegenswert();
+    public List<AusgabeDto> getAllAusgabe() {
+        return ausgabeService.getAllAusgabe();
     }
 
-    @Operation(summary = "Vermoegenswert finden mit ID")
+    @Operation(summary = "Ausgabe finden mit ID")
     @ApiResponses(
             value = {
                 @ApiResponse(
                         responseCode = "200",
-                        description = "Vermoegenswert mit ID gefunden",
+                        description = "Ausgabe mit ID gefunden",
                         content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = VergabungDto.class))
+                                    schema = @Schema(implementation = AusgabeDto.class))
                         }),
-                @ApiResponse(responseCode = "404", description = "Vermoegenswert nicht gefunden", content = @Content)
+                @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public VermoegenswertDto getVergabungById(@PathVariable String id) {
-        return vermoegenswertService.getVermoegenswertById(id);
+    public AusgabeDto getAusgabeById(@PathVariable String id) {
+        return ausgabeService.getAusgabeById(id);
     }
 
-    @Operation(summary = "Neuen Vermoegenswert erfassen")
+    @Operation(summary = "Neue Ausgabe erfassen")
     @ApiResponses(
             value = {
                 @ApiResponse(
                         responseCode = "201",
-                        description = "Vermoegenswert erfasst",
+                        description = "Ausgabe erfasst",
                         content =
                                 @Content(
                                         mediaType = MediaType.TEXT_PLAIN_VALUE,
                                         schema = @Schema(implementation = String.class)))
             })
     @PostMapping
-    public ResponseEntity<String> createVermoegenswert(@Valid @RequestBody VermoegenswertDto request) {
-        var id = vermoegenswertService.createVermoegenswert(request);
+    public ResponseEntity<String> createAusgabe(@Valid @RequestBody AusgabeDto request) {
+        var id = ausgabeService.createAusgabe(request);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
+
 }

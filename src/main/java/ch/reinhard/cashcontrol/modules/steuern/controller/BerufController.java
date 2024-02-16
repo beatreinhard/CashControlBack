@@ -59,7 +59,7 @@ public class BerufController {
         return berufService.getBerufById(id);
     }
 
-    @Operation(summary = "Neuen Beruf anlegen")
+    @Operation(summary = "Neuen Beruf erfassen")
     @ApiResponses(
             value = {
                 @ApiResponse(

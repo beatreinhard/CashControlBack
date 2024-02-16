@@ -1,6 +1,6 @@
 package ch.reinhard.cashcontrol;
 
-import ch.reinhard.cashcontrol.modules.finanzen.application.domain.JpaZahlungRepository;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.JpaAusgabeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class JpaTest {
 
     @Autowired
-    private JpaZahlungRepository zahlungRepository;
+    private JpaAusgabeRepository zahlungRepository;
 
     @Test
     public void testJpa() {

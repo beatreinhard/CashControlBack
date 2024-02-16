@@ -59,7 +59,7 @@ public class VergabungConroller {
         return vergabungService.getVergabungById(id);
     }
 
-    @Operation(summary = "Neue Vergabung anlegen")
+    @Operation(summary = "Neue Vergabung erfassen")
     @ApiResponses(
             value = {
                 @ApiResponse(
