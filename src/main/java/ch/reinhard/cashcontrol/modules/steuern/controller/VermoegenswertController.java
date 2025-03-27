@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/vermoegenswert")
 @Tag(name = "VermoegenswertController", description = "Endpoints für Vermoegenswert")
 public class VermoegenswertController {
-    @Autowired
-    private VermoegenswertService vermoegenswertService;
+
+    private final VermoegenswertService vermoegenswertService;
 
     @Operation(summary = "Alle Vermoegenswerte")
     @ApiResponses(
