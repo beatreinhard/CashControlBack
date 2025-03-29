@@ -1,7 +1,6 @@
-package ch.reinhard.cashcontrol.modules.finanzen.api;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 
 @Schema(name = "AusgabeKategorie")
 public enum AusgabeKategorieDto {

@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.finanzen.application.domain;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence;
 
 public enum AusgabeKategorie {
     VERKEHR_AUTO_TRANSPORT,

@@ -1,7 +1,7 @@
-package ch.reinhard.cashcontrol.modules.finanzen.controller;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web;
 
-import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeDto;
-import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeService;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeWebMapper.*;
+
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/ausgabe")
@@ -24,7 +27,7 @@ import java.util.List;
 public class AusgabeController {
 
 
-    private final AusgabeService ausgabeService;
+    private final AusgabeServicePort ausgabeService;
 
     @Operation(summary = "Alle Ausgaben")
     @ApiResponses(
@@ -40,7 +43,7 @@ public class AusgabeController {
             })
     @GetMapping
     public List<AusgabeDto> getAllAusgabe() {
-        return ausgabeService.getAllAusgabe();
+        return toAusgabeDtoList(ausgabeService.getAllAusgabe());
     }
 
     @Operation(summary = "Ausgabe finden mit ID")
@@ -58,7 +61,7 @@ public class AusgabeController {
             })
     @GetMapping("/{id}")
     public AusgabeDto getAusgabeById(@PathVariable String id) {
-        return ausgabeService.getAusgabeById(id);
+        return toAusgabeDto(ausgabeService.getAusgabeById(id));
     }
 
     @Operation(summary = "Neue Ausgabe erfassen")
@@ -74,8 +77,43 @@ public class AusgabeController {
             })
     @PostMapping
     public ResponseEntity<String> createAusgabe(@Valid @RequestBody AusgabeDto request) {
-        var id = ausgabeService.createAusgabe(request);
+        var id = ausgabeService.createAusgabe(toAusgabeBo(request));
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
+
+    @Operation(summary = "Ausgabe löschen mit ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ausgabe mit ID gelöscht"),
+                    @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
+            })
+    @DeleteMapping("/{id}")
+    public void deleteAusgabeById(@PathVariable String id) {
+         ausgabeService.deleteAusgabeById(id);
+    }
+
+    @Operation(summary = "Ausgabe aktualisieren")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ausgabe aktualisiert",
+                            content = {
+                                    @Content(
+                                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                            schema = @Schema(implementation = AusgabeDto.class))
+                            }),
+                    @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
+            })
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateAusgabe(@PathVariable String id, @Valid @RequestBody AusgabeDto request) {
+        AusgabeBo ausgabeBo = toAusgabeBo(request);
+        ausgabeBo.id(id);
+        ausgabeService.updateAusgabe(ausgabeBo);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

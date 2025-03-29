@@ -2,10 +2,12 @@ package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 
 import ch.reinhard.cashcontrol.PostgreSQLContainerInitializer;
 import ch.reinhard.cashcontrol.config.TestConfig;
-import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeDto;
-import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeKategorieDto;
-import ch.reinhard.cashcontrol.modules.finanzen.api.AusgabeService;
-import ch.reinhard.cashcontrol.modules.finanzen.application.domain.JpaAusgabeRepository;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeDto;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeKategorieDto;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.JpaAusgabeRepository;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeWebMapper.toAusgabeBo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -50,11 +53,14 @@ public class AusgabeServiceIT {
     //        registry.add("spring.datasource.password", postgresContainer::getPassword);
     //    }
 
-    @Autowired
-    private AusgabeService ausgabeService;
+    //@Autowired
+    //private AusgabeService ausgabeService;
 
     @Autowired
     public JpaAusgabeRepository ausgabeRepository;
+
+    @Autowired
+    private AusgabeServicePort ausgabeService;
 
     @BeforeEach
     public void deleteAllAusgaben() {
@@ -74,7 +80,7 @@ public class AusgabeServiceIT {
                 new BigDecimal("450.35"));
 
         // WHEN
-        var id = ausgabeService.createAusgabe(ausgabeDto);
+        var id = ausgabeService.createAusgabe(toAusgabeBo(ausgabeDto));
         var createdAusgabe = ausgabeRepository.getReferenceById(id);
 
         // THEN
@@ -92,51 +98,51 @@ public class AusgabeServiceIT {
                 AusgabeKategorieDto.GESUNDHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
-        var id = ausgabeService.createAusgabe(ausgabeDto);
+        var id = ausgabeService.createAusgabe(toAusgabeBo(ausgabeDto));
         ausgabeRepository.flush();
 
         // WHEN
-        var createdAusgabe = ausgabeService.getAusgabeById(id);
-        var ausgabeToUpdate = new AusgabeDto(
-                createdAusgabe.id(),
-                createdAusgabe.version(),
-                createdAusgabe.datum(),
-                createdAusgabe.empfaenger(),
-                createdAusgabe.kategorie(),
-                createdAusgabe.text(),
+        var createdAusgabeBo = ausgabeService.getAusgabeById(id);
+        var ausgabeToUpdateBo = new AusgabeBo(
+                createdAusgabeBo.id(),
+                createdAusgabeBo.version(),
+                createdAusgabeBo.datum(),
+                createdAusgabeBo.empfaenger(),
+                createdAusgabeBo.kategorie(),
+                createdAusgabeBo.text(),
                 new BigDecimal("455.55"));
 
-        ausgabeService.updateAusgabe(ausgabeToUpdate);
+        ausgabeService.updateAusgabe(ausgabeToUpdateBo);
         ausgabeRepository.flush();
         var updatedAusgabeAfterFlush = ausgabeService.getAusgabeById(id);
 
         // THEN
         assertEquals(new BigDecimal("455.55"), updatedAusgabeAfterFlush.betrag());
-        assertEquals(0, createdAusgabe.version());
+        assertEquals(0, createdAusgabeBo.version());
         assertEquals(1, updatedAusgabeAfterFlush.version());
     }
 
     @Test
     public void getAllAusgabe() {
         // GIVEN
-        var ausgabeDto1 = new AusgabeDto(
+        var ausgabeBo1 = new AusgabeBo(
                 null,
                 null,
                 LocalDate.now(),
                 "Assura",
-                AusgabeKategorieDto.GESUNDHEIT,
+                AusgabeKategorie.GESUNDHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
-        ausgabeService.createAusgabe(ausgabeDto1);
-        var ausgabeDto2 = new AusgabeDto(
+        ausgabeService.createAusgabe(ausgabeBo1);
+        var ausgabeBo2 = new AusgabeBo(
                 null,
                 null,
                 LocalDate.now(),
                 "Steuerverwaltung",
-                AusgabeKategorieDto.STEUERN,
+                AusgabeKategorie.STEUERN,
                 "1. Rate",
                 new BigDecimal("3400.05"));
-        ausgabeService.createAusgabe(ausgabeDto2);
+        ausgabeService.createAusgabe(ausgabeBo2);
 
         // WHEN
         var ausgabeList = ausgabeService.getAllAusgabe();
@@ -149,15 +155,15 @@ public class AusgabeServiceIT {
     public void getAusgabeById() {
         // GIVEN
         var empfaenger = "Assura";
-        var ausgabeDto = new AusgabeDto(
+        var ausgabeBo = new AusgabeBo(
                 null,
                 null,
                 LocalDate.now(),
                 empfaenger,
-                AusgabeKategorieDto.GESUNDHEIT,
+                AusgabeKategorie.GESUNDHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
-        ausgabeService.createAusgabe(ausgabeDto);
+        ausgabeService.createAusgabe(ausgabeBo);
         var ausgabeList = ausgabeService.getAllAusgabe();
 
         // WHEN
@@ -173,15 +179,15 @@ public class AusgabeServiceIT {
     public void deleteZahlungById() {
         // GIVEN
         var empfaenger = "Assura";
-        var ausgabeDto = new AusgabeDto(
+        var ausgabeBo = new AusgabeBo(
                 null,
                 null,
                 LocalDate.now(),
                 empfaenger,
-                AusgabeKategorieDto.GESUNDHEIT,
+                AusgabeKategorie.GESUNDHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
-        ausgabeService.createAusgabe(ausgabeDto);
+        ausgabeService.createAusgabe(ausgabeBo);
         var ausgabeList = ausgabeService.getAllAusgabe();
 
         // WHEN

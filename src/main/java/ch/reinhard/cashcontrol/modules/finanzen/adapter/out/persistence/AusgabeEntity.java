@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.finanzen.application.domain;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Ausgabe {
+public class AusgabeEntity {
     @NotNull
     @Id
     private String id;
@@ -40,12 +40,12 @@ public class Ausgabe {
     @NotNull
     BigDecimal betrag;
 
-    public void update(Ausgabe ausgabe) {
-        this.datum = ausgabe.datum;
-        this.empfaenger = ausgabe.empfaenger;
-        this.kategorie = ausgabe.kategorie;
-        this.text = ausgabe.text;
-        this.betrag = ausgabe.betrag;
+    public void update(AusgabeEntity ausgabeEntity) {
+        this.datum = ausgabeEntity.datum;
+        this.empfaenger = ausgabeEntity.empfaenger;
+        this.kategorie = ausgabeEntity.kategorie;
+        this.text = ausgabeEntity.text;
+        this.betrag = ausgabeEntity.betrag;
     }
 
 }
