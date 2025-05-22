@@ -162,6 +162,76 @@
                     </java>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.12.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-spring-server</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <!-- 1. Deine OpenAPI-Spec -->
+                            <inputSpec>${project.basedir}/src/main/resources/apispecs/cashcontrol.yaml</inputSpec>
+
+                            <!-- 2. Generator und Bibliothek -->
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+
+                            <!-- 3. Paketnamen für API-Interfaces und DTO-Modelle -->
+                            <apiPackage>ch.reinhard.cashcontrol.openapi.api</apiPackage>
+                            <modelPackage>ch.reinhard.cashcontrol.openapi.model</modelPackage>
+
+                            <!-- 4. Zielordner für generierten Code -->
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+
+                            <!-- 5. Nur bestimmte „Supporting Files“ erzeugen -->
+                            <supportingFilesToGenerate>
+                                ApiUtil.java
+                            </supportingFilesToGenerate>
+
+                            <!-- 6. Feintuning via configOptions -->
+                            <configOptions>
+                                <!-- verdrängt javax.* durch jakarta.* -->
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <!-- nur Interfaces, keine Controller -->
+                                <interfaceOnly>true</interfaceOnly>
+                                <!-- deaktiviert alle default-Methoden im Interface -->
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <!-- An Tag-namen in der Spec ausrichten -->
+                                <useTags>true</useTags>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Build Helper Plugin, um generated-sources als Source-Root hinzuzufügen -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>add-openapi-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <!-- Pfad zu deinem generated-sources-Ordner -->
+                                <source>${project.build.directory}/generated-sources/openapi/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
