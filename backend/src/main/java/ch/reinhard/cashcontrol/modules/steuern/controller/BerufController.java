@@ -57,7 +57,7 @@ public class BerufController {
                 @ApiResponse(responseCode = "404", description = "Beruf nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public BerufDto getBerufById(@PathVariable String id) {
+    public BerufDto getBerufById(@PathVariable("id") String id) {
         return berufService.getBerufById(id);
     }
 

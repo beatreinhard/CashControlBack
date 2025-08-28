@@ -56,7 +56,7 @@ public class VergabungConroller {
                 @ApiResponse(responseCode = "404", description = "Vergabung nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public VergabungDto getVergabungById(@PathVariable String id) {
+    public VergabungDto getVergabungById(@PathVariable("id") String id) {
         return vergabungService.getVergabungById(id);
     }
 

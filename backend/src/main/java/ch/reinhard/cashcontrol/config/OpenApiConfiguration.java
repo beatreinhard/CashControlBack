@@ -27,7 +27,7 @@ public class OpenApiConfiguration {
     public GroupedOpenApi apiV1() {
         return GroupedOpenApi.builder()
                 .group("v1")
-                .packagesToScan("ch.reinhard.cashcontrol.modules.finanzen.controller", "ch.reinhard.cashcontrol.modules.steuern.controller")
+                .packagesToScan("ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web", "ch.reinhard.cashcontrol.modules.steuern.controller")
                 .pathsToMatch("/api/v1/**")
                 .build();
     }

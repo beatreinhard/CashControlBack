@@ -57,7 +57,7 @@ public class KostenController {
                 @ApiResponse(responseCode = "404", description = "Kosten nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public KostenDto getKostenById(@PathVariable String id) {
+    public KostenDto getKostenById(@PathVariable("id") String id) {
         return kostenService.getKostenById(id);
     }
 

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Schema(name = "Zahlung")
 public record AusgabeDto(
     String id,
-    @NotNull Long version,
+    Long version,
     @NotNull LocalDate datum,
     @NotNull String empfaenger,
     @NotNull AusgabeKategorieDto kategorie,

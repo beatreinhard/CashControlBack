@@ -57,7 +57,7 @@ public class VermoegenswertController {
                 @ApiResponse(responseCode = "404", description = "Vermoegenswert nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public VermoegenswertDto getVergabungById(@PathVariable String id) {
+    public VermoegenswertDto getVergabungById(@PathVariable("id") String id) {
         return vermoegenswertService.getVermoegenswertById(id);
     }
 

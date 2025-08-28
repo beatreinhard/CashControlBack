@@ -56,7 +56,7 @@ public class SchuldController {
                 @ApiResponse(responseCode = "404", description = "Schuld nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public SchuldDto getSchuldById(@PathVariable String id) {
+    public SchuldDto getSchuldById(@PathVariable("id") String id) {
         return schuldService.getSchuldById(id);
     }
 

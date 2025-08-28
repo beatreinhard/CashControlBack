@@ -60,7 +60,7 @@ public class AusgabeController {
                 @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public AusgabeDto getAusgabeById(@PathVariable String id) {
+    public AusgabeDto getAusgabeById(@PathVariable("id") String id) {
         return toAusgabeDto(ausgabeService.getAusgabeById(id));
     }
 
@@ -90,7 +90,7 @@ public class AusgabeController {
                     @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
             })
     @DeleteMapping("/{id}")
-    public void deleteAusgabeById(@PathVariable String id) {
+    public void deleteAusgabeById(@PathVariable("id") String id) {
          ausgabeService.deleteAusgabeById(id);
     }
 
@@ -108,7 +108,7 @@ public class AusgabeController {
                     @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
             })
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAusgabe(@PathVariable String id, @Valid @RequestBody AusgabeDto request) {
+    public ResponseEntity<Void> updateAusgabe(@PathVariable("id") String id, @Valid @RequestBody AusgabeDto request) {
         AusgabeBo ausgabeBo = toAusgabeBo(request);
         ausgabeBo.id(id);
         ausgabeService.updateAusgabe(ausgabeBo);

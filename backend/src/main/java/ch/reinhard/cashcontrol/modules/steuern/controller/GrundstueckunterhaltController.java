@@ -59,7 +59,7 @@ public class GrundstueckunterhaltController {
                         content = @Content)
             })
     @GetMapping("/{id}")
-    public GrundstueckunterhaltDto getGrundstueckunterhaltById(@PathVariable String id) {
+    public GrundstueckunterhaltDto getGrundstueckunterhaltById(@PathVariable("id") String id) {
         return grundstueckunterhaltService.getGrundstueckunterhaltById(id);
     }
 

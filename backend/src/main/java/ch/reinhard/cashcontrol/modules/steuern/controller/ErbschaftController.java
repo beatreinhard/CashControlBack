@@ -56,7 +56,7 @@ public class ErbschaftController {
                 @ApiResponse(responseCode = "404", description = "Erbschaft nicht gefunden", content = @Content)
             })
     @GetMapping("/{id}")
-    public ErbschaftDto getErbschaftById(@PathVariable String id) {
+    public ErbschaftDto getErbschaftById(@PathVariable("id") String id) {
         return erbschaftService.getErbschaftById(id);
     }
 
