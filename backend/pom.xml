@@ -176,7 +176,7 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <!-- 1. Deine OpenAPI-Spec -->
-                            <inputSpec>${project.basedir}/src/main/resources/apispecs/cashcontrol.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api-spec/cashcontrol.yaml</inputSpec>
 
                             <!-- 2. Generator und Bibliothek -->
                             <generatorName>spring</generatorName>
@@ -204,6 +204,8 @@
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <!-- An Tag-namen in der Spec ausrichten -->
                                 <useTags>true</useTags>
+
+                                <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>
                     </execution>
