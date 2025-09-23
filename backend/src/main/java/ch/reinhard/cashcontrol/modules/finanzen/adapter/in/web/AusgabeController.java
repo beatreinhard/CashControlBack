@@ -15,54 +15,54 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeWebMapper.toAusgabeBo;
 
-import static ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeWebMapper.*;
 
+// TODO: kann weg, wenn openapi implementiert ist
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/ausgabe")
+@RequestMapping("/api/v2/ausgabe")
 @Tag(name = "AusgabeController", description = "Endpoints für Ausgaben")
 public class AusgabeController {
 
 
     private final AusgabeServicePort ausgabeService;
 
-    @Operation(summary = "Alle Ausgaben")
-    @ApiResponses(
-            value = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "Alle Ausgaben gefunden",
-                        content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AusgabeDto.class))
-                        })
-            })
-    @GetMapping
-    public List<AusgabeDto> getAllAusgabe() {
-        return toAusgabeDtoList(ausgabeService.getAllAusgabe());
-    }
+//    @Operation(summary = "Alle Ausgaben")
+//    @ApiResponses(
+//            value = {
+//                @ApiResponse(
+//                        responseCode = "200",
+//                        description = "Alle Ausgaben gefunden",
+//                        content = {
+//                            @Content(
+//                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+//                                    schema = @Schema(implementation = AusgabeDto.class))
+//                        })
+//            })
+//    @GetMapping
+//    public List<AusgabeDto> getAllAusgabe() {
+//        return toAusgabeDtoList(ausgabeService.getAllAusgabe());
+//    }
 
-    @Operation(summary = "Ausgabe finden mit ID")
-    @ApiResponses(
-            value = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "Ausgabe mit ID gefunden",
-                        content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AusgabeDto.class))
-                        }),
-                @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
-            })
-    @GetMapping("/{id}")
-    public AusgabeDto getAusgabeById(@PathVariable("id") String id) {
-        return toAusgabeDto(ausgabeService.getAusgabeById(id));
-    }
+//    @Operation(summary = "Ausgabe finden mit ID")
+//    @ApiResponses(
+//            value = {
+//                @ApiResponse(
+//                        responseCode = "200",
+//                        description = "Ausgabe mit ID gefunden",
+//                        content = {
+//                            @Content(
+//                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+//                                    schema = @Schema(implementation = AusgabeDto.class))
+//                        }),
+//                @ApiResponse(responseCode = "404", description = "Ausgabe nicht gefunden", content = @Content)
+//            })
+//    @GetMapping("/{id}")
+//    public AusgabeDto getAusgabeById(@PathVariable("id") String id) {
+//        return toAusgabeDto(ausgabeService.getAusgabeById(id));
+//    }
 
     @Operation(summary = "Neue Ausgabe erfassen")
     @ApiResponses(

@@ -102,7 +102,7 @@ paths:
 components:
   schemas:
     AusgabeDto:
-      title: Zahlung
+      title: Ausgabe
       type: object
       description: Datentransferobjekt einer Ausgabe
       properties:

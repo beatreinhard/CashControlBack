@@ -49,6 +49,12 @@
             </configuration>
           </execution>
           <execution>
+            <id>generate-api</id>
+            <phase>generate-resources</phase>
+            <goals><goal>npm</goal></goals>
+            <configuration><arguments>run gen:api</arguments></configuration>
+          </execution>
+          <execution>
             <id>npm run build</id>
             <goals>
               <goal>npm</goal>

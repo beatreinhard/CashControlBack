@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+// TODO: remove when old controller is deleted and openapi is fully implemented
 @Schema(name = "Zahlung")
 public record AusgabeDto(
     String id,
