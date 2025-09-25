@@ -2,12 +2,12 @@ package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 
 import ch.reinhard.cashcontrol.PostgreSQLContainerInitializer;
 import ch.reinhard.cashcontrol.config.TestConfig;
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeDto;
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeKategorieDto;
 import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.JpaAusgabeRepository;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
+import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;
+import ch.reinhard.cashcontrol.openapi.model.AusgabeKategorieDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +71,6 @@ public class AusgabeServiceIT {
     public void createAusgabe() {
         // GIVEN
         var ausgabeDto = new AusgabeDto(
-                null,
-                null,
                 LocalDate.now(),
                 "Assura",
                 AusgabeKategorieDto.GESUNDHEIT,
@@ -91,8 +89,6 @@ public class AusgabeServiceIT {
     public void updateAusgabe() {
         // GIVEN
         var ausgabeDto = new AusgabeDto(
-                null,
-                null,
                 LocalDate.now(),
                 "Assura",
                 AusgabeKategorieDto.GESUNDHEIT,
