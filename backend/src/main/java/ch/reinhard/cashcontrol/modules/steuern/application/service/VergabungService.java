@@ -1,10 +1,10 @@
 package ch.reinhard.cashcontrol.modules.steuern.application.service;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
-import ch.reinhard.cashcontrol.modules.steuern.api.VergabungDto;
-import ch.reinhard.cashcontrol.modules.steuern.api.VergabungService;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaVergabungRepository;
+import ch.reinhard.cashcontrol.modules.steuern.application.port.in.VergabungServicePort;
+import ch.reinhard.cashcontrol.openapi.model.VergabungDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import static ch.reinhard.cashcontrol.modules.steuern.application.service.Vergab
 
 @RequiredArgsConstructor
 @Service
-class VergabungServiceImpl implements VergabungService {
+class VergabungService implements VergabungServicePort {
 
     @Autowired
     private JpaVergabungRepository jpaVergabungRepository;
@@ -52,9 +52,9 @@ class VergabungServiceImpl implements VergabungService {
     @Transactional
     public void updateVergabung(VergabungDto source) {
         var vergabungEntity = jpaVergabungRepository
-                .findById(source.id())
-                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.id()));
-        validateOptimisticLocking(source.version(), vergabungEntity.getVersion(), Erbschaft.class);
+                .findById(source.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.getId()));
+        validateOptimisticLocking(source.getVersion(), vergabungEntity.getVersion(), Erbschaft.class);
         vergabungEntity.update(toVergabung(source));
         jpaVergabungRepository.save(vergabungEntity);
     }

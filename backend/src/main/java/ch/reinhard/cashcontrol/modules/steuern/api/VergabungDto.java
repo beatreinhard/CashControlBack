@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+// TODO löschen
+
 @Schema(name = "Vergabung")
 public record VergabungDto(
         String id,

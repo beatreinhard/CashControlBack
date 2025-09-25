@@ -2,7 +2,7 @@ openapi: 3.0.4
 info:
   title: CashControl Ausgabe API
   version: 1.0.0
-  description: REST-API für Ausgaben (AusgabeController)
+  description: REST-API
 servers:
   - url: http://localhost:8080
     description: Lokaler Server
@@ -10,6 +10,8 @@ servers:
 tags:
   - name: AusgabeController
     description: Endpoints für Ausgaben
+  - name: VergabungController
+    description: Endpoints für Vergabungen
 
 paths:
   /api/v1/ausgabe:
@@ -99,6 +101,59 @@ paths:
         '404':
           description: Ausgabe nicht gefunden
 
+  /api/v1/vergabung:
+    get:
+      tags: [VergabungController]
+      operationId: getAllVergabungen
+      summary: Alle Vergabungen
+      responses:
+        '200':
+          description: Alle Vergabungen gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VergabungDto'
+    post:
+      tags: [VergabungController]
+      operationId: createVergabung
+      summary: Neue Vergabung erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VergabungDto'
+      responses:
+        '201':
+          description: Vergabung erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID der neu erstellten Vergabung
+
+  /api/v1/vergabung/{id}:
+    get:
+      tags: [VergabungController]
+      operationId: getVergabungById
+      summary: Vergabung finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Vergabung mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VergabungDto'
+        '404':
+          description: Vergabung nicht gefunden
+
 components:
   schemas:
     AusgabeDto:
@@ -154,3 +209,41 @@ components:
         - SPAREN_VORSORGE
         - STEUERN
         - DIVERSES
+
+    VergabungDto:
+      title: Vergabung
+      type: object
+      description: Datentransferobjekt einer Vergabung
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "5c2a1b1e-97f9-4f0a-1b3e-a8f1c7d21b3e"
+        version:
+          type: integer
+          format: int64
+          description: Version für Optimistic Locking (optional)
+          example: 1
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr der Vergabung
+          example: 2025
+        zahlungsDatum:
+          type: string
+          format: date
+          description: Datum der Zahlung
+          example: "2025-03-31"
+        empfaenger:
+          type: string
+          description: Empfänger der Vergabung
+          example: "Gemeinde Bern"
+        betrag:
+          type: number
+          description: Betrag der Vergabung
+          example: 250.00
+      required:
+        - jahr
+        - zahlungsDatum
+        - empfaenger
+        - betrag
