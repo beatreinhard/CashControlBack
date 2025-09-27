@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
 @Getter
 @Setter
-public class Vergabung {
+public class VergabungEntity {
     @Id
     private String id;
 
@@ -37,10 +37,10 @@ public class Vergabung {
     @NotNull
     private BigDecimal betrag;
 
-    public void update(Vergabung vergabung) {
-        jahr = vergabung.jahr;
-        zahlungsDatum = vergabung.zahlungsDatum;
-        empfaenger = vergabung.empfaenger;
-        betrag = vergabung.betrag;
+    public void update(VergabungEntity vergabungEntity) {
+        jahr = vergabungEntity.jahr;
+        zahlungsDatum = vergabungEntity.zahlungsDatum;
+        empfaenger = vergabungEntity.empfaenger;
+        betrag = vergabungEntity.betrag;
     }
 }

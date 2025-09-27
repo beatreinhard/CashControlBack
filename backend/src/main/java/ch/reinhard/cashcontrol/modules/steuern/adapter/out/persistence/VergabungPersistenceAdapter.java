@@ -1,0 +1,64 @@
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
+
+import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
+import ch.reinhard.cashcontrol.modules.steuern.application.port.out.persistence.VergabungPersistencePort;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
+import static ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence.VergabungPersistenceMapper.*;
+
+
+public class VergabungPersistenceAdapter implements VergabungPersistencePort {
+
+
+    @Autowired
+    private JpaVergabungRepository jpaVergabungRepository;
+
+    @Override
+    @Transactional
+    public String createVergabung(VergabungBo source) {
+        var vergabung = toVergabung(source);
+        vergabung.setId(IdGenerator.generateId());
+        var vergabungEntity = jpaVergabungRepository.save(vergabung);
+        return vergabungEntity.getId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public VergabungBo getVergabungById(String id) {
+        var entity = jpaVergabungRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + id));
+        return toVergabungBo(entity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VergabungBo> getAllVergabung() {
+        var vergabungList = jpaVergabungRepository.findAll();
+        return toVergabungBoList(vergabungList);
+    }
+
+    @Override
+    @Transactional
+    public void updateVergabung(VergabungBo source) {
+        var vergabungEntity = jpaVergabungRepository
+                .findById(source.id())
+                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.id()));
+        validateOptimisticLocking(source.version(), vergabungEntity.getVersion(), Erbschaft.class);
+        vergabungEntity.update(toVergabung(source));
+        jpaVergabungRepository.save(vergabungEntity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteVergabungById(String id) {
+        jpaVergabungRepository.deleteById(id);
+    }
+}

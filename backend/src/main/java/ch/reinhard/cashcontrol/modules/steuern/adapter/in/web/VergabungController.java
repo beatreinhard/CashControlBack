@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.steuern.application.service.VergabungMapper.toVergabungDtoList;
+import static ch.reinhard.cashcontrol.modules.steuern.adapter.in.web.VergabungWebMapper.*;
 
 @AllArgsConstructor
 @RestController
@@ -20,7 +20,7 @@ public class VergabungController implements VergabungControllerApi {
 
     @Override
     public ResponseEntity<String> createVergabung(VergabungDto vergabungDto) {
-        var id = vergabungServicePort.createVergabung(vergabungDto);
+        var id = vergabungServicePort.createVergabung(toVergabungBo(vergabungDto));
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
@@ -32,6 +32,7 @@ public class VergabungController implements VergabungControllerApi {
 
     @Override
     public ResponseEntity<VergabungDto> getVergabungById(String id) {
-        return vergabungServicePort.getVergabungById(id);
+        var bo = vergabungServicePort.getVergabungById(id);
+        return ResponseEntity.ok(toVergabungDto(bo));
     }
 }
