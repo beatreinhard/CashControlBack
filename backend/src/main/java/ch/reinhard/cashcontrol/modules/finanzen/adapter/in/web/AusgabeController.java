@@ -4,7 +4,7 @@ import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import ch.reinhard.cashcontrol.openapi.api.AusgabeControllerApi;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +14,7 @@ import java.util.List;
 import static ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web.AusgabeWebMapper.*;
 
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class AusgabeController implements AusgabeControllerApi {
 
@@ -47,7 +47,7 @@ public class AusgabeController implements AusgabeControllerApi {
     @Override
     public ResponseEntity<Void> updateAusgabe(String id, AusgabeDto ausgabeDto) {
         AusgabeBo ausgabeBo = toAusgabeBo(ausgabeDto);
-        ausgabeBo.id(id);
+        ausgabeBo.setId(id);
         ausgabeServicePort.updateAusgabe(ausgabeBo);
         return ResponseEntity.ok().build();
     }

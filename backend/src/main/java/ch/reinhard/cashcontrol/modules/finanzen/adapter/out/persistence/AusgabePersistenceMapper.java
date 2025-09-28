@@ -12,13 +12,13 @@ public class AusgabePersistenceMapper {
 
     public static AusgabeEntity toAusgabe(AusgabeBo source) {
         return new AusgabeEntity(
-                source.id(),
-                source.version(),
-                source.datum(),
-                source.empfaenger(),
-                convert(source.kategorie(), AusgabeKategorie.class),
-                source.text(),
-                source.betrag());
+                source.getId(),
+                source.getVersion(),
+                source.getDatum(),
+                source.getEmpfaenger(),
+                convert(source.getKategorie(), AusgabeKategorie.class),
+                source.getText(),
+                source.getBetrag());
     }
 
     public static AusgabeBo toAusgabeBo(AusgabeEntity source) {

@@ -24,14 +24,14 @@ public class AusgabeWebMapper {
 
     public static AusgabeDto toAusgabeDto(AusgabeBo source) {
         AusgabeDto ausgabeDto = new AusgabeDto(
-                source.datum(),
-                source.empfaenger(),
-                convert(source.kategorie(), AusgabeKategorieDto.class),
-                source.text(),
-                source.betrag());
+                source.getDatum(),
+                source.getEmpfaenger(),
+                convert(source.getKategorie(), AusgabeKategorieDto.class),
+                source.getText(),
+                source.getBetrag());
 
-        ausgabeDto.setId(source.id());
-        ausgabeDto.setVersion(source.version());
+        ausgabeDto.setId(source.getId());
+        ausgabeDto.setVersion(source.getVersion());
         return ausgabeDto;
     }
 

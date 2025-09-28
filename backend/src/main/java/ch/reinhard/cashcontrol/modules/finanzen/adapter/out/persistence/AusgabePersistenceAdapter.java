@@ -50,9 +50,9 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
     @Override
     public void updateAusgabe(AusgabeBo source) {
         var ausgabeEntity = ausgabeRepository
-                .findById(source.id())
-                .orElseThrow(() -> new EntityNotFoundException("Ausgabe nicht gefunden mit ID=" + source.id()));
-        validateOptimisticLocking(source.version(), ausgabeEntity.getVersion(), AusgabeEntity.class);
+                .findById(source.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Ausgabe nicht gefunden mit ID=" + source.getId()));
+        validateOptimisticLocking(source.getVersion(), ausgabeEntity.getVersion(), AusgabeEntity.class);
         ausgabeEntity.update(toAusgabe(source));
         ausgabeRepository.save(ausgabeEntity);
     }

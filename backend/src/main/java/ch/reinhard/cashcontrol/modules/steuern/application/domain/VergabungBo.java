@@ -10,10 +10,11 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Accessors(fluent = true)
+@Accessors(chain = true)
 @AllArgsConstructor
 public class VergabungBo {
     private String id;
+    private String ausgabeId;
     private Long version;
     private Integer jahr;
     private LocalDate zahlungsDatum;

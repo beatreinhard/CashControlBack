@@ -19,12 +19,12 @@ public class VergabungWebMapper {
 
     public static VergabungDto toVergabungDto(VergabungBo source) {
         VergabungDto vergabungDto =  new VergabungDto(
-                source.jahr(),
-                source.zahlungsDatum(),
-                source.empfaenger(),
-                source.betrag());
-        vergabungDto.setId(source.id());
-        vergabungDto.setVersion(source.version());
+                source.getJahr(),
+                source.getZahlungsDatum(),
+                source.getEmpfaenger(),
+                source.getBetrag());
+        vergabungDto.setId(source.getId());
+        vergabungDto.setVersion(source.getVersion());
         return vergabungDto;
     }
 

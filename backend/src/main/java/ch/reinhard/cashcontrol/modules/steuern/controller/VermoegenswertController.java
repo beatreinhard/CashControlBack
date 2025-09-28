@@ -1,6 +1,5 @@
 package ch.reinhard.cashcontrol.modules.steuern.controller;
 
-import ch.reinhard.cashcontrol.modules.steuern.api.VergabungDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +51,7 @@ public class VermoegenswertController {
                         content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = VergabungDto.class))
+                                    schema = @Schema(implementation = VermoegenswertDto.class))
                         }),
                 @ApiResponse(responseCode = "404", description = "Vermoegenswert nicht gefunden", content = @Content)
             })

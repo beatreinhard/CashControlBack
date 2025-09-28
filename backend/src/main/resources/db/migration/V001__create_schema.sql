@@ -88,6 +88,7 @@ create table grundstueckunterhalt (
 create table vergabung
 (
     id             varchar(255) not null primary key,
+    ausgabe_id     varchar(255) not null,
     version        bigint,
     jahr           integer      not null,
     zahlungs_datum date         not null,

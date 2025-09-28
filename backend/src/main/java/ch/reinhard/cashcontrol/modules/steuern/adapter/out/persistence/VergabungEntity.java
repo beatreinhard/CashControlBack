@@ -21,6 +21,9 @@ public class VergabungEntity {
     @Id
     private String id;
 
+    @NotNull
+    private String ausgabeId;
+
     @Version
     private Long version;
 

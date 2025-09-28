@@ -9,6 +9,7 @@ public class VergabungPersistenceMapper {
     public static VergabungBo toVergabungBo(VergabungEntity source) {
         return new VergabungBo(
                 source.getId(),
+                source.getAusgabeId(),
                 source.getVersion(),
                 source.getJahr(),
                 source.getZahlungsDatum(),
@@ -18,12 +19,13 @@ public class VergabungPersistenceMapper {
 
     public static VergabungEntity toVergabung(VergabungBo source) {
         return new VergabungEntity(
-                source.id(),
-                source.version(),
-                source.jahr(),
-                source.zahlungsDatum(),
-                source.empfaenger(),
-                source.betrag());
+                source.getId(),
+                source.getAusgabeId(),
+                source.getVersion(),
+                source.getJahr(),
+                source.getZahlungsDatum(),
+                source.getEmpfaenger(),
+                source.getBetrag());
     }
 
     public static List<VergabungBo> toVergabungBoList(List<VergabungEntity> entityList) {

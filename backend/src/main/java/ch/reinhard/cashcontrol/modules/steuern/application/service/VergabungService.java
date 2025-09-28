@@ -1,5 +1,8 @@
 package ch.reinhard.cashcontrol.modules.steuern.application.service;
 
+import ch.reinhard.cashcontrol.core.domainevent.AusgabeCreatedEvent;
+import ch.reinhard.cashcontrol.core.domainevent.AusgabeDeletedEvent;
+import ch.reinhard.cashcontrol.core.domainevent.AusgabeUpdatedEvent;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.in.VergabungServicePort;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.out.persistence.VergabungPersistencePort;
@@ -43,5 +46,35 @@ class VergabungService implements VergabungServicePort {
     @Transactional
     public void deleteVergabungById(String id) {
         vergabungPersistencePort.deleteVergabungById(id);
+    }
+
+    @Override
+    public void consumeVergabungCreatedEvent(Object event) {
+        AusgabeCreatedEvent createdEvent = (AusgabeCreatedEvent) event;
+
+        // TODO hier sollten keine Events rein kommen, sondern nur AusgabeBo
+
+        //vergabungPersistencePort.createVergabung();
+
+    }
+
+    @Override
+    public void consumeVergabungUpdatedEvent(Object event) {
+        // TODO hier sollten keine Events rein kommen, sondern nur AusgabeBo
+
+
+        AusgabeUpdatedEvent updatedEvent = (AusgabeUpdatedEvent) event;
+        var vergabungOdDb = vergabungPersistencePort.getVergabungByAusgabeId(updatedEvent.getAusgabeId());
+
+
+    }
+
+    @Override
+    public void consumeVergabungDeletedEvent(Object event) {
+        // TODO hier sollten keine Events rein kommen, sondern nur AusgabeBo
+
+        AusgabeDeletedEvent deletedEvent = (AusgabeDeletedEvent) event;
+        var vergabungOdDb = vergabungPersistencePort.getVergabungByAusgabeId(deletedEvent.getAusgabeId());
+        vergabungPersistencePort.deleteVergabungById(vergabungOdDb.getId());
     }
 }

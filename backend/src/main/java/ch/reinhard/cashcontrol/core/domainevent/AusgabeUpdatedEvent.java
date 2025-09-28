@@ -4,19 +4,19 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.LocalDate;
 
 @Getter
-public class AusgabeCreatedEvent extends ApplicationEvent {
+public class AusgabeUpdatedEvent extends ApplicationEvent {
     private final String ausgabeId;
     private final LocalDate datum;
     private final String empfaenger;
     private final AusgabeEventKategorie kategorie;
     private final BigDecimal betrag;
 
-
-    public AusgabeCreatedEvent(Object source, String ausgabeId, LocalDate datum, String empfaenger, AusgabeEventKategorie kategorie, BigDecimal betrag) {
-        super(source, java.time.Clock.systemUTC());
+    public AusgabeUpdatedEvent(Object source, String ausgabeId, LocalDate datum, String empfaenger, AusgabeEventKategorie kategorie, BigDecimal betrag) {
+        super(source, Clock.systemUTC());
         this.ausgabeId = ausgabeId;
         this.datum = datum;
         this.empfaenger = empfaenger;

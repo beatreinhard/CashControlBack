@@ -39,6 +39,13 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
     }
 
     @Override
+    public VergabungBo getVergabungByAusgabeId(String id) {
+        var entity = jpaVergabungRepository
+                .findByAusgabeId(id);
+        return toVergabungBo(entity);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<VergabungBo> getAllVergabung() {
         var vergabungList = jpaVergabungRepository.findAll();
@@ -49,9 +56,9 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
     @Transactional
     public void updateVergabung(VergabungBo source) {
         var vergabungEntity = jpaVergabungRepository
-                .findById(source.id())
-                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.id()));
-        validateOptimisticLocking(source.version(), vergabungEntity.getVersion(), Erbschaft.class);
+                .findById(source.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.getId()));
+        validateOptimisticLocking(source.getVersion(), vergabungEntity.getVersion(), Erbschaft.class);
         vergabungEntity.update(toVergabung(source));
         jpaVergabungRepository.save(vergabungEntity);
     }

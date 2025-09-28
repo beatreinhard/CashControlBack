@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Accessors(fluent = true)
+@Accessors(chain = true)
 @AllArgsConstructor
 public class AusgabeBo {
     private String id;

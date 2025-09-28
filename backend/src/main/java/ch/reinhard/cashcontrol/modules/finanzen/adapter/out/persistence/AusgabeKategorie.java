@@ -9,5 +9,6 @@ public enum AusgabeKategorie {
     PERSOENLICHE_AUSGABEN,
     SPAREN_VORSORGE,
     STEUERN,
+    SPENDEN,
     DIVERSES
 }

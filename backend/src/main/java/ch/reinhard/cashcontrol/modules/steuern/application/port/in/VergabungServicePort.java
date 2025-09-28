@@ -16,4 +16,12 @@ public interface VergabungServicePort {
     void updateVergabung(VergabungBo source);
 
     void deleteVergabungById(String id);
+
+
+
+    void consumeVergabungCreatedEvent(Object event);
+
+    void consumeVergabungUpdatedEvent(Object event);
+
+    void consumeVergabungDeletedEvent(Object event);
 }

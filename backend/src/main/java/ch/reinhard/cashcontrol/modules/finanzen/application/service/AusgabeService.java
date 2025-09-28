@@ -2,7 +2,7 @@ package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
-import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.event.EventPort;
+import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.persistence.AusgabePersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,11 @@ public class AusgabeService implements AusgabeServicePort {
     private final EventPort eventPort;
 
 
+    // TODO async vs sync Event: https://www.baeldung.com/spring-events
     // TODO müsste Transactional hier sein statt im PersistenceAdapter, da der Event sonst evtl. nicht publiziert wird, wenn die Transaktion im Adapter fehlschlägt
-    //  siehe https://docs.spring.io/spring-framework/docs/current/reference/html/data-access.html#transaction-declarative-annotations
-    //  und https://www.baeldung.com/spring-events
-    //  und https://stackoverflow.com/questions/28997320/spring-transactional-events
-    //  und https://stackoverflow.com/questions/30592503/spring-transaction
     public String createAusgabe(AusgabeBo source) {
         var id = ausgabePersistencePort.createAusgabe(source);
+        source.setId(id);
 
         // Publish event after creation
         eventPort.publishAusgabeCreatedEvent(source);
@@ -42,10 +40,16 @@ public class AusgabeService implements AusgabeServicePort {
 
     public void updateAusgabe(AusgabeBo source) {
         ausgabePersistencePort.updateAusgabe(source);
+
+        // Publish event after update
+        eventPort.publishAusgabeUpdatedEvent(source);
     }
 
     public void deleteAusgabeById(String id) {
         ausgabePersistencePort.deleteAusgabeById(id);
+
+        // Publish event after deletion
+        eventPort.publishAusgabeDeletedEvent(id);
     }
 
 }
