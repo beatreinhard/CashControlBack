@@ -2,6 +2,7 @@ package ch.reinhard.cashcontrol.modules.steuern.application.port.in;
 
 
 
+import ch.reinhard.cashcontrol.core.domainevent.AusgabeCreatedEvent;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface VergabungServicePort {
 
 
 
-    void consumeVergabungCreatedEvent(Object event);
+    void consumeVergabungCreatedEvent(AusgabeCreatedEvent event);
 
     void consumeVergabungUpdatedEvent(Object event);
 

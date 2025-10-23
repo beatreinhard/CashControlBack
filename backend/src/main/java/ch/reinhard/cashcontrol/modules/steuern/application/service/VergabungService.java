@@ -7,11 +7,13 @@ import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.in.VergabungServicePort;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.out.persistence.VergabungPersistencePort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 class VergabungService implements VergabungServicePort {
@@ -49,12 +51,22 @@ class VergabungService implements VergabungServicePort {
     }
 
     @Override
-    public void consumeVergabungCreatedEvent(Object event) {
+    public void consumeVergabungCreatedEvent(AusgabeCreatedEvent event) {
         AusgabeCreatedEvent createdEvent = (AusgabeCreatedEvent) event;
 
+        log.info("Consume Ausgabe created event: {}", createdEvent);
         // TODO hier sollten keine Events rein kommen, sondern nur AusgabeBo
 
-        //vergabungPersistencePort.createVergabung();
+        VergabungBo vergabungBo = new VergabungBo()
+                .setId(null)
+                .setVersion(null)
+                .setAusgabeId(createdEvent.getAusgabeId())
+                .setJahr(createdEvent.getDatum().getYear())
+                .setZahlungsDatum(createdEvent.getDatum())
+                .setEmpfaenger(createdEvent.getEmpfaenger())
+                .setBetrag(createdEvent.getBetrag());
+
+        vergabungPersistencePort.createVergabung(vergabungBo);
 
     }
 

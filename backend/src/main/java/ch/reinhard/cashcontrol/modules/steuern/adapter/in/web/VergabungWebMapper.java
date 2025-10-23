@@ -8,8 +8,11 @@ import java.util.List;
 public class VergabungWebMapper {
 
     public static VergabungBo toVergabungBo(VergabungDto source) {
+        // AusgabeId wird hier nicht gemappt, da es im DTO nicht vorhanden ist und nicht vom Controller her kommen kann.
+        // Es wird über den Event gesetzt, beim erstellen einer Ausgabe.
         return new VergabungBo(
                 source.getId(),
+                null,
                 source.getVersion(),
                 source.getJahr(),
                 source.getZahlungsDatum(),

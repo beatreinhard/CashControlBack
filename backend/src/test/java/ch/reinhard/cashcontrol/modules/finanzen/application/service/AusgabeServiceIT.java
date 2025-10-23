@@ -100,12 +100,12 @@ public class AusgabeServiceIT {
         // WHEN
         var createdAusgabeBo = ausgabeService.getAusgabeById(id);
         var ausgabeToUpdateBo = new AusgabeBo(
-                createdAusgabeBo.id(),
-                createdAusgabeBo.version(),
-                createdAusgabeBo.datum(),
-                createdAusgabeBo.empfaenger(),
-                createdAusgabeBo.kategorie(),
-                createdAusgabeBo.text(),
+                createdAusgabeBo.getId(),
+                createdAusgabeBo.getVersion(),
+                createdAusgabeBo.getDatum(),
+                createdAusgabeBo.getEmpfaenger(),
+                createdAusgabeBo.getKategorie(),
+                createdAusgabeBo.getText(),
                 new BigDecimal("455.55"));
 
         ausgabeService.updateAusgabe(ausgabeToUpdateBo);
@@ -113,9 +113,9 @@ public class AusgabeServiceIT {
         var updatedAusgabeAfterFlush = ausgabeService.getAusgabeById(id);
 
         // THEN
-        assertEquals(new BigDecimal("455.55"), updatedAusgabeAfterFlush.betrag());
-        assertEquals(0, createdAusgabeBo.version());
-        assertEquals(1, updatedAusgabeAfterFlush.version());
+        assertEquals(new BigDecimal("455.55"), updatedAusgabeAfterFlush.getBetrag());
+        assertEquals(0, createdAusgabeBo.getVersion());
+        assertEquals(1, updatedAusgabeAfterFlush.getVersion());
     }
 
     @Test
@@ -163,12 +163,12 @@ public class AusgabeServiceIT {
         var ausgabeList = ausgabeService.getAllAusgabe();
 
         // WHEN
-        var id = ausgabeList.get(0).id();
+        var id = ausgabeList.get(0).getId();
         var ausgabeFoundById = ausgabeService.getAusgabeById(id);
 
         // THEN
-        assertThat(ausgabeFoundById.id()).isEqualTo(id);
-        assertThat(ausgabeFoundById.empfaenger()).isEqualTo(empfaenger);
+        assertThat(ausgabeFoundById.getId()).isEqualTo(id);
+        assertThat(ausgabeFoundById.getEmpfaenger()).isEqualTo(empfaenger);
     }
 
     @Test
@@ -187,7 +187,7 @@ public class AusgabeServiceIT {
         var ausgabeList = ausgabeService.getAllAusgabe();
 
         // WHEN
-        var id = ausgabeList.get(0).id();
+        var id = ausgabeList.get(0).getId();
         ausgabeService.deleteAusgabeById(id);
         var ausgabeListAfterDelete = ausgabeService.getAllAusgabe();
 

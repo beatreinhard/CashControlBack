@@ -6,12 +6,13 @@ import ch.reinhard.cashcontrol.core.domainevent.AusgabeEventKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import static ch.reinhard.cashcontrol.core.service.EnumMapper.convert;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class EventPublisherAdapter implements EventPort {
@@ -28,7 +29,7 @@ public class EventPublisherAdapter implements EventPort {
                 ausgabeBo.getBetrag()
         );
 
-        // TODO log event
+        log.info("Ausgabe created event: {}", event);
         applicationEventPublisher.publishEvent(event);
     }
 

@@ -11,7 +11,7 @@ import static ch.reinhard.cashcontrol.core.service.EnumMapper.convert;
 
 public class AusgabeWebMapper {
 
-    public static AusgabeBo toAusgabeBo(ch.reinhard.cashcontrol.openapi.model.AusgabeDto source) {
+    public static AusgabeBo toAusgabeBo(AusgabeDto source) {
         return new AusgabeBo(
                 source.getId(),
                 source.getVersion(),

@@ -1,15 +1,17 @@
 package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.persistence.AusgabePersistencePort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AusgabeService implements AusgabeServicePort {
@@ -24,8 +26,10 @@ public class AusgabeService implements AusgabeServicePort {
         var id = ausgabePersistencePort.createAusgabe(source);
         source.setId(id);
 
-        // Publish event after creation
-        eventPort.publishAusgabeCreatedEvent(source);
+        if (AusgabeKategorie.SPENDEN.equals(source.getKategorie())) {
+            // Publish event after creation
+            eventPort.publishAusgabeCreatedEvent(source);
+        }
 
         return id;
     }

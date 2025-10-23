@@ -208,6 +208,7 @@ components:
         - PERSOENLICHE_AUSGABEN
         - SPAREN_VORSORGE
         - STEUERN
+        - SPENDEN
         - DIVERSES
 
     VergabungDto:
