@@ -3,6 +3,7 @@ package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.domainevent;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeCreatedEvent;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeDeletedEvent;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeEventKategorie;
+import ch.reinhard.cashcontrol.core.domainevent.AusgabeUpdatedEvent;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class EventPublisherAdapter implements EventPort {
 
     @Override
     public void publishAusgabeUpdatedEvent(AusgabeBo ausgabeBo) {
-        var event = new AusgabeCreatedEvent(
+        var event = new AusgabeUpdatedEvent(
                 this,
                 ausgabeBo.getId(),
                 ausgabeBo.getDatum(),
