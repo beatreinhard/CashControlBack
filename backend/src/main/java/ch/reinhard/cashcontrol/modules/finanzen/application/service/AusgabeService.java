@@ -1,6 +1,5 @@
 package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
@@ -8,6 +7,7 @@ import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.persistence
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,28 +20,29 @@ public class AusgabeService implements AusgabeServicePort {
     private final EventPort eventPort;
 
 
-    // TODO async vs sync Event: https://www.baeldung.com/spring-events
-    // TODO müsste Transactional hier sein statt im PersistenceAdapter, da der Event sonst evtl. nicht publiziert wird, wenn die Transaktion im Adapter fehlschlägt
+    // TODO async vs sync Event: https://www.baeldung.com/spring-events  https://chatgpt.com/c/68fccfbe-bd4c-832d-ab9f-572f34b8cb11
+    @Transactional
     public String createAusgabe(AusgabeBo source) {
         var id = ausgabePersistencePort.createAusgabe(source);
         source.setId(id);
 
-        if (AusgabeKategorie.SPENDEN.equals(source.getKategorie())) {
-            // Publish event after creation
-            eventPort.publishAusgabeCreatedEvent(source);
-        }
+        // Publish event after creation
+        eventPort.publishAusgabeCreatedEvent(source);
 
         return id;
     }
 
+    @Transactional(readOnly = true)
     public AusgabeBo getAusgabeById(String id) {
         return ausgabePersistencePort.getAusgabeById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<AusgabeBo> getAllAusgabe() {
         return ausgabePersistencePort.getAllAusgabe();
     }
 
+    @Transactional
     public void updateAusgabe(AusgabeBo source) {
         ausgabePersistencePort.updateAusgabe(source);
 
@@ -49,6 +50,7 @@ public class AusgabeService implements AusgabeServicePort {
         eventPort.publishAusgabeUpdatedEvent(source);
     }
 
+    @Transactional
     public void deleteAusgabeById(String id) {
         ausgabePersistencePort.deleteAusgabeById(id);
 

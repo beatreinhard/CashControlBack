@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface JpaVergabungRepository
         extends JpaRepository<VergabungEntity, String>, QuerydslPredicateExecutor<VergabungEntity> {
     VergabungEntity findByAusgabeId(String ausgabeId);
+    void deleteVergabungByAusgabeId(String ausgabeId);
 }

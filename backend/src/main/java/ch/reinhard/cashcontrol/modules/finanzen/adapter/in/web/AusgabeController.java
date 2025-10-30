@@ -46,9 +46,12 @@ public class AusgabeController implements AusgabeControllerApi {
 
     @Override
     public ResponseEntity<Void> updateAusgabe(String id, AusgabeDto ausgabeDto) {
+
+        // TODO Sicherstellen, dass die ID aus dem Pfad verwendet wird
+
         AusgabeBo ausgabeBo = toAusgabeBo(ausgabeDto);
         ausgabeBo.setId(id);
         ausgabeServicePort.updateAusgabe(ausgabeBo);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

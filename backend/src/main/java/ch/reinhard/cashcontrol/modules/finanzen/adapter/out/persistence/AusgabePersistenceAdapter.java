@@ -6,7 +6,6 @@ import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.persistence
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
 
     private final JpaAusgabeRepository ausgabeRepository;
 
-    @Transactional
     @Override
     public String createAusgabe(AusgabeBo source) {
         var ausgabe = toAusgabe(source);
@@ -28,7 +26,6 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
         return ausgabeEntity.getId();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public AusgabeBo getAusgabeById(String id) {
         var entity = ausgabeRepository
@@ -37,7 +34,6 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
         return toAusgabeBo(entity);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<AusgabeBo> getAllAusgabe() {
         var ausgabeList = ausgabeRepository.findAll();
@@ -46,7 +42,6 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
     }
 
 
-    @Transactional
     @Override
     public void updateAusgabe(AusgabeBo source) {
         var ausgabeEntity = ausgabeRepository
@@ -57,7 +52,6 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
         ausgabeRepository.save(ausgabeEntity);
     }
 
-    @Transactional
     @Override
     public void deleteAusgabeById(String id) {
         ausgabeRepository.deleteById(id);

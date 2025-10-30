@@ -10,5 +10,6 @@ public interface VergabungPersistencePort {
     VergabungBo getVergabungByAusgabeId(String id);
     void updateVergabung(VergabungBo source);
     void deleteVergabungById(String id);
+    void deleteVergabungByAusgabeId(String ausgabeId);
     List<VergabungBo> getAllVergabung();
 }

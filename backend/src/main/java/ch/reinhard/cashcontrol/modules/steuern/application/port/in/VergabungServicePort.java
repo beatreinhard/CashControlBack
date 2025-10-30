@@ -10,9 +10,13 @@ public interface VergabungServicePort {
 
     VergabungBo getVergabungById(String id);
 
+    VergabungBo getVergabungByAusgabeId(String ausgabeId);
+
     List<VergabungBo> getAllVergabung();
 
     void updateVergabung(VergabungBo source);
 
     void deleteVergabungById(String id);
+
+    void deleteVergabungByAusgabeId(String ausgabeId);
 }

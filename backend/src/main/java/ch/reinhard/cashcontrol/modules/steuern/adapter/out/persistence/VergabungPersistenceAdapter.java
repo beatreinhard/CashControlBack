@@ -7,7 +7,6 @@ import ch.reinhard.cashcontrol.modules.steuern.application.port.out.persistence.
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
     private JpaVergabungRepository jpaVergabungRepository;
 
     @Override
-    @Transactional
     public String createVergabung(VergabungBo source) {
         var vergabung = toVergabung(source);
         vergabung.setId(IdGenerator.generateId());
@@ -31,7 +29,6 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public VergabungBo getVergabungById(String id) {
         var entity = jpaVergabungRepository
                 .findById(id)
@@ -47,14 +44,12 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<VergabungBo> getAllVergabung() {
         var vergabungList = jpaVergabungRepository.findAll();
         return toVergabungBoList(vergabungList);
     }
 
     @Override
-    @Transactional
     public void updateVergabung(VergabungBo source) {
         var vergabungEntity = jpaVergabungRepository
                 .findById(source.getId())
@@ -65,8 +60,12 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
     }
 
     @Override
-    @Transactional
     public void deleteVergabungById(String id) {
         jpaVergabungRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteVergabungByAusgabeId(String ausgabeId) {
+        jpaVergabungRepository.deleteVergabungByAusgabeId(ausgabeId);
     }
 }

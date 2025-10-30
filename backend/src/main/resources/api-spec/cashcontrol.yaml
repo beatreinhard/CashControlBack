@@ -76,8 +76,8 @@ paths:
           required: true
           schema: { type: string }
       responses:
-        '200':
-          description: Ausgabe mit ID gelöscht
+        '204':
+          description: Ausgabe gelöscht (kein Response-Body)
         '404':
           description: Ausgabe nicht gefunden
     put:
@@ -96,7 +96,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AusgabeDto'
       responses:
-        '200':
+        '204':
           description: Ausgabe aktualisiert (kein Response-Body)
         '404':
           description: Ausgabe nicht gefunden

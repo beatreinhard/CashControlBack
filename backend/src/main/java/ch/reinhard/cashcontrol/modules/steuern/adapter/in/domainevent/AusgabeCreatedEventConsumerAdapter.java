@@ -5,19 +5,25 @@ import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.in.VergabungServicePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class AusgabeCreatedEventConsumerAdapter implements ApplicationListener<AusgabeCreatedEvent> {
+public class AusgabeCreatedEventConsumerAdapter {
 
     private final VergabungServicePort vergabungServicePort;
 
-    @Override
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onApplicationEvent(AusgabeCreatedEvent event) {
         log.info("Consume AusgabeCreatedEvent: {}", event);
+
+        if (!event.isKategorieSpenden()) {
+            log.info("AusgabeCreatedEvent is not of category SPENDEN, ignoring.");
+            return;
+        }
 
         VergabungBo vergabungBo = new VergabungBo()
                 .setId(null)

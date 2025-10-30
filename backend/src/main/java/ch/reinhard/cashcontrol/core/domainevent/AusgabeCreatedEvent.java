@@ -23,4 +23,8 @@ public class AusgabeCreatedEvent extends ApplicationEvent {
         this.kategorie = kategorie;
         this.betrag = betrag;
     }
+
+    public boolean isKategorieSpenden() {
+        return this.kategorie == AusgabeEventKategorie.SPENDEN;
+    }
 }
