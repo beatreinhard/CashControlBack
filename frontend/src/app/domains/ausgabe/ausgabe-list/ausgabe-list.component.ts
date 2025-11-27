@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, signal, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, effect, input, signal, ViewChild} from '@angular/core';
 import {AusgabeDto} from '../../../generated';
 import {
   MatCell,
@@ -17,7 +17,6 @@ import {
 } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatFormField} from '@angular/material/input';
 import {MatChip, MatChipSet} from '@angular/material/chips';
 
 
@@ -25,7 +24,6 @@ import {MatChip, MatChipSet} from '@angular/material/chips';
   selector: 'app-ausgabe-list',
   imports: [
     MatPaginator,
-    MatFormField,
     MatChipSet,
     MatChip,
     MatTable,
@@ -46,30 +44,26 @@ import {MatChip, MatChipSet} from '@angular/material/chips';
   templateUrl: './ausgabe-list.component.html',
   styleUrl: './ausgabe-list.component.css'
 })
-export class AusgabeListComponent implements OnChanges {
-  @Input() items: AusgabeDto[] = [];
-
-  displayedColumns: string[] = ['datum','empfaenger','text','kategorie','betrag'];
-  dataSource = new MatTableDataSource<AusgabeDto>([]);
-
-
-  loading = true;
-  error = signal<string | undefined>("");
-
+export class AusgabeListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  protected displayedColumns: string[] = ['datum','empfaenger','text','kategorie','betrag'];
+  protected dataSource = new MatTableDataSource<AusgabeDto>([]);
+
+  readonly items = input.required<AusgabeDto[]>();
+  readonly error = signal<string | undefined>(undefined);
 
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['items']) {
-      this.dataSource.data = this.items ?? [];
-      if (this.paginator) {
-        this.dataSource.paginator = this.paginator;
-      }
-      if (this.sort) {
-        this.dataSource.sort = this.sort;
-      }
-    }
+  constructor() {
+    // Bridge: Signal -> Imperative API von MatTableDataSource
+    effect(() => {
+      const data = this.items(); // kein ?? [] nötig bei required
+      this.dataSource.data = data;
+    });
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 }

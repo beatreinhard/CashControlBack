@@ -14,13 +14,11 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 })
 export class AusgabeSearchComponent implements OnInit {
 
+  readonly loading = signal(true);
+  readonly error = signal<string | undefined>("");
+  readonly result = signal<AusgabeDto[]>([]);
 
-  loading = signal(true);
-  error = signal<string | undefined>("");
-
-  private ausgabeController = inject(AusgabeControllerApi);
-
-  result = signal<AusgabeDto[]>([]);
+  protected ausgabeController = inject(AusgabeControllerApi);
 
   ngOnInit(): void {
     this.ausgabeController.getAllAusgabe().subscribe({
