@@ -18,6 +18,7 @@ import {
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatChip, MatChipSet} from '@angular/material/chips';
+import {DatePipe} from '@angular/common';
 
 
 @Component({
@@ -38,7 +39,8 @@ import {MatChip, MatChipSet} from '@angular/material/chips';
     MatCell,
     MatFooterCell,
     MatHeaderRow,
-    MatRow
+    MatRow,
+    DatePipe
 
   ],
   templateUrl: './ausgabe-list.component.html',

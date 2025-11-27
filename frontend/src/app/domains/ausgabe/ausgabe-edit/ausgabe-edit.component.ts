@@ -1,23 +1,25 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AusgabeDto, AusgabeKategorieDto} from '../../../generated';
-import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
+import {AusgabeControllerApi, AusgabeDto, AusgabeKategorieDto} from '../../../generated';
+import {MatCardActions, MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-ausgabe-edit',
   imports: [
     ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatCard, MatCardTitle, MatCardContent, MatSelect, MatOption, MatCardActions,
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatCardModule, MatSelect, MatOption, MatCardActions, MatButtonModule
   ],
   templateUrl: './ausgabe-edit.component.html',
   styleUrl: './ausgabe-edit.component.css'
 })
 export class AusgabeEditComponent {
+  protected ausgabeController = inject(AusgabeControllerApi);
   protected form: FormGroup;
 
   // Das Enum in ein Array umwandeln für das <mat-select>
@@ -54,7 +56,8 @@ export class AusgabeEditComponent {
 
     console.log('Speichere Ausgabe:', dto);
 
-    // Hier später Service call oder Output-Event
+    this.ausgabeController.createAusgabe(dto).subscribe();
+
   }
 
   cancel(): void {
