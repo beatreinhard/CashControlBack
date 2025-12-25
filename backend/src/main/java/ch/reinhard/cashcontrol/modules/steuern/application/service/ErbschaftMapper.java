@@ -14,7 +14,6 @@ class ErbschaftMapper {
     public static Erbschaft toErbschaft(ErbschaftDto source) {
         return new Erbschaft(
                 source.id(),
-                source.version(),
                 source.jahr(),
                 convert(source.art(), ErbschaftArt.class),
                 source.betrag(),
@@ -28,7 +27,6 @@ class ErbschaftMapper {
     public static ErbschaftDto toErbschaftDto(Erbschaft source) {
         return new ErbschaftDto(
                 source.getId(),
-                source.getVersion(),
                 source.getJahr(),
                 convert(source.getArt(), ErbschaftArtDto.class),
                 source.getBetrag(),

@@ -6,7 +6,6 @@ SET search_path = cashcontrol;
 
 create table ausgabe (
     id              varchar(255)    not null primary key,
-    version         bigint,
     betrag          decimal         not null,
     datum           date            not null,
     empfaenger      varchar(255)    not null,
@@ -17,7 +16,6 @@ create table ausgabe (
 
 create table vermoegenswert (
     id               varchar(255)    not null primary key,
-    version          bigint,
     jahr             integer         not null,
     bezeichnung       varchar(255)   not null,
     anschaffungsjahr  integer        not null,
@@ -26,7 +24,6 @@ create table vermoegenswert (
 
 create table schuld (
     id              varchar(255)    not null primary key,
-    version         bigint,
     jahr            integer         not null,
     glaeubiger      varchar(255)    not null,
     art             varchar(255)    not null,
@@ -36,7 +33,6 @@ create table schuld (
 
 create table kosten (
     id              varchar(255)    not null primary key,
-    version         bigint,
     jahr            integer         not null,
     art             varchar(255)    not null,
     empfaenger      varchar(255)    not null,
@@ -47,7 +43,6 @@ create table kosten (
 
 create table beruf (
     id                          varchar(255)    not null primary key,
-    version                     bigint,
     jahr                        integer         not null,
     arbeitnehmer                varchar(255)    not null,
     arbeitgeber                 varchar(255)    not null,
@@ -62,7 +57,6 @@ create table beruf (
 
 create table erbschaft (
     id                          varchar(255)    not null primary key,
-    version                     bigint,
     jahr                        integer         not null,
     art                         varchar(255)    not null,
     betrag                      decimal         not null,
@@ -75,7 +69,6 @@ create table erbschaft (
 
 create table grundstueckunterhalt (
     id                          varchar(255)    not null primary key,
-    version                     bigint,
     jahr                        integer         not null,
     rg_datum                     date            not null,
     ausfuehrende_firma          varchar(255)    not null,
@@ -89,7 +82,6 @@ create table vergabung
 (
     id             varchar(255) not null primary key,
     ausgabe_id     varchar(255) not null,
-    version        bigint,
     jahr           integer      not null,
     zahlungs_datum date         not null,
     empfaenger     varchar(255) not null,

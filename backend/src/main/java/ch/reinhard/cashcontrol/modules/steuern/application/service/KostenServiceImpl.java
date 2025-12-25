@@ -4,7 +4,6 @@ import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.KostenDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.KostenService;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaKostenRepository;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Kosten;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.application.service.KostenMapper.*;
 
 @RequiredArgsConstructor
@@ -54,7 +52,6 @@ class KostenServiceImpl implements KostenService {
         var kostenEntity = jpaKostenRepository
                 .findById(source.id())
                 .orElseThrow(() -> new EntityNotFoundException("Kosten nicht gefunden mit ID=" + source.id()));
-        validateOptimisticLocking(source.version(), kostenEntity.getVersion(), Kosten.class);
         kostenEntity.update(toKosten(source));
         jpaKostenRepository.save(kostenEntity);
     }

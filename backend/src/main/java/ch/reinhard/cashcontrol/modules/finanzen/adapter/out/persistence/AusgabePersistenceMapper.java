@@ -13,7 +13,6 @@ public class AusgabePersistenceMapper {
     public static AusgabeEntity toAusgabe(AusgabeBo source) {
         return new AusgabeEntity(
                 source.getId(),
-                source.getVersion(),
                 source.getDatum(),
                 source.getEmpfaenger(),
                 convert(source.getKategorie(), AusgabeKategorie.class),
@@ -24,7 +23,6 @@ public class AusgabePersistenceMapper {
     public static AusgabeBo toAusgabeBo(AusgabeEntity source) {
         return new AusgabeBo(
                 source.getId(),
-                source.getVersion(),
                 source.getDatum(),
                 source.getEmpfaenger(),
                 convert(source.getKategorie(), AusgabeKategorie.class),

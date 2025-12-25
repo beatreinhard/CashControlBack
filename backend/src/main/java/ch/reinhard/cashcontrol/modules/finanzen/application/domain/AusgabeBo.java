@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AusgabeBo {
     private String id;
-    private Long version;
     private LocalDate datum;
     private String empfaenger;
     private AusgabeKategorie kategorie;

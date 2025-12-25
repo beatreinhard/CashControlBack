@@ -14,7 +14,6 @@ public class AusgabeWebMapper {
     public static AusgabeBo toAusgabeBo(AusgabeDto source) {
         return new AusgabeBo(
                 source.getId(),
-                source.getVersion(),
                 source.getDatum(),
                 source.getEmpfaenger(),
                 convert(source.getKategorie(), AusgabeKategorie.class),
@@ -31,7 +30,6 @@ public class AusgabeWebMapper {
                 source.getBetrag());
 
         ausgabeDto.setId(source.getId());
-        ausgabeDto.setVersion(source.getVersion());
         return ausgabeDto;
     }
 

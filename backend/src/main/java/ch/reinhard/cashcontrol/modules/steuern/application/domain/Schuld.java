@@ -17,9 +17,6 @@ public class Schuld {
     @Id
     private String id;
 
-    @Version
-    private Long version;
-
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
     private Integer jahr;

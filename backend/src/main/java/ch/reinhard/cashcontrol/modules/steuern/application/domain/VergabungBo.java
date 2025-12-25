@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class VergabungBo {
     private String id;
     private String ausgabeId;
-    private Long version;
     private Integer jahr;
     private LocalDate zahlungsDatum;
     private String empfaenger;

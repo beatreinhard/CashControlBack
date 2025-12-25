@@ -10,7 +10,6 @@ public class VermoegenswertMapper {
     public static Vermoegenswert toVermoegenswert(VermoegenswertDto source) {
         return new Vermoegenswert(
                 source.id(),
-                source.version(),
                 source.jahr(),
                 source.bezeichnung(),
                 source.anschaffungsjahr(),
@@ -20,7 +19,6 @@ public class VermoegenswertMapper {
     public static VermoegenswertDto toVermoegenswertDto(Vermoegenswert source) {
         return new VermoegenswertDto(
                 source.getId(),
-                source.getVersion(),
                 source.getJahr(),
                 source.getBezeichnung(),
                 source.getAnschaffungsjahr(),

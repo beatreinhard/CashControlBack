@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Schema(name = "Schuld")
 public record SchuldDto(
         String id,
-        Long version,
         @NotNull Integer jahr,
         @NotNull SchuldArtDto art,
         @NotNull String glaeubiger,

@@ -3,7 +3,6 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.GrundstueckunterhaltDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.GrundstueckunterhaltService;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Grundstueckunterhalt;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaGrundstueckunterhaltRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.application.service.GrundstueckunterhaltMapper.*;
 
 @RequiredArgsConstructor
@@ -55,8 +53,6 @@ public class GrundstueckunterhaltServiceImpl implements GrundstueckunterhaltServ
                 .findById(source.id())
                 .orElseThrow(
                         () -> new EntityNotFoundException("Grundstueckunterhalt nicht gefunden mit ID=" + source.id()));
-        validateOptimisticLocking(
-                source.version(), grundstueckunterhaltEntity.getVersion(), Grundstueckunterhalt.class);
         grundstueckunterhaltEntity.update(toGrundstueckunterhalt(source));
         jpaGrundstueckunterhaltRepository.save(grundstueckunterhaltEntity);
     }

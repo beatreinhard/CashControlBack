@@ -3,7 +3,6 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.SchuldDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.SchuldService;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaSchuldRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.application.service.SchuldMapper.*;
 
 @RequiredArgsConstructor
@@ -53,7 +51,6 @@ class SchuldServiceImpl implements SchuldService {
         var schuldEntity = jpaSchuldRepository
                 .findById(source.id())
                 .orElseThrow(() -> new EntityNotFoundException("Schuld nicht gefunden mit ID=" + source.id()));
-        validateOptimisticLocking(source.version(), schuldEntity.getVersion(), Erbschaft.class);
         schuldEntity.update(toSchuld(source));
         jpaSchuldRepository.save(schuldEntity);
     }

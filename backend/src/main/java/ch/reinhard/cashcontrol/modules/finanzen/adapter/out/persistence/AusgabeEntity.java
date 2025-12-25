@@ -21,9 +21,6 @@ public class AusgabeEntity {
     @Id
     private String id;
 
-    @Version
-    private Long version;
-
     @NotNull
     private LocalDate datum;
 

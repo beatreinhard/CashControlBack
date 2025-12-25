@@ -10,7 +10,6 @@ class BerufMapper {
     public static Beruf toBeruf(BerufDto source) {
         return new Beruf(
                 source.id(),
-                source.version(),
                 source.jahr(),
                 source.arbeitnehmer(),
                 source.arbeitgeber(),
@@ -26,7 +25,6 @@ class BerufMapper {
     public static BerufDto toBerufDto(Beruf source) {
         return new BerufDto(
                 source.getId(),
-                source.getVersion(),
                 source.getJahr(),
                 source.getArbeitnehmer(),
                 source.getArbeitgeber(),

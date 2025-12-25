@@ -13,7 +13,6 @@ public class VergabungWebMapper {
         return new VergabungBo(
                 source.getId(),
                 null,
-                source.getVersion(),
                 source.getJahr(),
                 source.getZahlungsDatum(),
                 source.getEmpfaenger(),
@@ -27,7 +26,6 @@ public class VergabungWebMapper {
                 source.getEmpfaenger(),
                 source.getBetrag());
         vergabungDto.setId(source.getId());
-        vergabungDto.setVersion(source.getVersion());
         return vergabungDto;
     }
 

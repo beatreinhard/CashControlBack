@@ -10,7 +10,6 @@ public class GrundstueckunterhaltMapper {
     public static Grundstueckunterhalt toGrundstueckunterhalt(GrundstueckunterhaltDto source) {
         return new Grundstueckunterhalt(
                 source.id(),
-                source.version(),
                 source.jahr(),
                 source.rgDatum(),
                 source.ausfuehrendeFirma(),
@@ -23,7 +22,6 @@ public class GrundstueckunterhaltMapper {
     public static GrundstueckunterhaltDto toGrundstueckunterhaltDto(Grundstueckunterhalt source) {
         return new GrundstueckunterhaltDto(
                 source.getId(),
-                source.getVersion(),
                 source.getJahr(),
                 source.getRgDatum(),
                 source.getAusfuehrendeFirma(),

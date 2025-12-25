@@ -1,9 +1,9 @@
 import {Component, computed, effect, inject, input, signal} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AusgabeControllerApi, AusgabeDto, AusgabeKategorieDto} from '../../../generated';
-import {MatCardActions, MatCardModule} from '@angular/material/card';
+import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
-import {MatOption, MatSelect} from '@angular/material/select';
+import {MatSelectModule} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
@@ -14,7 +14,7 @@ import {format, parseISO} from 'date-fns';
   selector: 'app-ausgabe-edit',
   imports: [
     ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatCardModule, MatSelect, MatOption, MatCardActions, MatButtonModule
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatCardModule, MatSelectModule, MatButtonModule
   ],
   templateUrl: './ausgabe-edit.component.html',
   styleUrl: './ausgabe-edit.component.css'
@@ -120,8 +120,7 @@ export class AusgabeEditComponent {
             empfaenger: ausgabe.empfaenger ?? '',
             kategorie: ausgabe.kategorie ?? null,
             text: ausgabe.text ?? null,
-            betrag: ausgabe.betrag ?? null,
-            version: ausgabe.version ?? 0,
+            betrag: ausgabe.betrag ?? null
           });
           this.isLoading.set(false);
         },
@@ -152,8 +151,7 @@ export class AusgabeEditComponent {
       text: raw.text ?? '',
       betrag: Number(raw.betrag),
       // falls dein Backend im Edit-Fall eine id im DTO erwartet, kannst du hier noch:
-      id: this.ausgabeId() ?? undefined,
-      version: raw.version ?? 0,
+      id: this.ausgabeId() ?? undefined
     };
 
     console.log(raw.datum);

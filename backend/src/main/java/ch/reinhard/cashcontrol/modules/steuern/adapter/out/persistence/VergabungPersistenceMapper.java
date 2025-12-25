@@ -14,7 +14,6 @@ public class VergabungPersistenceMapper {
         return new VergabungBo(
                 source.getId(),
                 source.getAusgabeId(),
-                source.getVersion(),
                 source.getJahr(),
                 source.getZahlungsDatum(),
                 source.getEmpfaenger(),
@@ -25,7 +24,6 @@ public class VergabungPersistenceMapper {
         return new VergabungEntity(
                 source.getId(),
                 source.getAusgabeId(),
-                source.getVersion(),
                 source.getJahr(),
                 source.getZahlungsDatum(),
                 source.getEmpfaenger(),

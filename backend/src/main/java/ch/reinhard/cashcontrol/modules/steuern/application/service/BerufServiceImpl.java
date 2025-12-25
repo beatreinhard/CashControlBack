@@ -3,7 +3,6 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.BerufDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.BerufService;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Beruf;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaBerufRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.application.service.BerufMapper.*;
 
 @RequiredArgsConstructor
@@ -50,7 +48,6 @@ class BerufServiceImpl implements BerufService {
         var berufEntity = jpaBerufRepository
                 .findById(source.id())
                 .orElseThrow(() -> new EntityNotFoundException("Beruf nicht gefunden mit ID=" + source.id()));
-        validateOptimisticLocking(source.version(), berufEntity.getVersion(), Beruf.class);
         berufEntity.update(toBeruf(source));
         jpaBerufRepository.save(berufEntity);
     }

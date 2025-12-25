@@ -3,7 +3,6 @@ package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -23,9 +22,6 @@ public class VergabungEntity {
 
     @NotNull
     private String ausgabeId;
-
-    @Version
-    private Long version;
 
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")

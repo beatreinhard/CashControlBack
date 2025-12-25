@@ -165,11 +165,6 @@ components:
           type: string
           description: Technische ID (bei Create optional)
           example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
-        version:
-          type: integer
-          format: int64
-          description: Version für Optimistic Locking (optional)
-          example: 3
         datum:
           type: string
           format: date
@@ -220,11 +215,6 @@ components:
           type: string
           description: Technische ID (bei Create optional)
           example: "5c2a1b1e-97f9-4f0a-1b3e-a8f1c7d21b3e"
-        version:
-          type: integer
-          format: int64
-          description: Version für Optimistic Locking (optional)
-          example: 1
         jahr:
           type: integer
           format: int32

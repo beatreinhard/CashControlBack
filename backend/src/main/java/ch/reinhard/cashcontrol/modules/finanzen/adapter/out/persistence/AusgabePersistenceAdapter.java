@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabePersistenceMapper.*;
 
 @RequiredArgsConstructor
@@ -47,7 +46,6 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
         var ausgabeEntity = ausgabeRepository
                 .findById(source.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Ausgabe nicht gefunden mit ID=" + source.getId()));
-        validateOptimisticLocking(source.getVersion(), ausgabeEntity.getVersion(), AusgabeEntity.class);
         ausgabeEntity.update(toAusgabe(source));
         ausgabeRepository.save(ausgabeEntity);
     }

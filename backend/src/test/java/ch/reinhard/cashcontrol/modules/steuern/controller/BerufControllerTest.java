@@ -36,7 +36,6 @@ public class BerufControllerTest {
         // GIVEN
         var expectedBerufDto = new BerufDto(
                 "1",
-                122L,
                 2023,
                 "Reinhard",
                 "BIT",
@@ -84,7 +83,6 @@ public class BerufControllerTest {
         // GIVEN
         var requestBerufDto = new BerufDto(
                 "1",
-                122L,
                 2023,
                 "Reinhard",
                 "BIT",

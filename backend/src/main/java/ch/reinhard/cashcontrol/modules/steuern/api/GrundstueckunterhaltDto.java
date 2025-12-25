@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Schema(name = "Grundstueckunterhalt")
 public record GrundstueckunterhaltDto(
         String id,
-        Long version,
         @NotNull Integer jahr,
         @NotNull LocalDate rgDatum,
         @NotNull String ausfuehrendeFirma,

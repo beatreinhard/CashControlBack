@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Schema(name = "Erbschaft")
 public record ErbschaftDto(
         String id,
-        Long version,
         @NotNull Integer jahr,
         @NotNull ErbschaftArtDto art,
         @NotNull BigDecimal betrag,

@@ -101,7 +101,6 @@ public class AusgabeServiceIT {
         var createdAusgabeBo = ausgabeService.getAusgabeById(id);
         var ausgabeToUpdateBo = new AusgabeBo(
                 createdAusgabeBo.getId(),
-                createdAusgabeBo.getVersion(),
                 createdAusgabeBo.getDatum(),
                 createdAusgabeBo.getEmpfaenger(),
                 createdAusgabeBo.getKategorie(),
@@ -114,15 +113,12 @@ public class AusgabeServiceIT {
 
         // THEN
         assertEquals(new BigDecimal("455.55"), updatedAusgabeAfterFlush.getBetrag());
-        assertEquals(0, createdAusgabeBo.getVersion());
-        assertEquals(1, updatedAusgabeAfterFlush.getVersion());
     }
 
     @Test
     public void getAllAusgabe() {
         // GIVEN
         var ausgabeBo1 = new AusgabeBo(
-                null,
                 null,
                 LocalDate.now(),
                 "Assura",
@@ -131,7 +127,6 @@ public class AusgabeServiceIT {
                 new BigDecimal("450.35"));
         ausgabeService.createAusgabe(ausgabeBo1);
         var ausgabeBo2 = new AusgabeBo(
-                null,
                 null,
                 LocalDate.now(),
                 "Steuerverwaltung",
@@ -152,7 +147,6 @@ public class AusgabeServiceIT {
         // GIVEN
         var empfaenger = "Assura";
         var ausgabeBo = new AusgabeBo(
-                null,
                 null,
                 LocalDate.now(),
                 empfaenger,
@@ -176,7 +170,6 @@ public class AusgabeServiceIT {
         // GIVEN
         var empfaenger = "Assura";
         var ausgabeBo = new AusgabeBo(
-                null,
                 null,
                 LocalDate.now(),
                 empfaenger,

@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Schema(name = "Vermoegenswert")
 public record VermoegenswertDto(
         String id,
-        Long version,
         @NotNull Integer jahr,
         @NotNull String bezeichnung,
         @NotNull Integer anschaffungsjahr,

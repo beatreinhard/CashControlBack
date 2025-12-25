@@ -1,7 +1,6 @@
 package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.out.persistence.VergabungPersistencePort;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.core.persistence.OptimisticLockingValidator.validateOptimisticLocking;
 import static ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence.VergabungPersistenceMapper.*;
 
 @Component
@@ -54,7 +52,6 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
         var vergabungEntity = jpaVergabungRepository
                 .findById(source.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.getId()));
-        validateOptimisticLocking(source.getVersion(), vergabungEntity.getVersion(), Erbschaft.class);
         vergabungEntity.update(toVergabung(source));
         jpaVergabungRepository.save(vergabungEntity);
     }

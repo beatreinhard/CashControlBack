@@ -14,7 +14,6 @@ class SchuldMapper {
     public static Schuld toSchuld(SchuldDto source) {
         return new Schuld(
                 source.id(),
-                source.version(),
                 source.jahr(),
                 convert(source.art(), SchuldArt.class),
                 source.glaeubiger(),
@@ -25,7 +24,6 @@ class SchuldMapper {
     public static SchuldDto toSchuldDto(Schuld source) {
         return new SchuldDto(
                 source.getId(),
-                source.getVersion(),
                 source.getJahr(),
                 convert(source.getArt(), SchuldArtDto.class),
                 source.getGlaeubiger(),

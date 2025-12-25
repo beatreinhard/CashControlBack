@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Schema(name = "Beruf")
 public record BerufDto(
         String id,
-        Long version,
         @NotNull Integer jahr,
         @NotNull String arbeitnehmer,
         @NotNull String arbeitgeber,

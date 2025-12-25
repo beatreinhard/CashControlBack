@@ -30,7 +30,6 @@ public class AusgabeUpdatedEventConsumerAdapter {
 
             VergabungBo vergabungBo = new VergabungBo()
                     .setId(null)
-                    .setVersion(null)
                     .setAusgabeId(event.getAusgabeId())
                     .setJahr(event.getDatum().getYear())
                     .setZahlungsDatum(event.getDatum())
@@ -48,7 +47,6 @@ public class AusgabeUpdatedEventConsumerAdapter {
 
             VergabungBo vergabungBo = new VergabungBo()
                     .setId(vergabung.getId())
-                    .setVersion(vergabung.getVersion())
                     .setAusgabeId(event.getAusgabeId())
                     .setJahr(event.getDatum().getYear())
                     .setZahlungsDatum(event.getDatum())
