@@ -1,5 +1,5 @@
 import {ApplicationConfig, LOCALE_ID, provideZoneChangeDetection} from '@angular/core';
-import {provideRouter} from '@angular/router';
+import {provideRouter, withComponentInputBinding} from '@angular/router';
 
 import {routes} from './app.routes';
 import {provideHttpClient} from '@angular/common/http';
@@ -11,7 +11,7 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(),
     provideApi('/cash-control'),
     provideNativeDateAdapter(),

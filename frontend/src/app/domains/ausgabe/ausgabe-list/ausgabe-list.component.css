@@ -36,3 +36,11 @@ mat-chip {
 
 /* Spaltenspezifische Ausrichtung */
 .mat-column-betrag { text-align: right; white-space: nowrap; }
+
+tr.ausgabe-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.ausgabe-row:not(.example-expanded-row):active {
+  background: #efefef;
+}

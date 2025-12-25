@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, effect, input, signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, effect, inject, input, signal, ViewChild} from '@angular/core';
 import {AusgabeDto} from '../../../generated';
 import {
   MatCell,
@@ -19,6 +19,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatChip, MatChipSet} from '@angular/material/chips';
 import {DatePipe} from '@angular/common';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -52,6 +53,8 @@ export class AusgabeListComponent implements AfterViewInit {
   protected displayedColumns: string[] = ['datum','empfaenger','text','kategorie','betrag'];
   protected dataSource = new MatTableDataSource<AusgabeDto>([]);
 
+  private router = inject(Router);
+
   readonly items = input.required<AusgabeDto[]>();
   readonly error = signal<string | undefined>(undefined);
 
@@ -67,5 +70,10 @@ export class AusgabeListComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+
+  selectRow(rowId: string) {
+    this.router.navigate(['/ausgabe/edit', rowId]);
   }
 }

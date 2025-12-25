@@ -7,6 +7,10 @@ import {AusgabeEditComponent} from './domains/ausgabe/ausgabe-edit/ausgabe-edit.
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'ausgabe', component: AusgabeComponent },
+  {
+    path: 'ausgabe/edit/:ausgabeId',
+    component: AusgabeEditComponent
+  },
   { path: 'ausgabe/create', component: AusgabeEditComponent },
   { path: 'vergabung', component: VergabungListComponent }
 ];
