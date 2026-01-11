@@ -1,6 +1,39 @@
-<ng-container>
-  <h1>Vergabung</h1>
-  <div>
-    <pre>{{ vergabungData | json }}</pre>
-  </div>
-</ng-container>
+<div class="table-wrap">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Jahr -->
+    <ng-container matColumnDef="jahr">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Jahr</th>
+      <td mat-cell *matCellDef="let a">{{ a.jahr }}</td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Datum -->
+    <ng-container matColumnDef="datum">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Datum</th>
+      <td mat-cell *matCellDef="let a">{{ a.zahlungsDatum | date:'EEE, dd.MM.yyyy' }}</td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Empfänger -->
+    <ng-container matColumnDef="empfaenger">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Empfänger</th>
+      <td mat-cell *matCellDef="let a">{{ a.empfaenger }}</td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- Betrag -->
+    <ng-container matColumnDef="betrag">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="right">Betrag</th>
+      <td mat-cell *matCellDef="let a" class="right">
+        {{ a.betrag }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row class="vergabung-row" *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+</div>

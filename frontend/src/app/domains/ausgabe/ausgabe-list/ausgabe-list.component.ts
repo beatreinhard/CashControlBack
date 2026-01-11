@@ -42,7 +42,6 @@ import {Router} from '@angular/router';
     MatHeaderRow,
     MatRow,
     DatePipe
-
   ],
   templateUrl: './ausgabe-list.component.html',
   styleUrl: './ausgabe-list.component.css'
