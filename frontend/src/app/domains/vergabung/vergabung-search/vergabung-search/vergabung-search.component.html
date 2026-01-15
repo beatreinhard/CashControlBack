@@ -1,6 +1,33 @@
 @if (loading()) {
   <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
 } @else {
+  <form class="ausgabe-form" [formGroup]="form" (ngSubmit)="filtern()">
+    <mat-card>
+      <mat-card-title>Filter</mat-card-title>
+      <mat-card-content>
+
+        <!-- Jahr -->
+        <mat-form-field class="full-width">
+          <mat-label>Jahr</mat-label>
+          <input
+            matInput
+            formControlName="jahr"
+            type="number"
+            placeholder="Jahr"
+          />
+          @if (form.get('jahr')?.hasError('min') && form.get('jahr')?.touched) {
+            <mat-error>Jahr muss grösser als 2000 sein</mat-error>
+          }
+        </mat-form-field>
+
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" type="button" (click)="filtern()">Filtern</button>
+      </mat-card-actions>
+
+    </mat-card>
+  </form>
   <app-vergabung-list
     [items]="result()">
   </app-vergabung-list>

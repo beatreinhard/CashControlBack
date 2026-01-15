@@ -55,7 +55,7 @@ export class AusgabeEditComponent {
     this.isEditMode() ? 'Ausgabe bearbeiten' : 'Neue Ausgabe erfassen'
   );
 
-  // Stark typisiertes FormGroup
+  // typisiertes FormGroup
   protected readonly form: FormGroup<{
     datum: FormControl<Date | null>;
     empfaenger: FormControl<string>;
