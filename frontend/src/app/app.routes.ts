@@ -1,8 +1,8 @@
 import {Routes} from '@angular/router';
 import {DashboardComponent} from './domains/dashboard/dashboard/dashboard.component';
-import {VergabungListComponent} from './domains/vergabung/vergabung-list/vergabung-list.component';
 import {AusgabeComponent} from './domains/ausgabe/ausgabe/ausgabe.component';
 import {AusgabeEditComponent} from './domains/ausgabe/ausgabe-edit/ausgabe-edit.component';
+import {VergabungComponent} from './domains/vergabung/vergabung/vergabung/vergabung.component';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -12,5 +12,5 @@ export const routes: Routes = [
     component: AusgabeEditComponent
   },
   { path: 'ausgabe/create', component: AusgabeEditComponent },
-  { path: 'vergabung', component: VergabungListComponent }
+  { path: 'vergabung', component: VergabungComponent }
 ];
