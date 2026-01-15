@@ -42,6 +42,12 @@ class VergabungService implements VergabungServicePort {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<VergabungBo> getVergabungByJahr(Integer jahr) {
+        return vergabungPersistencePort.getVergabungenByJahr(jahr);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateVergabung(VergabungBo source) {
         vergabungPersistencePort.updateVergabung(source);

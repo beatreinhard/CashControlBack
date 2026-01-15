@@ -48,6 +48,12 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
     }
 
     @Override
+    public List<VergabungBo> getVergabungenByJahr(Integer jahr) {
+        var vergabungList = jpaVergabungRepository.findVergabungEntitiesByJahr(jahr);
+        return toVergabungBoList(vergabungList);
+    }
+
+    @Override
     public void updateVergabung(VergabungBo source) {
         var vergabungEntity = jpaVergabungRepository
                 .findById(source.getId())

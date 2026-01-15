@@ -12,4 +12,5 @@ public interface VergabungPersistencePort {
     void deleteVergabungById(String id);
     void deleteVergabungByAusgabeId(String ausgabeId);
     List<VergabungBo> getAllVergabung();
+    List<VergabungBo> getVergabungenByJahr(Integer jahr);
 }

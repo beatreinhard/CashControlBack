@@ -104,11 +104,17 @@ paths:
   /api/v1/vergabung:
     get:
       tags: [VergabungController]
-      operationId: getAllVergabungen
-      summary: Alle Vergabungen
+      operationId: getVergabungen
+      summary: Gibt Vergabungen (wenn gewollt mit Jahr als Filter)
+      parameters:
+      - in: query
+        name: jahr
+        schema:
+          type: integer
+      description: Filter nach Jahr
       responses:
         '200':
-          description: Alle Vergabungen gefunden
+          description: Vergabungen gefunden
           content:
             application/json:
               schema:

@@ -20,7 +20,7 @@ export class VergabungSearchComponent implements OnInit {
   protected vergabungController = inject(VergabungControllerApi);
 
   ngOnInit(): void {
-    this.vergabungController.getAllVergabungen().subscribe({
+    this.vergabungController.getVergabungen().subscribe({
       next: (res) => {
         this.result.set((res as VergabungDto[]) ?? []);
         this.loading.set(false);

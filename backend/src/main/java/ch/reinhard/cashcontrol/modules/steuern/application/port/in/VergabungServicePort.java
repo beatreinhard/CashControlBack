@@ -14,6 +14,8 @@ public interface VergabungServicePort {
 
     List<VergabungBo> getAllVergabung();
 
+    List<VergabungBo> getVergabungByJahr(Integer jahr);
+
     void updateVergabung(VergabungBo source);
 
     void deleteVergabungById(String id);

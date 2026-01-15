@@ -1,5 +1,6 @@
 package ch.reinhard.cashcontrol.modules.steuern.adapter.in.web;
 
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.in.VergabungServicePort;
 import ch.reinhard.cashcontrol.openapi.api.VergabungControllerApi;
 import ch.reinhard.cashcontrol.openapi.model.VergabungDto;
@@ -25,14 +26,19 @@ public class VergabungController implements VergabungControllerApi {
     }
 
     @Override
-    public ResponseEntity<List<VergabungDto>> getAllVergabungen() {
-        var vergabungDtoList = toVergabungDtoList(vergabungServicePort.getAllVergabung());
-        return ResponseEntity.ok(vergabungDtoList);
-    }
-
-    @Override
     public ResponseEntity<VergabungDto> getVergabungById(String id) {
         var bo = vergabungServicePort.getVergabungById(id);
         return ResponseEntity.ok(toVergabungDto(bo));
+    }
+
+    @Override
+    public ResponseEntity<List<VergabungDto>> getVergabungen(Integer jahr) {
+        List<VergabungBo> vergabungBoList;
+        if (jahr != null) {
+            vergabungBoList = vergabungServicePort.getVergabungByJahr(jahr);
+        } else {
+            vergabungBoList = vergabungServicePort.getAllVergabung();
+        }
+        return ResponseEntity.ok(toVergabungDtoList(vergabungBoList));
     }
 }
