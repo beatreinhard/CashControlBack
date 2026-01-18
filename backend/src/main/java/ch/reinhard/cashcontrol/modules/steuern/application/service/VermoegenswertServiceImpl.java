@@ -3,7 +3,7 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.VermoegenswertService;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaVermoegenswertRepository;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.JpaVermoegenswertRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

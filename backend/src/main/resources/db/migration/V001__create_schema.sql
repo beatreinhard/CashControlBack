@@ -22,7 +22,7 @@ create table vermoegenswert (
     anschaffungspreis decimal        not null
 );
 
-create table schuld (
+create table schuldEntity (
     id              varchar(255)    not null primary key,
     jahr            integer         not null,
     glaeubiger      varchar(255)    not null,

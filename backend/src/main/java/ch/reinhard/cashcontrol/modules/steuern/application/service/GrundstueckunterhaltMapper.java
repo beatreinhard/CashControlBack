@@ -1,7 +1,7 @@
 package ch.reinhard.cashcontrol.modules.steuern.application.service;
 
 import ch.reinhard.cashcontrol.modules.steuern.api.GrundstueckunterhaltDto;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Grundstueckunterhalt;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.Grundstueckunterhalt;
 
 import java.util.List;
 

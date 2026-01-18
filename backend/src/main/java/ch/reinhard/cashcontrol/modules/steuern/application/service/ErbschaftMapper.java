@@ -2,8 +2,8 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 
 import ch.reinhard.cashcontrol.modules.steuern.api.ErbschaftArtDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.ErbschaftDto;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Erbschaft;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.ErbschaftArt;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.Erbschaft;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.ErbschaftArt;
 
 import java.util.List;
 

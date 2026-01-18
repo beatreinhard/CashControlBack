@@ -16,19 +16,19 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
 
 
     @Autowired
-    private JpaVergabungRepository jpaVergabungRepository;
+    private VergabungJpaRepository vergabungJpaRepository;
 
     @Override
     public String createVergabung(VergabungBo source) {
         var vergabung = toVergabung(source);
         vergabung.setId(IdGenerator.generateId());
-        var vergabungEntity = jpaVergabungRepository.save(vergabung);
+        var vergabungEntity = vergabungJpaRepository.save(vergabung);
         return vergabungEntity.getId();
     }
 
     @Override
     public VergabungBo getVergabungById(String id) {
-        var entity = jpaVergabungRepository
+        var entity = vergabungJpaRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + id));
         return toVergabungBo(entity);
@@ -36,39 +36,39 @@ public class VergabungPersistenceAdapter implements VergabungPersistencePort {
 
     @Override
     public VergabungBo getVergabungByAusgabeId(String id) {
-        var entity = jpaVergabungRepository
+        var entity = vergabungJpaRepository
                 .findByAusgabeId(id);
         return toVergabungBo(entity);
     }
 
     @Override
     public List<VergabungBo> getAllVergabung() {
-        var vergabungList = jpaVergabungRepository.findAll();
+        var vergabungList = vergabungJpaRepository.findAll();
         return toVergabungBoList(vergabungList);
     }
 
     @Override
     public List<VergabungBo> getVergabungenByJahr(Integer jahr) {
-        var vergabungList = jpaVergabungRepository.findVergabungEntitiesByJahr(jahr);
+        var vergabungList = vergabungJpaRepository.findVergabungEntitiesByJahr(jahr);
         return toVergabungBoList(vergabungList);
     }
 
     @Override
     public void updateVergabung(VergabungBo source) {
-        var vergabungEntity = jpaVergabungRepository
+        var vergabungEntity = vergabungJpaRepository
                 .findById(source.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Vergabung nicht gefunden mit ID=" + source.getId()));
         vergabungEntity.update(toVergabung(source));
-        jpaVergabungRepository.save(vergabungEntity);
+        vergabungJpaRepository.save(vergabungEntity);
     }
 
     @Override
     public void deleteVergabungById(String id) {
-        jpaVergabungRepository.deleteById(id);
+        vergabungJpaRepository.deleteById(id);
     }
 
     @Override
     public void deleteVergabungByAusgabeId(String ausgabeId) {
-        jpaVergabungRepository.deleteVergabungByAusgabeId(ausgabeId);
+        vergabungJpaRepository.deleteVergabungByAusgabeId(ausgabeId);
     }
 }

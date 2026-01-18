@@ -2,8 +2,8 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 
 import ch.reinhard.cashcontrol.modules.steuern.api.KostenArtDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.KostenDto;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Kosten;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.KostenArt;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.Kosten;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.KostenArt;
 
 import java.util.List;
 

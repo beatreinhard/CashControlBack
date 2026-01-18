@@ -3,7 +3,7 @@ package ch.reinhard.cashcontrol.modules.steuern.application.service;
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.api.ErbschaftDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.ErbschaftService;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.JpaErbschaftRepository;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.JpaErbschaftRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -21,6 +21,7 @@ public class AusgabeService implements AusgabeServicePort {
 
 
     // TODO async vs sync Event: https://www.baeldung.com/spring-events  https://chatgpt.com/c/68fccfbe-bd4c-832d-ab9f-572f34b8cb11
+    @Override
     @Transactional
     public String createAusgabe(AusgabeBo source) {
         var id = ausgabePersistencePort.createAusgabe(source);
@@ -32,16 +33,19 @@ public class AusgabeService implements AusgabeServicePort {
         return id;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public AusgabeBo getAusgabeById(String id) {
         return ausgabePersistencePort.getAusgabeById(id);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<AusgabeBo> getAllAusgabe() {
         return ausgabePersistencePort.getAllAusgabe();
     }
 
+    @Override
     @Transactional
     public void updateAusgabe(AusgabeBo source) {
         ausgabePersistencePort.updateAusgabe(source);
@@ -50,6 +54,7 @@ public class AusgabeService implements AusgabeServicePort {
         eventPort.publishAusgabeUpdatedEvent(source);
     }
 
+    @Override
     @Transactional
     public void deleteAusgabeById(String id) {
         ausgabePersistencePort.deleteAusgabeById(id);

@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
 @Getter
 @Setter
-public class Schuld {
+public class SchuldEntity {
     @Id
     private String id;
 
@@ -23,7 +23,7 @@ public class Schuld {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private SchuldArt art;
+    private SchuldArtEntity art;
 
     @NotNull
     private String glaeubiger;
@@ -33,11 +33,11 @@ public class Schuld {
 
     private BigDecimal zinsen;
 
-    public void update(Schuld schuld) {
-        jahr = schuld.jahr;
-        art = schuld.art;
-        glaeubiger = schuld.glaeubiger;
-        betrag = schuld.betrag;
-        zinsen = schuld.zinsen;
+    public void update(SchuldEntity schuldEntity) {
+        jahr = schuldEntity.jahr;
+        art = schuldEntity.art;
+        glaeubiger = schuldEntity.glaeubiger;
+        betrag = schuldEntity.betrag;
+        zinsen = schuldEntity.zinsen;
     }
 }

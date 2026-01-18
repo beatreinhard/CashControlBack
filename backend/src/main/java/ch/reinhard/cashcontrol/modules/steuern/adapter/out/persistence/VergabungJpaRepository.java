@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JpaVergabungRepository
+public interface VergabungJpaRepository
         extends JpaRepository<VergabungEntity, String>, QuerydslPredicateExecutor<VergabungEntity> {
     VergabungEntity findByAusgabeId(String ausgabeId);
     void deleteVergabungByAusgabeId(String ausgabeId);

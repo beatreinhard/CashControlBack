@@ -12,6 +12,8 @@ tags:
     description: Endpoints für Ausgaben
   - name: VergabungController
     description: Endpoints für Vergabungen
+  - name: SchuldController
+    description: Endpoints für Schulden
 
 paths:
   /api/v1/ausgabe:
@@ -160,6 +162,93 @@ paths:
         '404':
           description: Vergabung nicht gefunden
 
+  /api/v1/schuld:
+    get:
+      tags: [SchuldController]
+      operationId: getAllSchuld
+      summary: Alle Schulden
+      responses:
+        '200':
+          description: Alle Schulden gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SchuldDto'
+    post:
+      tags: [SchuldController]
+      operationId: createSchuld
+      summary: Neue Schuld erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchuldDto'
+      responses:
+        '201':
+          description: Schuld erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID der neu erstellten Schuld
+
+  /api/v1/schuld/{id}:
+    get:
+      tags: [SchuldController]
+      operationId: getSchuldById
+      summary: Schuld finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Schuld mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchuldDto'
+        '404':
+          description: Schuld nicht gefunden
+    delete:
+      tags: [SchuldController]
+      operationId: deleteSchuldById
+      summary: Schuld löschen mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Schuld gelöscht (kein Response-Body)
+        '404':
+          description: Schuld nicht gefunden
+    put:
+      tags: [SchuldController]
+      operationId: updateSchuld
+      summary: Schuld aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchuldDto'
+      responses:
+        '204':
+          description: Schuld aktualisiert (kein Response-Body)
+        '404':
+          description: Schuld nicht gefunden
+
 components:
   schemas:
     AusgabeDto:
@@ -244,3 +333,44 @@ components:
         - zahlungsDatum
         - empfaenger
         - betrag
+
+    SchuldDto:
+      title: Schuld
+      type: object
+      description: Datentransferobjekt einer Schuld
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr der Schuld
+          example: 2025
+        art:
+          $ref: '#/components/schemas/SchuldArtDto'
+        glaeubiger:
+          type: string
+          description: Gläubiger
+          example: "Steuerverwaltung"
+        betrag:
+          type: number
+          description: Betrag (positiv für Schuld)
+          example: 850.45
+        zinsen:
+          type: number
+          description: Zinsen (positiv für Schuld)
+          example: 10.20
+      required:
+        - jahr
+        - art
+        - glaeubiger
+        - betrag
+
+    SchuldArtDto:
+      type: string
+      description: Art der Schuld
+      enum:
+        - RECHNUNG
+        - HYPOTHEK

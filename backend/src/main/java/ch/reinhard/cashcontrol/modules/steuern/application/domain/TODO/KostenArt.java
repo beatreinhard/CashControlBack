@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain;
+package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
 
 public enum KostenArt {
     DEPOTGEBUEHREN,

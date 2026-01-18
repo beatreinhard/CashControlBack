@@ -1,7 +1,7 @@
 package ch.reinhard.cashcontrol.modules.steuern.application.service;
 
 import ch.reinhard.cashcontrol.modules.steuern.api.BerufDto;
-import ch.reinhard.cashcontrol.modules.steuern.application.domain.Beruf;
+import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.Beruf;
 
 import java.util.List;
 

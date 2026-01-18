@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain;
+package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
