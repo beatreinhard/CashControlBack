@@ -9,182 +9,188 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {format, parseISO} from 'date-fns';
+import {Observable} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {RouterLink} from '@angular/router';
+
+type AusgabeForm = FormGroup<{
+  datum: FormControl<Date | null>;
+  empfaenger: FormControl<string>;
+  kategorie: FormControl<AusgabeKategorieDto | null>;
+  text: FormControl<string | null>;
+  betrag: FormControl<number | null>;
+}>;
 
 @Component({
   selector: 'app-ausgabe-edit',
   imports: [
     ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatCardModule, MatSelectModule, MatButtonModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatCardModule,
+    MatSelectModule,
+    MatButtonModule,
+    RouterLink
   ],
   templateUrl: './ausgabe-edit.component.html',
   styleUrl: './ausgabe-edit.component.css'
 })
 export class AusgabeEditComponent {
-
-  // -> brauchts nicht mit "provideRouter(routes, withComponentInputBinding())," im app.config.ts (das Mapping von der Route ins ausgabeId wird von withComponentInputBindng übernommen
-
-  // protected readonly route = inject(ActivatedRoute);
-  // protected readonly paramMapSig = toSignal(this.route.paramMap);
-  //
-  // // Abgeleitete Signals (computed)
-  // protected readonly ausgabeId = computed(
-  //   () => this.paramMapSig()?.get('id') ?? ''
-  // );
-
-
-  /**
-   * Optionales Input:
-   * - undefined / null  => Create-Modus
-   * - string (id)       => Edit-Modus (Daten werden geladen)
-   */
+  /** undefined/null => Create, string => Edit */
   readonly ausgabeId = input<string | null>(null);
 
   private readonly fb = inject(FormBuilder);
   private readonly ausgabeController = inject(AusgabeControllerApi);
 
-  // Enum-Werte für <mat-select>
   protected readonly kategorien = Object.values(AusgabeKategorieDto);
 
-  // Zustände (optional, aber hilfreich für UX)
   protected readonly isLoading = signal(false);
   protected readonly loadError = signal<string | null>(null);
 
-  // Abgeleitete Infos
   protected readonly isEditMode = computed(() => !!this.ausgabeId());
-  protected readonly title = computed(() =>
-    this.isEditMode() ? 'Ausgabe bearbeiten' : 'Neue Ausgabe erfassen'
-  );
+  protected readonly title = computed(() => (this.isEditMode() ? 'Ausgabe bearbeiten' : 'Neue Ausgabe erfassen'));
 
-  // typisiertes FormGroup
-  protected readonly form: FormGroup<{
-    datum: FormControl<Date | null>;
-    empfaenger: FormControl<string>;
-    kategorie: FormControl<AusgabeKategorieDto | null>;
-    text: FormControl<string | null>;
-    betrag: FormControl<number | null>;
-  }>;
+  private readonly snackBar = inject(MatSnackBar);
+  protected readonly form: AusgabeForm = this.buildForm();
 
   constructor() {
-
-    this.form = this.fb.group({
-      datum: this.fb.control<Date | null>(null, {
-        validators: [Validators.required]
-      }),
-      empfaenger: this.fb.control<string>('', {
-        nonNullable: true,
-        validators: [Validators.required]
-      }),
-      kategorie: this.fb.control<AusgabeKategorieDto | null>(null, {
-        validators: [Validators.required]
-      }),
-      text: this.fb.control<string | null>(null),
-      betrag: this.fb.control<number | null>(null, {
-        validators: [Validators.required, Validators.min(0.01)]
-      })
-    });
-
-    // Effect zum Laden der Daten, wenn eine ausgabeId gesetzt ist
-    effect(() => {
-      const id = this.ausgabeId();
-
-      // Kein Edit-Modus => nichts laden
-      if (!id) {
-        // sicherstellen, dass das Formular im Create-Fall leer ist
-        this.form.reset({
-          datum: null,
-          empfaenger: '',
-          kategorie: null,
-          text: null,
-          betrag: null
-        });
-        return;
-      }
-
-      this.isLoading.set(true);
-      this.loadError.set(null);
-
-
-      // TODO zuerst in ein dto abfüllen und dieses dann auf die form (so haben wir die rohdaten im dto)
-      this.ausgabeController.getAusgabeById(id).subscribe({
-        next: (ausgabe) => {
-          // Mapping Backend-DTO -> Form
-          this.form.patchValue({
-            datum: ausgabe.datum ? parseISO(ausgabe.datum) : null,
-            empfaenger: ausgabe.empfaenger ?? '',
-            kategorie: ausgabe.kategorie ?? null,
-            text: ausgabe.text ?? null,
-            betrag: ausgabe.betrag ?? null
-          });
-          this.isLoading.set(false);
-        },
-        error: (err) => {
-          console.error('Fehler beim Laden der Ausgabe', err);
-          this.loadError.set('Die Ausgabe konnte nicht geladen werden.');
-          this.isLoading.set(false);
-        }
-      });
-    });
+    effect(() => this.handleIdChange(this.ausgabeId()));
   }
 
   save(): void {
     if (this.form.invalid) {
-      this.form.markAllAsTouched();
+      this.markFormTouched();
       return;
     }
 
-    const raw = this.form.getRawValue();
-
-    const dto: AusgabeDto = {
-      datum:
-        raw.datum instanceof Date
-          ? toJsonDate(raw.datum)!
-          : raw.datum ?? '',
-      empfaenger: raw.empfaenger,
-      kategorie: raw.kategorie!,
-      text: raw.text ?? '',
-      betrag: Number(raw.betrag),
-      // falls dein Backend im Edit-Fall eine id im DTO erwartet, kannst du hier noch:
-      id: this.ausgabeId() ?? undefined
-    };
-
-    console.log(raw.datum);
-    console.log(dto.datum);
-    const id = this.ausgabeId();
-
-    // Create vs. Update unterscheiden
-    const request$ = id
-      ? this.ausgabeController.updateAusgabe(id, dto) // Methode nach deinem API-Client anpassen
-      : this.ausgabeController.createAusgabe(dto);
+    const dto = this.buildDtoFromForm();
+    const request$ = this.saveRequest$(dto);
 
     request$.subscribe({
       next: (result) => {
         console.log('Ausgabe gespeichert:', result);
-        // TODO: Navigation, Snackbar, Event an Parent emitten etc.
+        this.showSuccess('Ausgabe wurde erfolgreich gespeichert.');
+        // optional: Navigation / Reset / Emit
       },
       error: (err) => {
         console.error('Fehler beim Speichern der Ausgabe:', err);
-        // TODO: Fehlermeldung im UI anzeigen
+        this.showError('Fehler beim Speichern der Ausgabe.');
       }
     });
   }
 
-  cancel(): void {
-    // TODO: Navigation oder Dialog schließen
-    console.log('Abgebrochen');
-  }
-}
+  // -----------------------
+  // private Methoden
+  // -----------------------
 
+  private buildForm(): AusgabeForm {
+    return this.fb.group({
+      datum: this.fb.control<Date | null>(null, { validators: [Validators.required] }),
+      empfaenger: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
+      kategorie: this.fb.control<AusgabeKategorieDto | null>(null, { validators: [Validators.required] }),
+      text: this.fb.control<string | null>(null),
+      betrag: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] })
+    });
+  }
 
-/**
- * Formats the given date to a string in the format yyyy-MM-dd.
- */
-export function toJsonDate(date?: Date | string): string | undefined {
-  if (!date) {
-    return undefined;
+  private handleIdChange(id: string | null): void {
+    if (!id) {
+      this.resetFormForCreate();
+      return;
+    }
+    this.loadForEdit(id);
   }
-  let input = date;
-  if (typeof input === 'string') {
-    input = parseISO(input);
+
+  private resetFormForCreate(): void {
+    this.loadError.set(null);
+    this.form.reset({
+      datum: null,
+      empfaenger: '',
+      kategorie: null,
+      text: null,
+      betrag: null
+    });
   }
-  return format(input, 'yyyy-MM-dd');
+
+  private loadForEdit(id: string): void {
+    this.setLoading(true);
+
+    this.ausgabeController.getAusgabeById(id).subscribe({
+      next: (ausgabe) => {
+        this.patchFormFromDto(ausgabe);
+        this.setLoading(false);
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Ausgabe', err);
+        this.loadError.set('Die Ausgabe konnte nicht geladen werden.');
+        this.setLoading(false);
+      }
+    });
+  }
+
+  private patchFormFromDto(ausgabe: AusgabeDto): void {
+    this.form.patchValue({
+      datum: this.parseBackendDate(ausgabe.datum),
+      empfaenger: ausgabe.empfaenger ?? '',
+      kategorie: ausgabe.kategorie ?? null,
+      text: ausgabe.text ?? null,
+      betrag: ausgabe.betrag ?? null
+    });
+  }
+
+  private buildDtoFromForm(): AusgabeDto {
+    const raw = this.form.getRawValue();
+
+    return {
+      datum: this.toBackendDate(raw.datum) ?? '',
+      empfaenger: raw.empfaenger,
+      kategorie: raw.kategorie!,
+      text: raw.text ?? '',
+      betrag: Number(raw.betrag),
+      id: this.ausgabeId() ?? undefined
+    };
+  }
+
+  private saveRequest$(dto: AusgabeDto): Observable<unknown> {
+    const id = this.ausgabeId();
+    return id ? this.ausgabeController.updateAusgabe(id, dto) : this.ausgabeController.createAusgabe(dto);
+  }
+
+  private markFormTouched(): void {
+    this.form.markAllAsTouched();
+  }
+
+  private setLoading(isLoading: boolean): void {
+    this.isLoading.set(isLoading);
+    if (isLoading) this.loadError.set(null);
+  }
+
+  private parseBackendDate(value?: string | null): Date | null {
+    return value ? parseISO(value) : null;
+  }
+
+  private toBackendDate(date: Date | null): string | undefined {
+    if (!date) return undefined;
+    return format(date, 'yyyy-MM-dd');
+  }
+
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+      panelClass: ['snackbar-success'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Schließen', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
+  }
 }

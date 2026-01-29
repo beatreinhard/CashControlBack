@@ -1,71 +1,96 @@
 import {Component, computed, effect, inject, input, signal} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
-import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from "@angular/material/card";
-import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
-import {MatOption} from "@angular/material/core";
-import {MatSelect} from "@angular/material/select";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
+import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
+import {MatOption} from '@angular/material/core';
+import {MatSelect} from '@angular/material/select';
+import {Observable} from 'rxjs';
 import {SchuldArtDto, SchuldControllerApi, SchuldDto} from '../../../generated';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {RouterLink} from '@angular/router';
+
+type SchuldForm = FormGroup<{
+  jahr: FormControl<number>;
+  glaeubiger: FormControl<string>;
+  art: FormControl<SchuldArtDto | null>;
+  betrag: FormControl<number | null>;
+  zinsen: FormControl<number | null>;
+}>;
 
 @Component({
   selector: 'app-schuld-edit',
-    imports: [
-        FormsModule,
-        MatButton,
-        MatCard,
-        MatCardActions,
-        MatCardContent,
-        MatCardTitle,
-        MatError,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        MatSuffix,
-        ReactiveFormsModule
-    ],
+  imports: [
+    FormsModule,
+    MatButton,
+    MatCard,
+    MatCardActions,
+    MatCardContent,
+    MatCardTitle,
+    MatError,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    MatSuffix,
+    ReactiveFormsModule,
+    RouterLink
+  ],
   templateUrl: './schuld-edit.component.html',
   styleUrl: './schuld-edit.component.css'
 })
 export class SchuldEditComponent {
-  /**
-   * Optionales Input:
-   * - undefined / null  => Create-Modus
-   * - string (id)       => Edit-Modus (Daten werden geladen)
-   */
+  /** undefined/null => Create, string => Edit */
   readonly schuldId = input<string | null>(null);
 
   private readonly fb = inject(FormBuilder);
   private readonly schuldController = inject(SchuldControllerApi);
 
-  // Enum-Werte für <mat-select>
   protected readonly artValues = Object.values(SchuldArtDto);
 
-  // Zustände (optional, aber hilfreich für UX)
   protected readonly isLoading = signal(false);
   protected readonly loadError = signal<string | null>(null);
 
-  // Abgeleitete Infos
   protected readonly isEditMode = computed(() => !!this.schuldId());
-  protected readonly title = computed(() =>
-    this.isEditMode() ? 'Schuld bearbeiten' : 'Neue Schuld erfassen'
-  );
+  protected readonly title = computed(() => (this.isEditMode() ? 'Schuld bearbeiten' : 'Neue Schuld erfassen'));
 
-  // typisiertes FormGroup
-  protected readonly form: FormGroup<{
-    jahr: FormControl<number>;
-    glaeubiger: FormControl<string>;
-    art: FormControl<SchuldArtDto | null>;
-    betrag: FormControl<number | null>;
-    zinsen: FormControl<number | null>;
-  }>;
+  private readonly snackBar = inject(MatSnackBar);
+  protected readonly form: SchuldForm = this.buildForm();
 
   constructor() {
+    effect(() => this.handleIdChange(this.schuldId()));
+  }
 
-    // todo: initialisieren mit aktuellen Systemjahr
-    this.form = this.fb.group({
-      jahr: this.fb.control<number>(2026, {
+  save(): void {
+    if (this.form.invalid) {
+      this.markFormTouched();
+      return;
+    }
+
+    const dto = this.buildDtoFromForm();
+    const request$ = this.saveRequest$(dto);
+
+    request$.subscribe({
+      next: (result) => {
+        console.log('Schuld gespeichert:', result);
+        this.showSuccess('Schuld wurde erfolgreich gespeichert.');
+        // optional: Navigation / Reset / Emit
+      },
+      error: (err) => {
+        console.error('Fehler beim Speichern der Schuld:', err);
+        this.showError('Fehler beim Speichern der Schuld.');
+      }
+    });
+  }
+
+  // -----------------------
+  // private Methoden
+  // -----------------------
+
+  private buildForm(): SchuldForm {
+    return this.fb.group({
+      jahr: this.fb.control<number>(this.defaultYear(), {
         nonNullable: true,
         validators: [Validators.required, Validators.min(2000)]
       }),
@@ -83,89 +108,100 @@ export class SchuldEditComponent {
         validators: [Validators.min(0)]
       })
     });
+  }
 
-    // Effect zum Laden der Daten, wenn eine ausgabeId gesetzt ist
-    effect(() => {
-      const id = this.schuldId();
+  private handleIdChange(id: string | null): void {
+    if (!id) {
+      this.resetFormForCreate();
+      return;
+    }
+    this.loadForEdit(id);
+  }
 
-      // Kein Edit-Modus => nichts laden
-      if (!id) {
-        // sicherstellen, dass das Formular im Create-Fall leer ist
-        this.form.reset({
-          jahr: 2026,
-          glaeubiger: '',
-          art: null,
-          betrag: null,
-          zinsen: null
-        });
-        return;
-      }
-
-      this.isLoading.set(true);
-      this.loadError.set(null);
-
-
-      // TODO zuerst in ein dto abfüllen und dieses dann auf die form (so haben wir die rohdaten im dto)
-      this.schuldController.getSchuldById(id).subscribe({
-        next: (schuld) => {
-          // Mapping Backend-DTO -> Form
-          this.form.patchValue({
-            jahr: schuld.jahr,
-            glaeubiger: schuld.glaeubiger ?? '',
-            art: schuld.art ?? null,
-            betrag: schuld.betrag ?? null,
-            zinsen: schuld.zinsen ?? null
-          });
-          this.isLoading.set(false);
-        },
-        error: (err) => {
-          console.error('Fehler beim Laden der Schuld', err);
-          this.loadError.set('Die Schuld konnte nicht geladen werden.');
-          this.isLoading.set(false);
-        }
-      });
+  private resetFormForCreate(): void {
+    this.loadError.set(null);
+    this.form.reset({
+      jahr: this.defaultYear(),
+      glaeubiger: '',
+      art: null,
+      betrag: null,
+      zinsen: null
     });
   }
 
-  save(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+  private loadForEdit(id: string): void {
+    this.setLoading(true);
 
+    this.schuldController.getSchuldById(id).subscribe({
+      next: (schuld) => {
+        this.patchFormFromDto(schuld);
+        this.setLoading(false);
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Schuld', err);
+        this.loadError.set('Die Schuld konnte nicht geladen werden.');
+        this.setLoading(false);
+      }
+    });
+  }
+
+  private patchFormFromDto(schuld: SchuldDto): void {
+    this.form.patchValue({
+      jahr: schuld.jahr ?? this.defaultYear(),
+      glaeubiger: schuld.glaeubiger ?? '',
+      art: schuld.art ?? null,
+      betrag: schuld.betrag ?? null,
+      zinsen: schuld.zinsen ?? null
+    });
+  }
+
+  private buildDtoFromForm(): SchuldDto {
     const raw = this.form.getRawValue();
 
-    const dto: SchuldDto = {
+    return {
       jahr: raw.jahr,
       glaeubiger: raw.glaeubiger,
       art: raw.art!,
       betrag: Number(raw.betrag),
+      // falls null/undefined => nicht mitschicken (oder auf null setzen, je nach Backend)
       zinsen: raw.zinsen == null ? undefined : Number(raw.zinsen),
-      // falls dein Backend im Edit-Fall eine id im DTO erwartet, kannst du hier noch:
       id: this.schuldId() ?? undefined
     };
+  }
 
+  private saveRequest$(dto: SchuldDto): Observable<unknown> {
     const id = this.schuldId();
+    return id ? this.schuldController.updateSchuld(id, dto) : this.schuldController.createSchuld(dto);
+  }
 
-    // Create vs. Update unterscheiden
-    const request$ = id
-      ? this.schuldController.updateSchuld(id, dto) // Methode nach deinem API-Client anpassen
-      : this.schuldController.createSchuld(dto);
+  private markFormTouched(): void {
+    this.form.markAllAsTouched();
+  }
 
-    request$.subscribe({
-      next: (result) => {
-        console.log('Schuld gespeichert:', result);
-        // TODO: Navigation, Snackbar, Event an Parent emitten etc.
-      },
-      error: (err) => {
-        console.error('Fehler beim Speichern der Schuld:', err);
-        // TODO: Fehlermeldung im UI anzeigen
-      }
+  private setLoading(isLoading: boolean): void {
+    this.isLoading.set(isLoading);
+    if (isLoading) this.loadError.set(null);
+  }
+
+  private defaultYear(): number {
+    return new Date().getFullYear();
+  }
+
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+      panelClass: ['snackbar-success'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
     });
   }
 
-  cancel(): void {
-    // TODO: Navigation oder Dialog schließen
-    console.log('Abgebrochen');
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Schließen', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
   }
 }
