@@ -1,11 +1,16 @@
 package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
+import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.SchuldBo;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.out.persistence.SchuldPersistencePort;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence.SchuldPersistenceMapper.*;
+
 
 @Component
 @RequiredArgsConstructor
@@ -15,22 +20,27 @@ public class SchuldPersistenceAdapter implements SchuldPersistencePort {
 
     @Override
     public String createSchuld(SchuldBo source) {
-        return "";
+        var schuld = toSchuldEntity(source);
+        schuld.setId(IdGenerator.generateId());
+        var schuldEntity = schuldJpaRepository.save(schuld);
+        return schuldEntity.getId();
     }
 
     @Override
     public SchuldBo getSchuldById(String id) {
-        return null;
-    }
-
-    @Override
-    public SchuldBo getSchuldByAusgabeId(String id) {
-        return null;
+        var entity = schuldJpaRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Schuld nicht gefunden mit ID=" + id));
+        return toSchuldBo(entity);
     }
 
     @Override
     public void updateSchuld(SchuldBo source) {
-
+        var schuldEntity = schuldJpaRepository
+                .findById(source.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Schuld nicht gefunden mit ID=" + source.getId()));
+        schuldEntity.update(toSchuldEntity(source));
+        schuldJpaRepository.save(schuldEntity);
     }
 
     @Override
@@ -40,11 +50,14 @@ public class SchuldPersistenceAdapter implements SchuldPersistencePort {
 
     @Override
     public List<SchuldBo> getAllSchuld() {
-        return List.of();
+        var schuldList = schuldJpaRepository.findAll();
+
+        return toSchuldBoList(schuldList);
     }
 
     @Override
     public List<SchuldBo> getSchuldByJahr(Integer jahr) {
-        return List.of();
+        var schuldList = schuldJpaRepository.findSchuldEntitiesByJahr(jahr);
+        return toSchuldBoList(schuldList);
     }
 }

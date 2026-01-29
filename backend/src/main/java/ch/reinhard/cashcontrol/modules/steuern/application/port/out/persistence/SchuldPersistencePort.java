@@ -7,7 +7,6 @@ import java.util.List;
 public interface SchuldPersistencePort {
     String createSchuld(SchuldBo source);
     SchuldBo getSchuldById(String id);
-    SchuldBo getSchuldByAusgabeId(String id);
     void updateSchuld(SchuldBo source);
     void deleteSchuldById(String id);
     List<SchuldBo> getAllSchuld();

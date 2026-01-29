@@ -165,8 +165,14 @@ paths:
   /api/v1/schuld:
     get:
       tags: [SchuldController]
-      operationId: getAllSchuld
+      operationId: getSchulden
       summary: Alle Schulden
+      parameters:
+        - in: query
+          name: jahr
+          schema:
+            type: integer
+      description: Filter nach Jahr
       responses:
         '200':
           description: Alle Schulden gefunden

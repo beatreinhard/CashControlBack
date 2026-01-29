@@ -5,14 +5,14 @@ import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.persistence.AusgabePersistencePort;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 import static ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabePersistenceMapper.*;
 
+@Component
 @RequiredArgsConstructor
-@Service
 public class AusgabePersistenceAdapter implements AusgabePersistencePort {
 
     private final JpaAusgabeRepository ausgabeRepository;

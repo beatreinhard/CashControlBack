@@ -14,4 +14,6 @@ public interface SchuldServicePort {
     void updateSchuld(SchuldBo source);
 
     void deleteSchuldById(String id);
+
+    List<SchuldBo> getSchuldByJahr(Integer jahr);
 }
