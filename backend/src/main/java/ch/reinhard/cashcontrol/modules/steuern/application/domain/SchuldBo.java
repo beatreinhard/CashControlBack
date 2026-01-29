@@ -18,6 +18,7 @@ public class SchuldBo {
     private Integer jahr;
     private SchuldArtBo art;
     private String glaeubiger;
+    private String text;
     private BigDecimal betrag;
     private BigDecimal zinsen;
 }

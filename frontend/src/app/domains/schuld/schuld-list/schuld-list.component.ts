@@ -46,7 +46,7 @@ import {MatChip, MatChipSet} from '@angular/material/chips';
 export class SchuldListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['jahr','art', 'glaeubiger','betrag','zinsen'];
+  protected displayedColumns: string[] = ['jahr','art', 'glaeubiger', 'text','betrag','zinsen'];
   protected dataSource = new MatTableDataSource<SchuldDto>([]);
 
   private router = inject(Router);

@@ -28,6 +28,8 @@ public class SchuldEntity {
     @NotNull
     private String glaeubiger;
 
+    private String text;
+
     @NotNull
     private BigDecimal betrag;
 
@@ -37,6 +39,7 @@ public class SchuldEntity {
         jahr = schuldEntity.jahr;
         art = schuldEntity.art;
         glaeubiger = schuldEntity.glaeubiger;
+        text = schuldEntity.text;
         betrag = schuldEntity.betrag;
         zinsen = schuldEntity.zinsen;
     }

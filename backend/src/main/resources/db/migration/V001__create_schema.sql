@@ -27,6 +27,7 @@ create table schuld (
     jahr            integer         not null,
     glaeubiger      varchar(255)    not null,
     art             varchar(255)    not null,
+    text            varchar(255),
     betrag          decimal         not null,
     zinsen          decimal
 );

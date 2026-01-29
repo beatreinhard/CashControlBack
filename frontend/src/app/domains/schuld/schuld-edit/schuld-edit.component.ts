@@ -14,6 +14,7 @@ type SchuldForm = FormGroup<{
   jahr: FormControl<number>;
   glaeubiger: FormControl<string>;
   art: FormControl<SchuldArtDto | null>;
+  text: FormControl<string | null>;
   betrag: FormControl<number | null>;
   zinsen: FormControl<number | null>;
 }>;
@@ -98,6 +99,7 @@ export class SchuldEditComponent {
         nonNullable: true,
         validators: [Validators.required]
       }),
+      text: this.fb.control<string | null>(null),
       art: this.fb.control<SchuldArtDto | null>(null, {
         validators: [Validators.required]
       }),
@@ -124,6 +126,7 @@ export class SchuldEditComponent {
       jahr: this.defaultYear(),
       glaeubiger: '',
       art: null,
+      text: null,
       betrag: null,
       zinsen: null
     });
@@ -150,6 +153,7 @@ export class SchuldEditComponent {
       jahr: schuld.jahr ?? this.defaultYear(),
       glaeubiger: schuld.glaeubiger ?? '',
       art: schuld.art ?? null,
+      text: schuld.text ?? null,
       betrag: schuld.betrag ?? null,
       zinsen: schuld.zinsen ?? null
     });
@@ -163,6 +167,7 @@ export class SchuldEditComponent {
       glaeubiger: raw.glaeubiger,
       art: raw.art!,
       betrag: Number(raw.betrag),
+      text: raw.text ?? undefined,
       // falls null/undefined => nicht mitschicken (oder auf null setzen, je nach Backend)
       zinsen: raw.zinsen == null ? undefined : Number(raw.zinsen),
       id: this.schuldId() ?? undefined

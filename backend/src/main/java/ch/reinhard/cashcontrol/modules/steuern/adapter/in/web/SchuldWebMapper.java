@@ -16,6 +16,7 @@ public class SchuldWebMapper {
                 source.getJahr(),
                 convert(source.getArt(), SchuldArtBo.class),
                 source.getGlaeubiger(),
+                source.getText(),
                 source.getBetrag(),
                 source.getZinsen());
     }
@@ -28,6 +29,7 @@ public class SchuldWebMapper {
                 source.getBetrag());
         schuld.setId(source.getId());
         schuld.setZinsen(source.getZinsen());
+        schuld.setText(source.getText());
         return schuld;
     }
 

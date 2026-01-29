@@ -453,6 +453,10 @@ components:
           type: string
           description: Gläubiger
           example: "Steuerverwaltung"
+        text:
+          type: string
+          description: Text
+          example: "Depogebühr"
         betrag:
           type: number
           description: Betrag (positiv für Schuld)

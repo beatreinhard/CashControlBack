@@ -18,6 +18,7 @@ public class SchuldPersistenceMapper {
                 source.getJahr(),
                 convert(source.getArt(), SchuldArtBo.class),
                 source.getGlaeubiger(),
+                source.getText(),
                 source.getBetrag(),
                 source.getZinsen());
     }
@@ -28,6 +29,7 @@ public class SchuldPersistenceMapper {
                 source.getJahr(),
                 convert(source.getArt(), SchuldArtEntity.class),
                 source.getGlaeubiger(),
+                source.getText(),
                 source.getBetrag(),
                 source.getZinsen());
     }
