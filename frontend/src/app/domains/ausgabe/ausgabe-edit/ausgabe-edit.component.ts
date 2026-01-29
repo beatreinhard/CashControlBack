@@ -62,7 +62,6 @@ export class AusgabeEditComponent {
     kategorie: FormControl<AusgabeKategorieDto | null>;
     text: FormControl<string | null>;
     betrag: FormControl<number | null>;
-    version: FormControl<number | null>;
   }>;
 
   constructor() {
@@ -81,17 +80,12 @@ export class AusgabeEditComponent {
       text: this.fb.control<string | null>(null),
       betrag: this.fb.control<number | null>(null, {
         validators: [Validators.required, Validators.min(0.01)]
-      }),
-      version: this.fb.control<number>(0, {
-        validators: [Validators.required]
-      }),
+      })
     });
 
     // Effect zum Laden der Daten, wenn eine ausgabeId gesetzt ist
     effect(() => {
       const id = this.ausgabeId();
-
-      console.log(id);
 
       // Kein Edit-Modus => nichts laden
       if (!id) {
@@ -101,8 +95,7 @@ export class AusgabeEditComponent {
           empfaenger: '',
           kategorie: null,
           text: null,
-          betrag: null,
-          version: 0
+          betrag: null
         });
         return;
       }

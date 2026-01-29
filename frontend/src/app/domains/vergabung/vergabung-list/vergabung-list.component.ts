@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, effect, inject, input, signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, effect, input, ViewChild} from '@angular/core';
 import {VergabungDto} from '../../../generated';
 import {DatePipe} from '@angular/common';
 import {MatPaginator} from '@angular/material/paginator';
@@ -18,7 +18,6 @@ import {
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-vergabung-list',
@@ -48,10 +47,8 @@ export class VergabungListComponent implements AfterViewInit{
   protected displayedColumns: string[] = ['jahr', 'datum','empfaenger', 'betrag'];
   protected dataSource = new MatTableDataSource<VergabungDto>([]);
 
-  private router = inject(Router);
-
   readonly items = input.required<VergabungDto[]>();
-  readonly error = signal<string | undefined>(undefined);
+  // readonly error = signal<string | undefined>(undefined);
 
   constructor() {
     // Bridge: Signal -> Imperative API von MatTableDataSource

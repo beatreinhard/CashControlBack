@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, effect, inject, input, ViewChild} from '@angular/core';
-import {AusgabeDto} from '../../../generated';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {
   MatCell,
   MatCellDef,
@@ -15,48 +16,42 @@ import {
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatChip, MatChipSet} from '@angular/material/chips';
-import {DatePipe} from '@angular/common';
+import {SchuldDto} from '../../../generated';
 import {Router} from '@angular/router';
-
+import {MatChip, MatChipSet} from '@angular/material/chips';
 
 @Component({
-  selector: 'app-ausgabe-list',
+  selector: 'app-schuld-list',
   imports: [
-    MatPaginator,
-    MatChipSet,
+    MatCell,
+    MatCellDef,
     MatChip,
+    MatChipSet,
+    MatColumnDef,
+    MatFooterCell,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatPaginator,
+    MatRow,
+    MatRowDef,
+    MatSort,
     MatTable,
     MatHeaderCellDef,
-    MatCellDef,
-    MatFooterCellDef,
-    MatHeaderRowDef,
-    MatRowDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatSort,
-    MatCell,
-    MatFooterCell,
-    MatHeaderRow,
-    MatRow,
-    DatePipe
+    MatFooterCellDef
   ],
-  templateUrl: './ausgabe-list.component.html',
-  styleUrl: './ausgabe-list.component.css'
+  templateUrl: './schuld-list.component.html',
+  styleUrl: './schuld-list.component.css'
 })
-export class AusgabeListComponent implements AfterViewInit {
+export class SchuldListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['datum','empfaenger','text','kategorie','betrag'];
-  protected dataSource = new MatTableDataSource<AusgabeDto>([]);
+  protected displayedColumns: string[] = ['jahr','art', 'glaeubiger','betrag','zinsen'];
+  protected dataSource = new MatTableDataSource<SchuldDto>([]);
 
   private router = inject(Router);
 
-  readonly items = input.required<AusgabeDto[]>();
-  // readonly error = signal<string | undefined>(undefined);
-
+  readonly items = input.required<SchuldDto[]>();
 
   constructor() {
     // Bridge: Signal -> Imperative API von MatTableDataSource
@@ -73,6 +68,6 @@ export class AusgabeListComponent implements AfterViewInit {
 
 
   selectRow(rowId: string) {
-    this.router.navigate(['/ausgabe/edit', rowId]);
+    this.router.navigate(['/schuld/edit', rowId]);
   }
 }

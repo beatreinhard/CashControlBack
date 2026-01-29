@@ -1,0 +1,7 @@
+@if (loading()) {
+  <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+} @else {
+  <app-schuld-list
+    [items]="result()">
+  </app-schuld-list>
+}
