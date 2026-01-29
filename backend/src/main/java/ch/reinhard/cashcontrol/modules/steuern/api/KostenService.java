@@ -1,5 +1,7 @@
 package ch.reinhard.cashcontrol.modules.steuern.api;
 
+import ch.reinhard.cashcontrol.openapi.model.KostenDto;
+
 import java.util.List;
 
 public interface KostenService {
@@ -8,6 +10,8 @@ public interface KostenService {
     KostenDto getKostenById(String id);
 
     List<KostenDto> getAllKosten();
+
+    List<KostenDto> getKostenByJahr(Integer jahr);
 
     void updateKosten(KostenDto source);
 

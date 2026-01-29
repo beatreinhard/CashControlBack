@@ -9,6 +9,8 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// TODO: package zu controller entfernen, wenn Hexagonal implementiert ist
+
 @OpenAPIDefinition(
         info =
                 @Info(
@@ -27,7 +29,9 @@ public class OpenApiConfiguration {
     public GroupedOpenApi apiV1() {
         return GroupedOpenApi.builder()
                 .group("v1")
-                .packagesToScan("ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web", "ch.reinhard.cashcontrol.modules.steuern.adapter.in.web")
+                .packagesToScan("ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web",
+                        "ch.reinhard.cashcontrol.modules.steuern.adapter.in.web",
+                        "ch.reinhard.cashcontrol.modules.steuern.controller")
                 .pathsToMatch("/api/v1/**")
                 .build();
     }

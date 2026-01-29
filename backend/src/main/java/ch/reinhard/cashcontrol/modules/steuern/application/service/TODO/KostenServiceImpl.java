@@ -1,9 +1,9 @@
 package ch.reinhard.cashcontrol.modules.steuern.application.service.TODO;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
-import ch.reinhard.cashcontrol.modules.steuern.api.KostenDto;
 import ch.reinhard.cashcontrol.modules.steuern.api.KostenService;
 import ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO.JpaKostenRepository;
+import ch.reinhard.cashcontrol.openapi.model.KostenDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +47,17 @@ class KostenServiceImpl implements KostenService {
     }
 
     @Override
+    public List<KostenDto> getKostenByJahr(Integer jahr) {
+        var kostenList = jpaKostenRepository.findKostenByJahr(jahr);
+        return toKostenDtoList(kostenList);
+    }
+
+    @Override
     @Transactional
     public void updateKosten(KostenDto source) {
         var kostenEntity = jpaKostenRepository
-                .findById(source.id())
-                .orElseThrow(() -> new EntityNotFoundException("Kosten nicht gefunden mit ID=" + source.id()));
+                .findById(source.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Kosten nicht gefunden mit ID=" + source.getId()));
         kostenEntity.update(toKosten(source));
         jpaKostenRepository.save(kostenEntity);
     }

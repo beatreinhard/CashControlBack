@@ -255,6 +255,99 @@ paths:
         '404':
           description: Schuld nicht gefunden
 
+  /api/v1/kosten:
+    get:
+      tags: [KostenController]
+      operationId: getKosten
+      summary: Alle Kosten
+      parameters:
+        - in: query
+          name: jahr
+          schema:
+            type: integer
+      description: Filter nach Jahr
+      responses:
+        '200':
+          description: Alle Kosten gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KostenDto'
+    post:
+      tags: [KostenController]
+      operationId: createKosten
+      summary: Neue Kosten erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KostenDto'
+      responses:
+        '201':
+          description: Kosten erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID der neu erstellten Kosten
+
+  /api/v1/kosten/{id}:
+    get:
+      tags: [KostenController]
+      operationId: getKostenById
+      summary: Kosten finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Kosten mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KostenDto'
+        '404':
+          description: Kosten nicht gefunden
+    delete:
+      tags: [KostenController]
+      operationId: deleteKostenById
+      summary: Kosten löschen mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Kosten gelöscht (kein Response-Body)
+        '404':
+          description: Kosten nicht gefunden
+    put:
+      tags: [KostenController]
+      operationId: updateKosten
+      summary: Kosten aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KostenDto'
+      responses:
+        '204':
+          description: Kosten aktualisiert (kein Response-Body)
+        '404':
+          description: Kosten nicht gefunden
+
 components:
   schemas:
     AusgabeDto:
@@ -273,7 +366,7 @@ components:
           example: "2025-08-15"
         empfaenger:
           type: string
-          description: Empfänger/Payee
+          description: Empfänger
           example: "Coop"
         kategorie:
           $ref: '#/components/schemas/AusgabeKategorieDto'
@@ -380,3 +473,52 @@ components:
       enum:
         - RECHNUNG
         - HYPOTHEK
+        -
+    KostenDto:
+      title: Kosten
+      type: object
+      description: Datentransferobjekt von Kosten
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr der Kosten
+          example: 2026
+        art:
+          $ref: '#/components/schemas/KostenArtDto'
+        empfaenger:
+          type: string
+          description: Empfänger
+          example: "UBS"
+        bezahler:
+          type: string
+          description: Bezahler
+          example: "Hans Muster"
+        betrag:
+          type: number
+          description: Betrag (positiv für Kosten)
+          example: 86.45
+        bemerkung:
+          type: string
+          description: Bemerkung
+          example: "irgend eine Bemerkung"
+      required:
+        - jahr
+        - art
+        - empfaenger
+        - bezahler
+        - betrag
+
+    KostenArtDto:
+      type: string
+      description: Kategorie der Kosten
+      enum:
+        - DEPOTGEBUEHREN
+        - KRANKENKASSE
+        - UNFALL_KRANKHEIT
+        - BERUF
+        - GRUNDSTUECK_BETRIEB
