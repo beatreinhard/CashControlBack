@@ -1,7 +1,7 @@
 <form class="ausgabe-form" [formGroup]="form" (ngSubmit)="save()">
   <mat-card>
 
-    <mat-card-title>Ausgabe erfassen/mutieren</mat-card-title>
+    <mat-card-title>{{ title() }}</mat-card-title>
     <mat-card-content>
 
       <!-- Datum -->
@@ -85,6 +85,9 @@
     <mat-card-actions align="end">
       <button mat-button type="button" [routerLink]="'/ausgabe'">
         Abbrechen
+      </button>
+      <button mat-button type="button" (click)="delete()">
+        Löschen
       </button>
       <button mat-flat-button color="primary" type="submit">
         Speichern

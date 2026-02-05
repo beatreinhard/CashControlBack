@@ -9,6 +9,7 @@ import {Observable} from 'rxjs';
 import {SchuldArtDto, SchuldControllerApi, SchuldDto} from '../../../generated';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router, RouterLink} from '@angular/router';
+import {HttpResponse} from '@angular/common/http';
 
 type SchuldForm = FormGroup<{
   jahr: FormControl<number>;
@@ -43,7 +44,8 @@ type SchuldForm = FormGroup<{
 })
 export class SchuldEditComponent {
   /** undefined/null => Create, string => Edit */
-  private inputSchuldId = input<string | null>(null);
+  readonly schuldId = input<string | null>(null);
+  // private schuldId: string | undefined = undefined;
 
   private readonly fb = inject(FormBuilder);
   private readonly schuldController = inject(SchuldControllerApi);
@@ -54,7 +56,7 @@ export class SchuldEditComponent {
   protected readonly isLoading = signal(false);
   protected readonly loadError = signal<string | null>(null);
 
-  protected readonly isEditMode = computed(() => !!this.inputSchuldId());
+  protected readonly isEditMode = computed(() => !!this.schuldId());
 
   protected readonly title = computed(() => (this.isEditMode() ? 'Schuld bearbeiten' : 'Neue Schuld erfassen'));
 
@@ -62,10 +64,11 @@ export class SchuldEditComponent {
   protected readonly form: SchuldForm = this.buildForm();
 
   constructor() {
-    effect(() => this.handleIdChange(this.inputSchuldId()));
+    effect(() => this.handleIdChange(this.schuldId()));
   }
 
   save(): void {
+    console.log('save');
     if (this.form.invalid) {
       this.markFormTouched();
       return;
@@ -76,7 +79,10 @@ export class SchuldEditComponent {
 
     request$.subscribe({
       next: (result) => {
-        console.log('Schuld gespeichert');
+        console.log('Schuld gespeichert', result);
+        if (result instanceof HttpResponse) {
+          console.log(result.body);
+        }
         this.showSuccess('Schuld wurde erfolgreich gespeichert.');
         // optional: Navigation / Reset / Emit
       },
@@ -88,10 +94,10 @@ export class SchuldEditComponent {
   }
 
   delete(): void {
-  //  if (this.schuldId() ) {
-      this.schuldController.deleteSchuldById(this.inputSchuldId()!).subscribe();
-  //  }
-    this.router.navigate(['/schuld']);
+    if (this.schuldId() != null) {
+      this.schuldController.deleteSchuldById(this.schuldId()!).subscribe();
+      this.router.navigate(['/schuld']);
+    }
   }
 
   // -----------------------
@@ -143,7 +149,6 @@ export class SchuldEditComponent {
 
   private loadForEdit(id: string): void {
     this.setLoading(true);
-
     this.schuldController.getSchuldById(id).subscribe({
       next: (schuld) => {
         this.patchFormFromDto(schuld);
@@ -179,12 +184,12 @@ export class SchuldEditComponent {
       text: raw.text ?? undefined,
       // falls null/undefined => nicht mitschicken (oder auf null setzen, je nach Backend)
       zinsen: raw.zinsen == null ? undefined : Number(raw.zinsen),
-      id: this.inputSchuldId() ?? undefined
+      id: this.schuldId() ?? undefined
     };
   }
 
   private saveRequest$(dto: SchuldDto): Observable<unknown> {
-    const id = this.inputSchuldId();
+    const id = this.schuldId();
     return id ? this.schuldController.updateSchuld(id, dto) : this.schuldController.createSchuld(dto);
   }
 

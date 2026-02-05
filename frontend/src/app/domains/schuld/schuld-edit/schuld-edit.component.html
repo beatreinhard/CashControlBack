@@ -1,7 +1,7 @@
 <form class="ausgabe-form" [formGroup]="form" (ngSubmit)="save()">
   <mat-card>
 
-    <mat-card-title>Schuld erfassen/mutieren</mat-card-title>
+    <mat-card-title>{{ title() }}</mat-card-title>
     <mat-card-content>
 
       <!-- Jahr -->
@@ -102,7 +102,7 @@
       <button mat-button type="button" [routerLink]="'/schuld'">
         Abbrechen
       </button>
-      <button mat-button (click)="delete()">
+      <button mat-button type="button" (click)="delete()">
         Löschen
       </button>
       <button mat-flat-button color="primary" type="submit">

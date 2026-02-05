@@ -11,7 +11,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {format, parseISO} from 'date-fns';
 import {Observable} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 type AusgabeForm = FormGroup<{
   datum: FormControl<Date | null>;
@@ -43,6 +43,7 @@ export class AusgabeEditComponent {
 
   private readonly fb = inject(FormBuilder);
   private readonly ausgabeController = inject(AusgabeControllerApi);
+  private readonly router = inject(Router);
 
   protected readonly kategorien = Object.values(AusgabeKategorieDto);
 
@@ -79,6 +80,13 @@ export class AusgabeEditComponent {
         this.showError('Fehler beim Speichern der Ausgabe.');
       }
     });
+  }
+
+  delete(): void {
+    if (this.ausgabeId() != null) {
+      this.ausgabeController.deleteAusgabeById(this.ausgabeId()!).subscribe();
+      this.router.navigate(['/ausgabe']);
+    }
   }
 
   // -----------------------
