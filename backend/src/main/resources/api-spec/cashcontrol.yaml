@@ -398,6 +398,7 @@ components:
         - SPAREN_VORSORGE
         - STEUERN
         - SPENDEN
+        - KRANKENKASSE
         - DIVERSES
 
     VergabungDto:

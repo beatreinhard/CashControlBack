@@ -5,6 +5,7 @@ import {AusgabeEditComponent} from './domains/ausgabe/ausgabe-edit/ausgabe-edit.
 import {VergabungComponent} from './domains/vergabung/vergabung/vergabung/vergabung.component';
 import {SchuldComponent} from './domains/schuld/schuld/schuld.component';
 import {SchuldEditComponent} from './domains/schuld/schuld-edit/schuld-edit.component';
+import {KostenComponent} from './domains/kosten/kosten/kosten.component';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'ausgabe/create', component: AusgabeEditComponent },
   { path: 'vergabung', component: VergabungComponent },
   { path: 'schuld', component: SchuldComponent },
+  { path: 'kosten', component: KostenComponent },
   {
     path: 'schuld/edit/:schuldId',
     component: SchuldEditComponent,

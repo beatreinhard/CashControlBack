@@ -57,10 +57,11 @@ public class AusgabeService implements AusgabeServicePort {
     @Override
     @Transactional
     public void deleteAusgabeById(String id) {
+        var ausgabeKategorie = ausgabePersistencePort.getAusgabeById(id);
         ausgabePersistencePort.deleteAusgabeById(id);
 
         // Publish event after deletion
-        eventPort.publishAusgabeDeletedEvent(id);
+        eventPort.publishAusgabeDeletedEvent(id, ausgabeKategorie.getKategorie());
     }
 
 }

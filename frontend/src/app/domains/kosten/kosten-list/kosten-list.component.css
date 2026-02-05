@@ -1,0 +1,46 @@
+.page-title {
+  margin: 0 0 12px 0;
+}
+
+.search {
+  margin-bottom: 8px;
+}
+
+.table-wrap {
+  overflow: auto; /* falls viele Spalten/kleine Screens */
+}
+
+.right {
+  text-align: right;
+}
+
+mat-chip {
+  font-weight: 500;
+}
+
+.total {
+  font-weight: 700;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.error {
+  color: #b00020;
+  margin: 8px 0 16px;
+}
+
+/* Spaltenspezifische Ausrichtung */
+.mat-column-betrag { text-align: right; white-space: nowrap; }
+
+tr.kosten-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.kosten-row:not(.example-expanded-row):active {
+  background: #efefef;
+}

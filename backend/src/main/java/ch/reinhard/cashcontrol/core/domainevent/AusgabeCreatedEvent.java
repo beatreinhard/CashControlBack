@@ -24,7 +24,14 @@ public class AusgabeCreatedEvent extends ApplicationEvent {
         this.betrag = betrag;
     }
 
-    public boolean isKategorieSpenden() {
+    public boolean isKategorieForVergabung() {
         return this.kategorie == AusgabeEventKategorie.SPENDEN;
+    }
+
+    public boolean isKategorieForKosten() {
+        if (this.kategorie == AusgabeEventKategorie.KRANKENKASSE) {
+            return true;
+        }
+        return false;
     }
 }

@@ -18,7 +18,16 @@ public class AusgabeDeletedEventConsumerAdapter {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onApplicationEvent(AusgabeDeletedEvent event) {
 
-        log.info("Consume AusgabeDeletedEvent: {}", event);
-        vergabungServicePort.deleteVergabungByAusgabeId(event.getAusgabeId());
+        log.info("Consume AusgabeDeletedEvent for Category: {}", event.getKategorie());
+
+        // Vergabung
+        if (event.isKategorieForVergabung()) {
+            vergabungServicePort.deleteVergabungByAusgabeId(event.getAusgabeId());
+        }
+
+        // Kosten
+        if (event.isKategorieForKosten()) {
+            // TODO Kosten-DB-Tabelle muss auch noch eine AusgabeID haben
+        }
     }
 }

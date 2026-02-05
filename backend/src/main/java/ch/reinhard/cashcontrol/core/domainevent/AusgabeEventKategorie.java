@@ -10,5 +10,6 @@ public enum AusgabeEventKategorie {
     SPAREN_VORSORGE,
     STEUERN,
     SPENDEN,
-    DIVERSES
+    DIVERSES,
+    KRANKENKASSE,
 }

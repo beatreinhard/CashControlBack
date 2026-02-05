@@ -10,5 +10,6 @@ public enum AusgabeKategorie {
     SPAREN_VORSORGE,
     STEUERN,
     SPENDEN,
-    DIVERSES
+    DIVERSES,
+    KRANKENKASSE
 }
