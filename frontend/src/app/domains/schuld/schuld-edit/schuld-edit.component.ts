@@ -8,7 +8,7 @@ import {MatSelect} from '@angular/material/select';
 import {Observable} from 'rxjs';
 import {SchuldArtDto, SchuldControllerApi, SchuldDto} from '../../../generated';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 type SchuldForm = FormGroup<{
   jahr: FormControl<number>;
@@ -43,24 +43,26 @@ type SchuldForm = FormGroup<{
 })
 export class SchuldEditComponent {
   /** undefined/null => Create, string => Edit */
-  readonly schuldId = input<string | null>(null);
+  private inputSchuldId = input<string | null>(null);
 
   private readonly fb = inject(FormBuilder);
   private readonly schuldController = inject(SchuldControllerApi);
+  private readonly router = inject(Router);
 
   protected readonly artValues = Object.values(SchuldArtDto);
 
   protected readonly isLoading = signal(false);
   protected readonly loadError = signal<string | null>(null);
 
-  protected readonly isEditMode = computed(() => !!this.schuldId());
+  protected readonly isEditMode = computed(() => !!this.inputSchuldId());
+
   protected readonly title = computed(() => (this.isEditMode() ? 'Schuld bearbeiten' : 'Neue Schuld erfassen'));
 
   private readonly snackBar = inject(MatSnackBar);
   protected readonly form: SchuldForm = this.buildForm();
 
   constructor() {
-    effect(() => this.handleIdChange(this.schuldId()));
+    effect(() => this.handleIdChange(this.inputSchuldId()));
   }
 
   save(): void {
@@ -74,7 +76,7 @@ export class SchuldEditComponent {
 
     request$.subscribe({
       next: (result) => {
-        console.log('Schuld gespeichert:', result);
+        console.log('Schuld gespeichert');
         this.showSuccess('Schuld wurde erfolgreich gespeichert.');
         // optional: Navigation / Reset / Emit
       },
@@ -83,6 +85,13 @@ export class SchuldEditComponent {
         this.showError('Fehler beim Speichern der Schuld.');
       }
     });
+  }
+
+  delete(): void {
+  //  if (this.schuldId() ) {
+      this.schuldController.deleteSchuldById(this.inputSchuldId()!).subscribe();
+  //  }
+    this.router.navigate(['/schuld']);
   }
 
   // -----------------------
@@ -170,12 +179,12 @@ export class SchuldEditComponent {
       text: raw.text ?? undefined,
       // falls null/undefined => nicht mitschicken (oder auf null setzen, je nach Backend)
       zinsen: raw.zinsen == null ? undefined : Number(raw.zinsen),
-      id: this.schuldId() ?? undefined
+      id: this.inputSchuldId() ?? undefined
     };
   }
 
   private saveRequest$(dto: SchuldDto): Observable<unknown> {
-    const id = this.schuldId();
+    const id = this.inputSchuldId();
     return id ? this.schuldController.updateSchuld(id, dto) : this.schuldController.createSchuld(dto);
   }
 
