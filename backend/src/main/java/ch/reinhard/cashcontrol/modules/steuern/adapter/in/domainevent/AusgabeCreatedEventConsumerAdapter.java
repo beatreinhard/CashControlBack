@@ -45,7 +45,7 @@ public class AusgabeCreatedEventConsumerAdapter {
                     .jahr(event.getDatum().getYear())
                     .art(EnumMapper.convert(event.getKategorie(), KostenArtDto.class))
                     .empfaenger(event.getEmpfaenger())
-                    .bezahler(null)
+                    .zahlender(event.getZahlender())
                     .betrag(event.getBetrag())
                     .bemerkung(null);
 

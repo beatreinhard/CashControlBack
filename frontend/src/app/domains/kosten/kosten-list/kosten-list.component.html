@@ -19,6 +19,13 @@
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
 
+    <!-- Zahlender -->
+    <ng-container matColumnDef="zahlender">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Zahlender</th>
+      <td mat-cell *matCellDef="let k">{{ k.zahlender }}</td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
     <!-- Empfänger -->
     <ng-container matColumnDef="empfaenger">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Empfänger</th>

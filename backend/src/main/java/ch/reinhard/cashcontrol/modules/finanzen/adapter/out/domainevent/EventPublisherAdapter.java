@@ -26,6 +26,7 @@ public class EventPublisherAdapter implements EventPort {
                 this,
                 ausgabeBo.getId(),
                 ausgabeBo.getDatum(),
+                ausgabeBo.getZahlender(),
                 ausgabeBo.getEmpfaenger(),
                 convert(ausgabeBo.getKategorie(), AusgabeEventKategorie.class),
                 ausgabeBo.getBetrag()
@@ -53,6 +54,7 @@ public class EventPublisherAdapter implements EventPort {
                 this,
                 ausgabeBo.getId(),
                 ausgabeBo.getDatum(),
+                ausgabeBo.getZahlender(),
                 ausgabeBo.getEmpfaenger(),
                 convert(ausgabeBo.getKategorie(), AusgabeEventKategorie.class),
                 ausgabeBo.getBetrag()

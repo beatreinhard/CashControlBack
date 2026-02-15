@@ -8,6 +8,7 @@ create table ausgabe (
     id              varchar(255)    not null primary key,
     betrag          decimal         not null,
     datum           date            not null,
+    zahlender       varchar(255),
     empfaenger      varchar(255)    not null,
     kategorie       varchar(255)    not null,
     text            varchar(255)
@@ -37,7 +38,7 @@ create table kosten (
     jahr            integer         not null,
     art             varchar(255)    not null,
     empfaenger      varchar(255)    not null,
-    bezahler        varchar(255)    not null,
+    zahlender       varchar(255)    not null,
     betrag          decimal         not null,
     bemerkung       varchar(255)
 );

@@ -14,6 +14,7 @@ public class AusgabePersistenceMapper {
         return new AusgabeEntity(
                 source.getId(),
                 source.getDatum(),
+                source.getZahlender(),
                 source.getEmpfaenger(),
                 convert(source.getKategorie(), AusgabeKategorie.class),
                 source.getText(),
@@ -24,6 +25,7 @@ public class AusgabePersistenceMapper {
         return new AusgabeBo(
                 source.getId(),
                 source.getDatum(),
+                source.getZahlender(),
                 source.getEmpfaenger(),
                 convert(source.getKategorie(), AusgabeKategorie.class),
                 source.getText(),

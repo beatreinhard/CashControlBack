@@ -17,7 +17,7 @@ class KostenMapper {
                 source.getJahr(),
                 convert(source.getArt(), KostenArt.class),
                 source.getEmpfaenger(),
-                source.getBezahler(),
+                source.getZahlender(),
                 source.getBetrag(),
                 source.getBemerkung());
     }
@@ -27,7 +27,7 @@ class KostenMapper {
                 source.getJahr(),
                 convert(source.getArt(), KostenArtDto.class),
                 source.getEmpfaenger(),
-                source.getBezahler(),
+                source.getZahlender(),
                 source.getBetrag());
         kosten.setId(source.getId());
         kosten.setBemerkung(source.getBemerkung());

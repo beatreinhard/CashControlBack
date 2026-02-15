@@ -24,6 +24,8 @@ public class AusgabeEntity {
     @NotNull
     private LocalDate datum;
 
+    private String zahlender;
+
     @NotNull
     private String empfaenger;
 

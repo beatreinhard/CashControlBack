@@ -16,6 +16,7 @@ import {Router, RouterLink} from '@angular/router';
 type AusgabeForm = FormGroup<{
   datum: FormControl<Date | null>;
   empfaenger: FormControl<string>;
+  zahlender: FormControl<string | null>;
   kategorie: FormControl<AusgabeKategorieDto | null>;
   text: FormControl<string | null>;
   betrag: FormControl<number | null>;
@@ -96,6 +97,7 @@ export class AusgabeEditComponent {
   private buildForm(): AusgabeForm {
     return this.fb.group({
       datum: this.fb.control<Date | null>(null, { validators: [Validators.required] }),
+      zahlender: this.fb.control<string | null>(null),
       empfaenger: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
       kategorie: this.fb.control<AusgabeKategorieDto | null>(null, { validators: [Validators.required] }),
       text: this.fb.control<string | null>(null),
@@ -115,6 +117,7 @@ export class AusgabeEditComponent {
     this.loadError.set(null);
     this.form.reset({
       datum: null,
+      zahlender: '',
       empfaenger: '',
       kategorie: null,
       text: null,
@@ -141,6 +144,7 @@ export class AusgabeEditComponent {
   private patchFormFromDto(ausgabe: AusgabeDto): void {
     this.form.patchValue({
       datum: this.parseBackendDate(ausgabe.datum),
+      zahlender: ausgabe.zahlender ?? null,
       empfaenger: ausgabe.empfaenger ?? '',
       kategorie: ausgabe.kategorie ?? null,
       text: ausgabe.text ?? null,
@@ -153,6 +157,7 @@ export class AusgabeEditComponent {
 
     return {
       datum: this.toBackendDate(raw.datum) ?? '',
+      zahlender: raw.zahlender ?? '',
       empfaenger: raw.empfaenger,
       kategorie: raw.kategorie!,
       text: raw.text ?? '',

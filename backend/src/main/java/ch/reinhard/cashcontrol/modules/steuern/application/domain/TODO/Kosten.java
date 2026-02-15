@@ -29,7 +29,7 @@ public class Kosten {
     private String empfaenger;
 
     @NotNull
-    private String bezahler;
+    private String zahlender;
 
     @NotNull
     private BigDecimal betrag;
@@ -40,7 +40,7 @@ public class Kosten {
         jahr = kosten.jahr;
         art = kosten.art;
         empfaenger = kosten.empfaenger;
-        bezahler = kosten.bezahler;
+        zahlender = kosten.zahlender;
         betrag = kosten.betrag;
         bemerkung = kosten.bemerkung;
     }

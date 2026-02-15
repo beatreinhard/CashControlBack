@@ -364,6 +364,10 @@ components:
           format: date
           description: Buchungs-/Belegdatum
           example: "2025-08-15"
+        zahlender:
+          type: string
+          description: Zahlender
+          example: "Hans Muster"
         empfaenger:
           type: string
           description: Empfänger
@@ -499,9 +503,9 @@ components:
           type: string
           description: Empfänger
           example: "UBS"
-        bezahler:
+        zahlender:
           type: string
-          description: Bezahler
+          description: Zahlender
           example: "Hans Muster"
         betrag:
           type: number
@@ -515,7 +519,7 @@ components:
         - jahr
         - art
         - empfaenger
-        - bezahler
+        - zahlender
         - betrag
 
     KostenArtDto:

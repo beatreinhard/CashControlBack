@@ -49,7 +49,7 @@ import {Router} from '@angular/router';
 export class AusgabeListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['datum','empfaenger','text','kategorie','betrag'];
+  protected displayedColumns: string[] = ['datum','zahlender', 'empfaenger','text','kategorie','betrag'];
   protected dataSource = new MatTableDataSource<AusgabeDto>([]);
 
   private router = inject(Router);

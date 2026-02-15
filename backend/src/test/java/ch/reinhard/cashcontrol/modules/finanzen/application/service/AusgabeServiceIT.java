@@ -102,6 +102,7 @@ public class AusgabeServiceIT {
         var ausgabeToUpdateBo = new AusgabeBo(
                 createdAusgabeBo.getId(),
                 createdAusgabeBo.getDatum(),
+                createdAusgabeBo.getZahlender(),
                 createdAusgabeBo.getEmpfaenger(),
                 createdAusgabeBo.getKategorie(),
                 createdAusgabeBo.getText(),
@@ -121,6 +122,7 @@ public class AusgabeServiceIT {
         var ausgabeBo1 = new AusgabeBo(
                 null,
                 LocalDate.now(),
+                "",
                 "Assura",
                 AusgabeKategorie.GESUNDHEIT,
                 "Krankenkasse",
@@ -129,6 +131,7 @@ public class AusgabeServiceIT {
         var ausgabeBo2 = new AusgabeBo(
                 null,
                 LocalDate.now(),
+                "",
                 "Steuerverwaltung",
                 AusgabeKategorie.STEUERN,
                 "1. Rate",
@@ -149,6 +152,7 @@ public class AusgabeServiceIT {
         var ausgabeBo = new AusgabeBo(
                 null,
                 LocalDate.now(),
+                "",
                 empfaenger,
                 AusgabeKategorie.GESUNDHEIT,
                 "Krankenkasse",
@@ -172,6 +176,7 @@ public class AusgabeServiceIT {
         var ausgabeBo = new AusgabeBo(
                 null,
                 LocalDate.now(),
+                "",
                 empfaenger,
                 AusgabeKategorie.GESUNDHEIT,
                 "Krankenkasse",

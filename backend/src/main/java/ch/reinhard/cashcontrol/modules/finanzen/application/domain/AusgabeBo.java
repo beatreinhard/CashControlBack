@@ -18,6 +18,7 @@ import java.time.LocalDate;
 public class AusgabeBo {
     private String id;
     private LocalDate datum;
+    private String zahlender;
     private String empfaenger;
     private AusgabeKategorie kategorie;
     private String text;

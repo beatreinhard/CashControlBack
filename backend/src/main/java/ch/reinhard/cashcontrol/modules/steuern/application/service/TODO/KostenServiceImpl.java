@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -22,7 +23,7 @@ class KostenServiceImpl implements KostenService {
     private JpaKostenRepository jpaKostenRepository;
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String createKosten(KostenDto source) {
         var kosten = toKosten(source);
         kosten.setId(IdGenerator.generateId());
@@ -53,7 +54,7 @@ class KostenServiceImpl implements KostenService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateKosten(KostenDto source) {
         var kostenEntity = jpaKostenRepository
                 .findById(source.getId())
@@ -63,7 +64,7 @@ class KostenServiceImpl implements KostenService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteKostenById(String id) {
         jpaKostenRepository.deleteById(id);
     }
