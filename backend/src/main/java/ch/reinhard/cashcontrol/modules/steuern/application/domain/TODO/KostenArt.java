@@ -1,7 +1,7 @@
 package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
 
 public enum KostenArt {
-    DEPOTGEBUEHREN,
+    BANKGEBUEHREN,
     KRANKENKASSE,
     UNFALL_KRANKHEIT,
     BERUF,

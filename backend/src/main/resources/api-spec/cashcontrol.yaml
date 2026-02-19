@@ -403,6 +403,8 @@ components:
         - STEUERN
         - SPENDEN
         - KRANKENKASSE
+        - BERUF
+        - BANKGEBUEHREN
         - DIVERSES
 
     VergabungDto:
@@ -530,7 +532,7 @@ components:
       type: string
       description: Kategorie der Kosten
       enum:
-        - DEPOTGEBUEHREN
+        - BANKGEBUEHREN
         - KRANKENKASSE
         - UNFALL_KRANKHEIT
         - BERUF
