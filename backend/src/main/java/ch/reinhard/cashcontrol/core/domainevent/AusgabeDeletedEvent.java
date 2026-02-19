@@ -15,18 +15,4 @@ public class AusgabeDeletedEvent extends ApplicationEvent {
         this.ausgabeId = ausgabeId;
         this.kategorie = kategorie;
     }
-
-    public boolean isKategorieForVergabung() {
-        return this.kategorie == AusgabeEventKategorie.SPENDEN;
-    }
-
-    public boolean isKategorieForKosten() {
-        if (this.kategorie == AusgabeEventKategorie.KRANKENKASSE ||
-                this.kategorie == AusgabeEventKategorie.BERUF ||
-                this.kategorie == AusgabeEventKategorie.BANKGEBUEHREN ||
-                this.kategorie == AusgabeEventKategorie.GESUNDHEIT) {
-            return true;
-        }
-        return false;
-    }
 }

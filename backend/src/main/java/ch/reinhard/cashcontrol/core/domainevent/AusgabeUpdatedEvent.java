@@ -27,20 +27,4 @@ public class AusgabeUpdatedEvent extends ApplicationEvent {
         this.kategorie = kategorie;
         this.betrag = betrag;
     }
-
-    public boolean isKategorieForVergabung() {
-        return this.kategorie == AusgabeEventKategorie.SPENDEN;
-    }
-
-    // TODO könnte evtl im Enum oder irgendwo zentriert sein, damit es nicht in jedem Event implementiert und redundant ist
-
-    public boolean isKategorieForKosten() {
-        if (this.kategorie == AusgabeEventKategorie.KRANKENKASSE ||
-            this.kategorie == AusgabeEventKategorie.BERUF ||
-            this.kategorie == AusgabeEventKategorie.BANKGEBUEHREN ||
-            this.kategorie == AusgabeEventKategorie.GESUNDHEIT) {
-            return true;
-        }
-        return false;
-    }
 }

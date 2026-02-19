@@ -24,6 +24,9 @@ class KostenMapper {
     }
 
     public static KostenDto toKostenDto(Kosten source) {
+        if (source == null) {
+            return null;
+        }
         var kosten =  new KostenDto(
                 source.getJahr(),
                 convert(source.getArt(), KostenArtDto.class),
