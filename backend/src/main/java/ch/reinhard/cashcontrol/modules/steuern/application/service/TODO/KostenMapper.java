@@ -14,6 +14,7 @@ class KostenMapper {
     public static Kosten toKosten(KostenDto source) {
         return new Kosten(
                 source.getId(),
+                source.getAusgabeId(),
                 source.getJahr(),
                 convert(source.getArt(), KostenArt.class),
                 source.getEmpfaenger(),
@@ -31,6 +32,7 @@ class KostenMapper {
                 source.getBetrag());
         kosten.setId(source.getId());
         kosten.setBemerkung(source.getBemerkung());
+        kosten.setAusgabeId(source.getAusgabeId());
         return kosten;
     }
 

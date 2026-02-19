@@ -17,6 +17,8 @@ public class Kosten {
     @Id
     private String id;
 
+    private String ausgabeId;
+
     @NotNull
     @Digits(integer = 4, fraction = 0, message = "Das Jahr muss eine 4-stellige Zahl sein.")
     private Integer jahr;

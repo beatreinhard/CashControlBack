@@ -44,7 +44,7 @@ import {MatChip, MatChipSet} from '@angular/material/chips';
 export class KostenListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['jahr','art','zahlender','empfaenger','bezahler','bemerkung','betrag'];
+  protected displayedColumns: string[] = ['jahr','art','zahlender','empfaenger','bemerkung','betrag'];
   protected dataSource = new MatTableDataSource<KostenDto>([]);
 
   private router = inject(Router);

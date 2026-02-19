@@ -1,6 +1,7 @@
 package ch.reinhard.cashcontrol.modules.steuern.adapter.in.domainevent;
 
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeDeletedEvent;
+import ch.reinhard.cashcontrol.modules.steuern.api.KostenService;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.in.VergabungServicePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class AusgabeDeletedEventConsumerAdapter {
 
     private final VergabungServicePort vergabungServicePort;
+    private final KostenService kostenService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onApplicationEvent(AusgabeDeletedEvent event) {
@@ -27,7 +29,7 @@ public class AusgabeDeletedEventConsumerAdapter {
 
         // Kosten
         if (event.isKategorieForKosten()) {
-            // TODO Kosten-DB-Tabelle muss auch noch eine AusgabeID haben
+            kostenService.deleteKostgenByAusgabeId(event.getAusgabeId());
         }
     }
 }

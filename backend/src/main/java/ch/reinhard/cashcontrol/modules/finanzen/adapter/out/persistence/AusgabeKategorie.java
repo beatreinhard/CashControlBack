@@ -11,5 +11,7 @@ public enum AusgabeKategorie {
     STEUERN,
     SPENDEN,
     DIVERSES,
-    KRANKENKASSE
+    KRANKENKASSE,
+    BERUF,
+    BANKGEBUEHREN
 }

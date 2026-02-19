@@ -16,4 +16,8 @@ public interface KostenService {
     void updateKosten(KostenDto source);
 
     void deleteKostenById(String id);
+
+    KostenDto getKostenByAusgabeId(String ausgabeId);
+
+    void deleteKostgenByAusgabeId(String ausgabeId);
 }

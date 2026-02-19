@@ -68,4 +68,17 @@ class KostenServiceImpl implements KostenService {
     public void deleteKostenById(String id) {
         jpaKostenRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public KostenDto getKostenByAusgabeId(String ausgabeId) {
+        var kosten = jpaKostenRepository.getKostenByAusgabeId(ausgabeId);
+        return toKostenDto(kosten);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteKostgenByAusgabeId(String ausgabeId) {
+        jpaKostenRepository.deleteKostenByAusgabeId(ausgabeId);
+    }
 }

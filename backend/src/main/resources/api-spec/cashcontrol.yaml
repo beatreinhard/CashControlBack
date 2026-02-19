@@ -492,6 +492,10 @@ components:
           type: string
           description: Technische ID (bei Create optional)
           example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
+        ausgabeId:
+          type: string
+          description: Technische ID  (optional) Fremdschlüssel zu Ausgabe
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
         jahr:
           type: integer
           format: int32

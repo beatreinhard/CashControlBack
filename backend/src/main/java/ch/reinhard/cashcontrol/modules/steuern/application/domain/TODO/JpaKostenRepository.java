@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface JpaKostenRepository extends JpaRepository<Kosten, String>, QuerydslPredicateExecutor<Kosten> {
     List<Kosten> findKostenByJahr(Integer jahr);
+    Kosten getKostenByAusgabeId(String ausgabeId);
+    void deleteKostenByAusgabeId(String ausgabeId);
 }

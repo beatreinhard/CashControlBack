@@ -42,12 +42,13 @@ public class AusgabeCreatedEventConsumerAdapter {
         if (event.isKategorieForKosten()) {
             KostenDto kostenDto = new KostenDto()
                     .id(null)
+                    .ausgabeId(event.getAusgabeId())
                     .jahr(event.getDatum().getYear())
                     .art(EnumMapper.convert(event.getKategorie(), KostenArtDto.class))
                     .empfaenger(event.getEmpfaenger())
                     .zahlender(event.getZahlender())
                     .betrag(event.getBetrag())
-                    .bemerkung(null);
+                    .bemerkung(event.getBemerkung());
 
             kostenService.createKosten(kostenDto);
         }

@@ -54,7 +54,7 @@ class VergabungService implements VergabungServicePort {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteVergabungById(String id) {
         vergabungPersistencePort.deleteVergabungById(id);
     }

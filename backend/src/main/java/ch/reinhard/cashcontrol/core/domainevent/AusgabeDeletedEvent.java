@@ -21,7 +21,10 @@ public class AusgabeDeletedEvent extends ApplicationEvent {
     }
 
     public boolean isKategorieForKosten() {
-        if (this.kategorie == AusgabeEventKategorie.KRANKENKASSE) {
+        if (this.kategorie == AusgabeEventKategorie.KRANKENKASSE ||
+                this.kategorie == AusgabeEventKategorie.BERUF ||
+                this.kategorie == AusgabeEventKategorie.BANKGEBUEHREN ||
+                this.kategorie == AusgabeEventKategorie.GESUNDHEIT) {
             return true;
         }
         return false;

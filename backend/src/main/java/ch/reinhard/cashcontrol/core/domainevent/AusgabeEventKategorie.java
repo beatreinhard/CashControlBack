@@ -12,4 +12,6 @@ public enum AusgabeEventKategorie {
     SPENDEN,
     DIVERSES,
     KRANKENKASSE,
+    BERUF,
+    BANKGEBUEHREN
 }

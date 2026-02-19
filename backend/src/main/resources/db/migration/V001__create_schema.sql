@@ -35,6 +35,7 @@ create table schuld (
 
 create table kosten (
     id              varchar(255)    not null primary key,
+    ausgabe_id      varchar(255),
     jahr            integer         not null,
     art             varchar(255)    not null,
     empfaenger      varchar(255)    not null,
