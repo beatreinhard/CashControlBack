@@ -3,6 +3,13 @@ create schema if not exists cashcontrol;
 -- Schema-wechsel
 SET search_path = cashcontrol;
 
+create table person (
+    id              varchar(255)    not null primary key,
+    name            varchar(255)    not null,
+    vorname         varchar(255)    not null,
+    geburtsdatum    date            not null,
+    ahvnummer       varchar(255)
+);
 
 create table ausgabe (
     id              varchar(255)    not null primary key,
@@ -13,7 +20,6 @@ create table ausgabe (
     kategorie       varchar(255)    not null,
     text            varchar(255)
 );
-
 
 create table vermoegenswert (
     id               varchar(255)    not null primary key,

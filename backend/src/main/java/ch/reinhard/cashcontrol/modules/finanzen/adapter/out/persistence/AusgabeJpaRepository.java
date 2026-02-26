@@ -5,5 +5,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaAusgabeRepository
+public interface AusgabeJpaRepository
         extends JpaRepository<AusgabeEntity, String>, QuerydslPredicateExecutor<AusgabeEntity> {}

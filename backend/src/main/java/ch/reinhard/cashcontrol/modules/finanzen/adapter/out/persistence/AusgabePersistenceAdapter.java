@@ -15,7 +15,7 @@ import static ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.A
 @RequiredArgsConstructor
 public class AusgabePersistenceAdapter implements AusgabePersistencePort {
 
-    private final JpaAusgabeRepository ausgabeRepository;
+    private final AusgabeJpaRepository ausgabeRepository;
 
     @Override
     public String createAusgabe(AusgabeBo source) {
