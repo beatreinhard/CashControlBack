@@ -4,11 +4,13 @@ import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeK
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeKategorieDto;
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 
 import static ch.reinhard.cashcontrol.core.service.EnumMapper.convert;
 
+@UtilityClass
 public class AusgabeWebMapper {
 
     public static AusgabeBo toAusgabeBo(AusgabeDto source) {

@@ -348,6 +348,93 @@ paths:
         '404':
           description: Kosten nicht gefunden
 
+  /api/v1/person:
+    get:
+      tags: [PersonController]
+      operationId: getPerson
+      summary: Alle Personen
+      responses:
+        '200':
+          description: Alle Personen gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonDto'
+    post:
+      tags: [PersonController]
+      operationId: createPerson
+      summary: Neue Person erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDto'
+      responses:
+        '201':
+          description: Person erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID der neu erstellten Person
+
+  /api/v1/person/{id}:
+    get:
+      tags: [PersonController]
+      operationId: getPersonById
+      summary: Person finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Person mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+        '404':
+          description: Person nicht gefunden
+    delete:
+      tags: [PersonController]
+      operationId: deletePersonById
+      summary: Person löschen mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Person gelöscht (kein Response-Body)
+        '404':
+          description: Person nicht gefunden
+    put:
+      tags: [PersonController]
+      operationId: updatePerson
+      summary: Person aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDto'
+      responses:
+        '204':
+          description: Person aktualisiert (kein Response-Body)
+        '404':
+          description: Person nicht gefunden
+
 components:
   schemas:
     AusgabeDto:
@@ -537,3 +624,34 @@ components:
         - UNFALL_KRANKHEIT
         - BERUF
         - GRUNDSTUECK_BETRIEB
+
+    PersonDto:
+      title: Person
+      type: object
+      description: Datentransferobjekt einer Person
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "5c2a1b1e-97f9-4f0a-1b3e-a8f1c7d21b3e"
+        name:
+          type: string
+          description: Name der Person
+          example: "Gerber"
+        vorname:
+          type: string
+          description: Vorname der Person
+          example: "Max"
+        geburtsdatum:
+          type: string
+          format: date
+          description: Geburtsdatum
+          example: "2025-03-31"
+        ahvnummer:
+          type: string
+          description: AHV-Nummer
+          example: "756.1234.5678.90"
+      required:
+        - name
+        - vorname
+        - geburtsdatum

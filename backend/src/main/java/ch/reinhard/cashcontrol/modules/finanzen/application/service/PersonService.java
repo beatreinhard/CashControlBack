@@ -19,7 +19,7 @@ public class PersonService implements PersonServicePort {
 
     @Transactional(readOnly = true)
     @Override
-    public PersonBo gerPersonById(String id) {
+    public PersonBo getPersonById(String id) {
         return personPersistencePort.gerPersonById(id);
     }
 

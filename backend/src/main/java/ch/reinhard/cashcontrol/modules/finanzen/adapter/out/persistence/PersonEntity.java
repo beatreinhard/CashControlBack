@@ -32,4 +32,11 @@ public class PersonEntity {
     private LocalDate geburtsdatum;
 
     private String ahvnummer;
+
+    public void update(PersonEntity personEntity) {
+        this.name = personEntity.name;
+        this.vorname = personEntity.vorname;
+        this.geburtsdatum = personEntity.geburtsdatum;
+        this.ahvnummer = personEntity.ahvnummer;
+    }
 }
