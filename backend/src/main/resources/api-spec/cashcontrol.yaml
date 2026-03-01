@@ -351,7 +351,7 @@ paths:
   /api/v1/person:
     get:
       tags: [PersonController]
-      operationId: getPerson
+      operationId: getAllPerson
       summary: Alle Personen
       responses:
         '200':

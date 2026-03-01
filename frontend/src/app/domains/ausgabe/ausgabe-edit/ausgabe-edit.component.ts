@@ -85,6 +85,7 @@ export class AusgabeEditComponent {
 
   delete(): void {
     if (this.ausgabeId() != null) {
+      console.log('Ausgabe gelöscht');
       this.ausgabeController.deleteAusgabeById(this.ausgabeId()!).subscribe();
       this.router.navigate(['/ausgabe']);
     }

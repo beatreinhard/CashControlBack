@@ -41,6 +41,7 @@ public class AusgabeEntity {
 
     public void update(AusgabeEntity ausgabeEntity) {
         this.datum = ausgabeEntity.datum;
+        this.zahlender = ausgabeEntity.zahlender;
         this.empfaenger = ausgabeEntity.empfaenger;
         this.kategorie = ausgabeEntity.kategorie;
         this.text = ausgabeEntity.text;

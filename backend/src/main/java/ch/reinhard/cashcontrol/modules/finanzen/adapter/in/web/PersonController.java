@@ -32,7 +32,7 @@ public class PersonController implements PersonControllerApi {
     }
 
     @Override
-    public ResponseEntity<List<PersonDto>> getPerson() {
+    public ResponseEntity<List<PersonDto>> getAllPerson() {
         var personDtoList = toPersonDtoList(personServicePort.getAllPerson());
         return ResponseEntity.ok(personDtoList);
     }
