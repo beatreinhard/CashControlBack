@@ -4,6 +4,7 @@ import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import ch.reinhard.cashcontrol.openapi.api.AusgabeControllerApi;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;
+import ch.reinhard.cashcontrol.openapi.model.AusgabeViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,8 @@ public class AusgabeController implements AusgabeControllerApi {
     }
 
     @Override
-    public ResponseEntity<List<AusgabeDto>> getAllAusgabe() {
-        var ausgabeDtoList = toAusgabeDtoList(ausgabeServicePort.getAllAusgabe());
+    public ResponseEntity<List<AusgabeViewDto>> getAllAusgabeView() {
+        var ausgabeDtoList = toAusgabeViewDtoList(ausgabeServicePort.getAllAusgabeView());
         return ResponseEntity.ok(ausgabeDtoList);
     }
 

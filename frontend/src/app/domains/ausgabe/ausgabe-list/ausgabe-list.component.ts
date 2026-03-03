@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, effect, inject, input, ViewChild} from '@angular/core';
-import {AusgabeDto} from '../../../generated';
+import {AusgabeViewDto} from '../../../generated';
 import {
   MatCell,
   MatCellDef,
@@ -50,11 +50,11 @@ export class AusgabeListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   protected displayedColumns: string[] = ['datum','zahlender', 'empfaenger','text','kategorie','betrag'];
-  protected dataSource = new MatTableDataSource<AusgabeDto>([]);
+  protected dataSource = new MatTableDataSource<AusgabeViewDto>([]);
 
   private router = inject(Router);
 
-  readonly items = input.required<AusgabeDto[]>();
+  readonly items = input.required<AusgabeViewDto[]>();
   // readonly error = signal<string | undefined>(undefined);
 
 

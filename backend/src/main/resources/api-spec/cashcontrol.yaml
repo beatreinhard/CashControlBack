@@ -19,8 +19,8 @@ paths:
   /api/v1/ausgabe:
     get:
       tags: [AusgabeController]
-      operationId: getAllAusgabe
-      summary: Alle Ausgaben
+      operationId: getAllAusgabeView
+      summary: Alle Ausgaben mit Name, Vorname der Person als Zahlender
       responses:
         '200':
           description: Alle Ausgaben gefunden
@@ -29,7 +29,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AusgabeDto'
+                  $ref: '#/components/schemas/AusgabeViewDto'
     post:
       tags: [AusgabeController]
       operationId: createAusgabe
@@ -453,8 +453,8 @@ components:
           example: "2025-08-15"
         zahlender:
           type: string
-          description: Zahlender
-          example: "Hans Muster"
+          description: Id zur Person (Fremdschlüssel)
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
         empfaenger:
           type: string
           description: Empfänger
@@ -474,6 +474,49 @@ components:
         - empfaenger
         - kategorie
         - text
+        - betrag
+
+    AusgabeViewDto:
+      title: AusgabeView
+      type: object
+      description: Datentransferobjekt einer Ausgabe mit Personendaten
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
+        datum:
+          type: string
+          format: date
+          description: Buchungs-/Belegdatum
+          example: "2025-08-15"
+        zahlender:
+          type: string
+          description: Id zur Person (Fremdschlüssel)
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
+        empfaenger:
+          type: string
+          description: Empfänger
+          example: "Coop"
+        kategorie:
+          $ref: '#/components/schemas/AusgabeKategorieDto'
+        betrag:
+          type: number
+          description: Betrag (positiv für Ausgaben)
+          example: 86.45
+        zahlenderName:
+          type: string
+          description: Zahlender (Name der Person)
+          example: "Muster"
+        zahlenderVorname:
+          type: string
+          description: Zahlender (Vorname der Person)
+          example: "Hans"
+      required:
+        - id
+        - datum
+        - empfaenger
+        - kategorie
         - betrag
 
     AusgabeKategorieDto:

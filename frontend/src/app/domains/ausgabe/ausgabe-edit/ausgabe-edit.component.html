@@ -22,13 +22,13 @@
       </mat-form-field>
 
       <!-- Zahlender -->
-      <mat-form-field class="full-width">
+      <mat-form-field>
         <mat-label>Zahlender</mat-label>
-        <input
-          matInput
-          formControlName="zahlender"
-          placeholder="Empfänger"
-        />
+        <mat-select formControlName="zahlender">
+          @for (zahlender of zahlender(); track zahlender) {
+            <mat-option [value]="zahlender.value">{{zahlender.viewValue}}</mat-option>
+          }
+        </mat-select>
       </mat-form-field>
 
       <!-- Empfänger -->

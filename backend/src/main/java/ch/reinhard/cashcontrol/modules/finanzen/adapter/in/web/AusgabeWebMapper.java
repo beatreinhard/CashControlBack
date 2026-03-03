@@ -2,8 +2,10 @@ package ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web;
 
 import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeViewBo;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeKategorieDto;
+import ch.reinhard.cashcontrol.openapi.model.AusgabeViewDto;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
@@ -39,6 +41,24 @@ public class AusgabeWebMapper {
 
     public static List<AusgabeDto> toAusgabeDtoList(List<AusgabeBo> ausgabeBoList) {
         return ausgabeBoList.stream().map(AusgabeWebMapper::toAusgabeDto).toList();
+    }
+
+    public static AusgabeViewDto toAusgabeViewDto(AusgabeViewBo source) {
+        AusgabeViewDto ausgabeViewDto = new AusgabeViewDto(
+                source.getId(),
+                source.getDatum(),
+                source.getEmpfaenger(),
+                convert(source.getKategorie(), AusgabeKategorieDto.class),
+                source.getBetrag());
+        ausgabeViewDto.setZahlender(source.getZahlender());
+        ausgabeViewDto.setZahlenderName(source.getPersonName());
+        ausgabeViewDto.setZahlenderVorname(source.getPersonVorname());
+
+        return ausgabeViewDto;
+    }
+
+    public static List<AusgabeViewDto> toAusgabeViewDtoList(List<AusgabeViewBo> ausgabeViewBoList) {
+        return ausgabeViewBoList.stream().map(AusgabeWebMapper::toAusgabeViewDto).toList();
     }
 
 }

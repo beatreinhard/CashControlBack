@@ -1,6 +1,6 @@
 import {Component, computed, effect, inject, input, signal} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AusgabeControllerApi, AusgabeDto, AusgabeKategorieDto} from '../../../generated';
+import {AusgabeControllerApi, AusgabeDto, AusgabeKategorieDto, PersonControllerApi} from '../../../generated';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
@@ -9,9 +9,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {format, parseISO} from 'date-fns';
-import {Observable} from 'rxjs';
+import {catchError, map, Observable, of} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router, RouterLink} from '@angular/router';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 type AusgabeForm = FormGroup<{
   datum: FormControl<Date | null>;
@@ -20,7 +21,13 @@ type AusgabeForm = FormGroup<{
   kategorie: FormControl<AusgabeKategorieDto | null>;
   text: FormControl<string | null>;
   betrag: FormControl<number | null>;
+  personSelect: FormControl<string | null>;
 }>;
+
+interface Zahlender {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-ausgabe-edit',
@@ -44,7 +51,9 @@ export class AusgabeEditComponent {
 
   private readonly fb = inject(FormBuilder);
   private readonly ausgabeController = inject(AusgabeControllerApi);
+  private readonly personController:PersonControllerApi = inject(PersonControllerApi);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   protected readonly kategorien = Object.values(AusgabeKategorieDto);
 
@@ -54,8 +63,24 @@ export class AusgabeEditComponent {
   protected readonly isEditMode = computed(() => !!this.ausgabeId());
   protected readonly title = computed(() => (this.isEditMode() ? 'Ausgabe bearbeiten' : 'Neue Ausgabe erfassen'));
 
-  private readonly snackBar = inject(MatSnackBar);
   protected readonly form: AusgabeForm = this.buildForm();
+
+  protected readonly zahlender = toSignal(
+    this.personController.getAllPerson().pipe(
+      map((persons) =>
+        persons.map((p) => ({
+          value: String(p.id),
+          viewValue: `${p.vorname} ${p.name}`.trim(),
+        }))
+      ),
+      catchError(() => {
+        this.loadError.set('Personen konnten nicht geladen werden.');
+        return of([] as Zahlender[]);
+      })
+    ),
+    { initialValue: [] as Zahlender[] }
+  );
+
 
   constructor() {
     effect(() => this.handleIdChange(this.ausgabeId()));
@@ -102,7 +127,8 @@ export class AusgabeEditComponent {
       empfaenger: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
       kategorie: this.fb.control<AusgabeKategorieDto | null>(null, { validators: [Validators.required] }),
       text: this.fb.control<string | null>(null),
-      betrag: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] })
+      betrag: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] }),
+      personSelect: this.fb.control<string | null>(null),
     });
   }
 
@@ -155,6 +181,8 @@ export class AusgabeEditComponent {
 
   private buildDtoFromForm(): AusgabeDto {
     const raw = this.form.getRawValue();
+
+    console.log(raw.personSelect);
 
     return {
       datum: this.toBackendDate(raw.datum) ?? '',

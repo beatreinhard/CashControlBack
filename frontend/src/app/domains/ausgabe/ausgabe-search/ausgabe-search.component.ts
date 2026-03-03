@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {AusgabeControllerApi, AusgabeDto} from '../../../generated';
+import {AusgabeControllerApi, AusgabeViewDto} from '../../../generated';
 import {AusgabeListComponent} from '../ausgabe-list/ausgabe-list.component';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
@@ -16,14 +16,14 @@ export class AusgabeSearchComponent implements OnInit {
 
   readonly loading = signal(true);
   readonly error = signal<string | undefined>("");
-  readonly result = signal<AusgabeDto[]>([]);
+  readonly result = signal<AusgabeViewDto[]>([]);
 
   protected ausgabeController = inject(AusgabeControllerApi);
 
   ngOnInit(): void {
-    this.ausgabeController.getAllAusgabe().subscribe({
+    this.ausgabeController.getAllAusgabeView().subscribe({
       next: (res) => {
-        this.result.set((res as AusgabeDto[]) ?? []);
+        this.result.set((res as AusgabeViewDto[]) ?? []);
         this.loading.set(false);
       },
       error: (err) => {

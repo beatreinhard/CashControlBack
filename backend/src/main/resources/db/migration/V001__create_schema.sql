@@ -20,6 +20,15 @@ create table ausgabe (
     kategorie       varchar(255)    not null,
     text            varchar(255)
 );
+alter table ausgabe
+    add constraint fk_ausgabe_zahlender_person
+        foreign key (zahlender)
+            references person(id)
+            on delete restrict;
+
+-- Index für Join-Performance
+create index if not exists idx_ausgabe_zahlender
+    on ausgabe (zahlender);
 
 create table vermoegenswert (
     id               varchar(255)    not null primary key,

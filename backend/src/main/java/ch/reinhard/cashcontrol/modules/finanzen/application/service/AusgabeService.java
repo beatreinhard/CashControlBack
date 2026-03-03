@@ -1,6 +1,7 @@
 package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeViewBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.persistence.AusgabePersistencePort;
@@ -43,6 +44,12 @@ public class AusgabeService implements AusgabeServicePort {
     @Transactional(readOnly = true)
     public List<AusgabeBo> getAllAusgabe() {
         return ausgabePersistencePort.getAllAusgabe();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<AusgabeViewBo> getAllAusgabeView() {
+        return ausgabePersistencePort.getAllAusgabeView();
     }
 
     @Override

@@ -2,6 +2,7 @@ package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeViewBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.persistence.AusgabePersistencePort;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import static ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.A
 public class AusgabePersistenceAdapter implements AusgabePersistencePort {
 
     private final AusgabeJpaRepository ausgabeRepository;
+    private final AusgabeViewJpaRepository ausgabeViewRepository;
 
     @Override
     public String createAusgabe(AusgabeBo source) {
@@ -36,10 +38,8 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
     @Override
     public List<AusgabeBo> getAllAusgabe() {
         var ausgabeList = ausgabeRepository.findAll();
-
         return toAusgabeBoList(ausgabeList);
     }
-
 
     @Override
     public void updateAusgabe(AusgabeBo source) {
@@ -53,5 +53,11 @@ public class AusgabePersistenceAdapter implements AusgabePersistencePort {
     @Override
     public void deleteAusgabeById(String id) {
         ausgabeRepository.deleteById(id);
+    }
+
+    @Override
+    public List<AusgabeViewBo> getAllAusgabeView() {
+        var ausgabeList = ausgabeViewRepository.findAll();
+        return toAusgabeViewBoList(ausgabeList);
     }
 }
