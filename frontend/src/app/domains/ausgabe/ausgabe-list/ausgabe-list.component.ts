@@ -75,4 +75,11 @@ export class AusgabeListComponent implements AfterViewInit {
   selectRow(rowId: string) {
     this.router.navigate(['/ausgabe/edit', rowId]);
   }
+
+  zahlenderNameVorname(zahlenderName: string,  zahlenderVorname: string): string {
+    if (zahlenderName && zahlenderVorname) {
+      return zahlenderName + ' ' + zahlenderVorname;
+    }
+    return '';
+  }
 }

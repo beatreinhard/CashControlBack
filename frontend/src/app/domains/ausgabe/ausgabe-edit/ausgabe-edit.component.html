@@ -25,6 +25,7 @@
       <mat-form-field>
         <mat-label>Zahlender</mat-label>
         <mat-select formControlName="zahlender">
+          <mat-option [value]="undefined"></mat-option>
           @for (zahlender of zahlender(); track zahlender) {
             <mat-option [value]="zahlender.value">{{zahlender.viewValue}}</mat-option>
           }

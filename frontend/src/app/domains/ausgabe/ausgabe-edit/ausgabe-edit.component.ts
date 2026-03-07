@@ -16,7 +16,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 
 type AusgabeForm = FormGroup<{
   datum: FormControl<Date | null>;
-  empfaenger: FormControl<string>;
+  empfaenger: FormControl<string | null>;
   zahlender: FormControl<string | null>;
   kategorie: FormControl<AusgabeKategorieDto | null>;
   text: FormControl<string | null>;
@@ -70,7 +70,7 @@ export class AusgabeEditComponent {
       map((persons) =>
         persons.map((p) => ({
           value: String(p.id),
-          viewValue: `${p.vorname} ${p.name}`.trim(),
+          viewValue: `${p.name} ${p.vorname}`.trim(),
         }))
       ),
       catchError(() => {
@@ -124,7 +124,7 @@ export class AusgabeEditComponent {
     return this.fb.group({
       datum: this.fb.control<Date | null>(null, { validators: [Validators.required] }),
       zahlender: this.fb.control<string | null>(null),
-      empfaenger: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
+      empfaenger: this.fb.control<string | null>(null, { validators: [Validators.required] }),
       kategorie: this.fb.control<AusgabeKategorieDto | null>(null, { validators: [Validators.required] }),
       text: this.fb.control<string | null>(null),
       betrag: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] }),
@@ -144,8 +144,8 @@ export class AusgabeEditComponent {
     this.loadError.set(null);
     this.form.reset({
       datum: null,
-      zahlender: '',
-      empfaenger: '',
+      zahlender: null,
+      empfaenger: undefined,
       kategorie: null,
       text: null,
       betrag: null
@@ -186,8 +186,8 @@ export class AusgabeEditComponent {
 
     return {
       datum: this.toBackendDate(raw.datum) ?? '',
-      zahlender: raw.zahlender ?? '',
-      empfaenger: raw.empfaenger,
+      zahlender: raw.zahlender ?? undefined,
+      empfaenger: raw.empfaenger ?? '',
       kategorie: raw.kategorie!,
       text: raw.text ?? '',
       betrag: Number(raw.betrag),
