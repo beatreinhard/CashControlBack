@@ -15,7 +15,7 @@ import {
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
-import {KostenDto} from '../../../generated';
+import {KostenViewDto} from '../../../generated';
 import {Router} from '@angular/router';
 import {MatChip, MatChipSet} from '@angular/material/chips';
 
@@ -45,11 +45,11 @@ export class KostenListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   protected displayedColumns: string[] = ['jahr','art','zahlender','empfaenger','bemerkung','betrag'];
-  protected dataSource = new MatTableDataSource<KostenDto>([]);
+  protected dataSource = new MatTableDataSource<KostenViewDto>([]);
 
   private router = inject(Router);
 
-  readonly items = input.required<KostenDto[]>();
+  readonly items = input.required<KostenViewDto[]>();
   // readonly error = signal<string | undefined>(undefined);
 
 
@@ -69,5 +69,12 @@ export class KostenListComponent implements AfterViewInit {
 
   selectRow(rowId: string) {
     this.router.navigate(['/kosten/edit', rowId]);
+  }
+
+  zahlenderNameVorname(zahlenderName: string,  zahlenderVorname: string): string {
+    if (zahlenderName && zahlenderVorname) {
+      return zahlenderName + ' ' + zahlenderVorname;
+    }
+    return '';
   }
 }

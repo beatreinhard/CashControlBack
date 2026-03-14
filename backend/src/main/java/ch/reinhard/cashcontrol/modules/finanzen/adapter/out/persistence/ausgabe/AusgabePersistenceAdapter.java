@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe;
 
 import ch.reinhard.cashcontrol.core.persistence.IdGenerator;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabePersistenceMapper.*;
+import static ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabePersistenceMapper.*;
 
 @Component
 @RequiredArgsConstructor

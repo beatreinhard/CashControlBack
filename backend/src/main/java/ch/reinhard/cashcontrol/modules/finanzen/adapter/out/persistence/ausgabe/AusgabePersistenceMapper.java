@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeViewBo;
 import lombok.experimental.UtilityClass;

@@ -3,17 +3,17 @@ package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import org.hibernate.annotations.Immutable;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "kosten", schema = "cashcontrol")
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
+@Immutable
+@Table(name = "kosten_view", schema = "cashcontrol")
 @Getter
-@Setter
-public class Kosten {
+public class KostenView {
+    @NotNull
     @Id
     private String id;
 
@@ -38,12 +38,7 @@ public class Kosten {
 
     private String bemerkung;
 
-    public void update(Kosten kosten) {
-        jahr = kosten.jahr;
-        art = kosten.art;
-        empfaenger = kosten.empfaenger;
-        zahlender = kosten.zahlender;
-        betrag = kosten.betrag;
-        bemerkung = kosten.bemerkung;
-    }
+    // aus Person (LEFT JOIN → können null sein)
+    private String personName;
+    private String personVorname;
 }

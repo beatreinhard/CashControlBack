@@ -1,6 +1,7 @@
 package ch.reinhard.cashcontrol.modules.steuern.api;
 
 import ch.reinhard.cashcontrol.openapi.model.KostenDto;
+import ch.reinhard.cashcontrol.openapi.model.KostenViewDto;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface KostenService {
     KostenDto getKostenByAusgabeId(String ausgabeId);
 
     void deleteKostgenByAusgabeId(String ausgabeId);
+
+    List<KostenViewDto> getKostenView();
+
+    List<KostenViewDto> getKostenViewByJahr(Integer jahr);
 }

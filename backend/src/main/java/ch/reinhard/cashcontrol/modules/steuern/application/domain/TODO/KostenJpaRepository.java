@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JpaKostenRepository extends JpaRepository<Kosten, String>, QuerydslPredicateExecutor<Kosten> {
-    List<Kosten> findKostenByJahr(Integer jahr);
-    Kosten getKostenByAusgabeId(String ausgabeId);
+public interface KostenJpaRepository extends JpaRepository<KostenEntity, String>, QuerydslPredicateExecutor<KostenEntity> {
+    List<KostenEntity> findKostenByJahr(Integer jahr);
+    KostenEntity getKostenByAusgabeId(String ausgabeId);
     void deleteKostenByAusgabeId(String ausgabeId);
 }

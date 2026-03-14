@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.person;
 
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.PersonBo;
 import lombok.experimental.UtilityClass;

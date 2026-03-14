@@ -1,6 +1,6 @@
 package ch.reinhard.cashcontrol.modules.finanzen.application.domain;
 
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeKategorie;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -2,8 +2,8 @@ package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 
 import ch.reinhard.cashcontrol.PostgreSQLContainerInitializer;
 import ch.reinhard.cashcontrol.config.TestConfig;
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeJpaRepository;
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeJpaRepository;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;

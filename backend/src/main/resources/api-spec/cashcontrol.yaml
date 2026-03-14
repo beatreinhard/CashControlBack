@@ -258,7 +258,7 @@ paths:
   /api/v1/kosten:
     get:
       tags: [KostenController]
-      operationId: getKosten
+      operationId: getAllKostenView
       summary: Alle Kosten
       parameters:
         - in: query
@@ -274,7 +274,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/KostenDto'
+                  $ref: '#/components/schemas/KostenViewDto'
     post:
       tags: [KostenController]
       operationId: createKosten
@@ -651,6 +651,57 @@ components:
           type: string
           description: Bemerkung
           example: "irgend eine Bemerkung"
+      required:
+        - jahr
+        - art
+        - empfaenger
+        - zahlender
+        - betrag
+
+    KostenViewDto:
+      title: KostenView
+      type: object
+      description: Datentransferobjekt von Kosten mit Personendaten
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
+        ausgabeId:
+          type: string
+          description: Technische ID  (optional) Fremdschlüssel zu Ausgabe
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr der Kosten
+          example: 2026
+        art:
+          $ref: '#/components/schemas/KostenArtDto'
+        empfaenger:
+          type: string
+          description: Empfänger
+          example: "UBS"
+        zahlender:
+          type: string
+          description: Zahlender
+          example: "Hans Muster"
+        betrag:
+          type: number
+          description: Betrag (positiv für Kosten)
+          example: 86.45
+        bemerkung:
+          type: string
+          description: Bemerkung
+          example: "irgend eine Bemerkung"
+        zahlenderName:
+          type: string
+          description: Zahlender (Name der Person)
+          example: "Muster"
+        zahlenderVorname:
+          type: string
+          description: Zahlender (Vorname der Person)
+          example: "Hans"
       required:
         - jahr
         - art

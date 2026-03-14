@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence;
+package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

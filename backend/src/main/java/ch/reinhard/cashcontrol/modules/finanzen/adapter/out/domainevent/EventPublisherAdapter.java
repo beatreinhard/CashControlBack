@@ -4,7 +4,7 @@ import ch.reinhard.cashcontrol.core.domainevent.AusgabeCreatedEvent;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeDeletedEvent;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeEventKategorie;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeUpdatedEvent;
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.AusgabeKategorie;
+import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
 import lombok.RequiredArgsConstructor;

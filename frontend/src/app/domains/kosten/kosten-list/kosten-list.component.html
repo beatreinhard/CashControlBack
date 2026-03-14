@@ -22,7 +22,7 @@
     <!-- Zahlender -->
     <ng-container matColumnDef="zahlender">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Zahlender</th>
-      <td mat-cell *matCellDef="let k">{{ k.zahlender }}</td>
+      <td mat-cell *matCellDef="let k">{{ zahlenderNameVorname(k.zahlenderName, k.zahlenderVorname) }}</td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
 

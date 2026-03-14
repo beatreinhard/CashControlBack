@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {KostenControllerApi, KostenDto} from '../../../generated';
+import {KostenControllerApi, KostenViewDto} from '../../../generated';
 import {KostenListComponent} from '../kosten-list/kosten-list.component';
 import {MatButton} from '@angular/material/button';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
@@ -30,7 +30,7 @@ export class KostenSearchComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   readonly loading = signal(true);
   readonly error = signal<string | undefined>("");
-  readonly result = signal<KostenDto[]>([]);
+  readonly result = signal<KostenViewDto[]>([]);
 
   protected kostenController = inject(KostenControllerApi);
 
@@ -61,9 +61,9 @@ export class KostenSearchComponent implements OnInit {
   }
 
   private fetchData(jahr?: number): void {
-    this.kostenController.getKosten(jahr).subscribe({
+    this.kostenController.getAllKostenView(jahr).subscribe({
       next: (res) => {
-        this.result.set((res as KostenDto[]) ?? []);
+        this.result.set((res as KostenViewDto[]) ?? []);
         this.loading.set(false);
       },
       error: (err) => {
