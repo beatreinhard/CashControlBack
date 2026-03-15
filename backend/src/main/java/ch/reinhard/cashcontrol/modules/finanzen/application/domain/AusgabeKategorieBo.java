@@ -1,6 +1,6 @@
-package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe;
+package ch.reinhard.cashcontrol.modules.finanzen.application.domain;
 
-public enum AusgabeKategorie {
+public enum AusgabeKategorieBo {
     VERKEHR_AUTO_TRANSPORT,
     HAUSHALT,
     FERIEN,

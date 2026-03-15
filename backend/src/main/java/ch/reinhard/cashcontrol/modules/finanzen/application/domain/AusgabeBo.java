@@ -1,6 +1,5 @@
 package ch.reinhard.cashcontrol.modules.finanzen.application.domain;
 
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeKategorie;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ public class AusgabeBo {
     private LocalDate datum;
     private String zahlender;
     private String empfaenger;
-    private AusgabeKategorie kategorie;
+    private AusgabeKategorieBo kategorie;
     private String text;
     private BigDecimal betrag;
 }

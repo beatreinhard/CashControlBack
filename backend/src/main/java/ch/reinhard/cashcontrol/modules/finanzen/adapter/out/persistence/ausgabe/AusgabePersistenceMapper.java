@@ -1,5 +1,6 @@
 package ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeKategorieBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeViewBo;
 import lombok.experimental.UtilityClass;
 
@@ -27,7 +28,7 @@ public class AusgabePersistenceMapper {
                 source.getDatum(),
                 source.getZahlender(),
                 source.getEmpfaenger(),
-                convert(source.getKategorie(), AusgabeKategorie.class),
+                convert(source.getKategorie(), AusgabeKategorieBo.class),
                 source.getText(),
                 source.getBetrag());
     }
@@ -42,7 +43,7 @@ public class AusgabePersistenceMapper {
                 source.getDatum(),
                 source.getZahlender(),
                 source.getEmpfaenger(),
-                convert(source.getKategorie(), AusgabeKategorie.class),
+                convert(source.getKategorie(), AusgabeKategorieBo.class),
                 source.getText(),
                 source.getBetrag(),
                 source.getPersonName(),

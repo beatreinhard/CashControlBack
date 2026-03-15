@@ -4,8 +4,8 @@ import ch.reinhard.cashcontrol.core.domainevent.AusgabeCreatedEvent;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeDeletedEvent;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeEventKategorie;
 import ch.reinhard.cashcontrol.core.domainevent.AusgabeUpdatedEvent;
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeKategorieBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.out.domainevent.EventPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class EventPublisherAdapter implements EventPort {
     }
 
     @Override
-    public void publishAusgabeDeletedEvent(String ausgabeId, AusgabeKategorie ausgabeKategorie) {
+    public void publishAusgabeDeletedEvent(String ausgabeId, AusgabeKategorieBo ausgabeKategorie) {
         var event = new AusgabeDeletedEvent(
                 this,
                 ausgabeId,

@@ -10,19 +10,18 @@ public enum AusgabeEventKategorie {
     SPAREN_VORSORGE,
     STEUERN,
     SPENDEN,
-    DIVERSES,
     KRANKENKASSE,
     BERUF,
-    BANKGEBUEHREN;
+    BANKGEBUEHREN,
+    LIEGENSCHAFT_BETRIEB,
+    DIVERSES;
 
     public static boolean isKategorieForKosten(AusgabeEventKategorie kategorie) {
-        if (kategorie == AusgabeEventKategorie.KRANKENKASSE ||
+        return kategorie == AusgabeEventKategorie.KRANKENKASSE ||
                 kategorie == AusgabeEventKategorie.BERUF ||
                 kategorie == AusgabeEventKategorie.BANKGEBUEHREN ||
-                kategorie == AusgabeEventKategorie.GESUNDHEIT) {
-            return true;
-        }
-        return false;
+                kategorie == AusgabeEventKategorie.GESUNDHEIT ||
+                kategorie == AusgabeEventKategorie.LIEGENSCHAFT_BETRIEB;
     }
 
     public static boolean isKategorieForVergabung(AusgabeEventKategorie kategorie) {
