@@ -148,7 +148,8 @@ export class AusgabeEditComponent {
       empfaenger: undefined,
       kategorie: null,
       text: null,
-      betrag: null
+      betrag: null,
+      personSelect: null
     });
   }
 
@@ -181,8 +182,6 @@ export class AusgabeEditComponent {
 
   private buildDtoFromForm(): AusgabeDto {
     const raw = this.form.getRawValue();
-
-    console.log(raw.personSelect);
 
     return {
       datum: this.toBackendDate(raw.datum) ?? '',

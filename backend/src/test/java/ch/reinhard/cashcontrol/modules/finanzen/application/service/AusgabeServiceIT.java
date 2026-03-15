@@ -3,8 +3,8 @@ package ch.reinhard.cashcontrol.modules.finanzen.application.service;
 import ch.reinhard.cashcontrol.PostgreSQLContainerInitializer;
 import ch.reinhard.cashcontrol.config.TestConfig;
 import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeJpaRepository;
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeKategorieBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.AusgabeServicePort;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeKategorieDto;
@@ -124,7 +124,7 @@ public class AusgabeServiceIT {
                 LocalDate.now(),
                 "",
                 "Assura",
-                AusgabeKategorie.GESUNDHEIT,
+                AusgabeKategorieBo.GESUNDHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
         ausgabeService.createAusgabe(ausgabeBo1);
@@ -133,7 +133,7 @@ public class AusgabeServiceIT {
                 LocalDate.now(),
                 "",
                 "Steuerverwaltung",
-                AusgabeKategorie.STEUERN,
+                AusgabeKategorieBo.STEUERN,
                 "1. Rate",
                 new BigDecimal("3400.05"));
         ausgabeService.createAusgabe(ausgabeBo2);
@@ -154,7 +154,7 @@ public class AusgabeServiceIT {
                 LocalDate.now(),
                 "",
                 empfaenger,
-                AusgabeKategorie.GESUNDHEIT,
+                AusgabeKategorieBo.GESUNDHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
         ausgabeService.createAusgabe(ausgabeBo);
@@ -178,7 +178,7 @@ public class AusgabeServiceIT {
                 LocalDate.now(),
                 "",
                 empfaenger,
-                AusgabeKategorie.GESUNDHEIT,
+                AusgabeKategorieBo.GESUNDHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
         ausgabeService.createAusgabe(ausgabeBo);

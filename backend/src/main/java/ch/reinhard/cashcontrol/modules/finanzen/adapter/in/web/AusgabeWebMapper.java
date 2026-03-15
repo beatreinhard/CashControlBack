@@ -1,7 +1,7 @@
 package ch.reinhard.cashcontrol.modules.finanzen.adapter.in.web;
 
-import ch.reinhard.cashcontrol.modules.finanzen.adapter.out.persistence.ausgabe.AusgabeKategorie;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeBo;
+import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeKategorieBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.domain.AusgabeViewBo;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeDto;
 import ch.reinhard.cashcontrol.openapi.model.AusgabeKategorieDto;
@@ -21,7 +21,7 @@ public class AusgabeWebMapper {
                 source.getDatum(),
                 source.getZahlender(),
                 source.getEmpfaenger(),
-                convert(source.getKategorie(), AusgabeKategorie.class),
+                convert(source.getKategorie(), AusgabeKategorieBo.class),
                 source.getText(),
                 source.getBetrag());
     }

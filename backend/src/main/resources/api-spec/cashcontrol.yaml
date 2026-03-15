@@ -1,6 +1,6 @@
 openapi: 3.0.4
 info:
-  title: CashControl Ausgabe API
+  title: CashControl API
   version: 1.0.0
   description: REST-API
 servers:
@@ -535,6 +535,7 @@ components:
         - KRANKENKASSE
         - BERUF
         - BANKGEBUEHREN
+        - LIEGENSCHAFT_BETRIEB
         - DIVERSES
 
     VergabungDto:
@@ -717,7 +718,7 @@ components:
         - KRANKENKASSE
         - UNFALL_KRANKHEIT
         - BERUF
-        - GRUNDSTUECK_BETRIEB
+        - LIEGENSCHAFT_BETRIEB
 
     PersonDto:
       title: Person

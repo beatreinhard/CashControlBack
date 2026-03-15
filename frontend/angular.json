@@ -15,7 +15,7 @@
           "options": {
             "outputPath": "dist/frontend",
             "index": "src/index.html",
-            "baseHref": "/cash-control/",
+            "baseHref": "/",
             "deployUrl": "/cash-control/",
             "browser": "src/main.ts",
             "polyfills": [
