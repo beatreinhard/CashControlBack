@@ -16,6 +16,12 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate    # validiert das Schema mit den Entities beim Starten der Applikation
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
 server:
   port: 8080
   servlet:
@@ -30,5 +36,3 @@ logging:
     ch.reinhard: INFO
 #    org.springframework: DEBUG
 #    org.flywaydb: DEBUG
-
-
