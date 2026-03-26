@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-<h3 style="text-align: center; color: green">
-    <span th:text="'Welcome to ' + ${to} + '!'"></span>
-</h3>
-</body>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+    <body>
+        <h3 style="text-align: center; color: green">
+            <span th:text="'Welcome to ' + ${data.getVorname()} + ' ' + ${data.getName()} + '!'"></span>
+        </h3>
+        <div th:replace="reporting/fragments/person :: person"></div>
+    </body>
 </html>
