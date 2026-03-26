@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.reporting;
+package ch.reinhard.cashcontrol.modules.reporting.adapter.out;
 
 import org.springframework.stereotype.Service;
 import org.xhtmlrenderer.pdf.ITextRenderer;

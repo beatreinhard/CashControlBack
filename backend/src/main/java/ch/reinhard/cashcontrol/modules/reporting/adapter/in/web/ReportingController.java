@@ -1,5 +1,6 @@
-package ch.reinhard.cashcontrol.modules.reporting;
+package ch.reinhard.cashcontrol.modules.reporting.adapter.in.web;
 
+import ch.reinhard.cashcontrol.modules.reporting.application.port.in.ReportingServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -11,14 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class ReportingController {
-    private final PdfGenerator pdfGenerator;
-    private final ThymeleafTemplate templateEngine;
+    private final ReportingServicePort reportingServicePort;
 
 
     @GetMapping(value = "/api/v1/report", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> report() {
-        String html = templateEngine.parseThymeleafTemplate();
-        byte[] pdf = pdfGenerator.generatePdfFromHtml(html);
+        byte[] pdf = reportingServicePort.getReportingPdf();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

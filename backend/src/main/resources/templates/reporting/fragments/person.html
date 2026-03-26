@@ -1,4 +1,17 @@
 <nav th:fragment="person">
     <h1>Steuerzahler</h1>
     <h2><span th:text="'Name ' + ${data.getName()}"></span></h2>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Vorname</th>
+            <th>Ahv-Nummer</th>
+        </tr>
+        <tr th:each="person : ${data.getPersons()}">
+            <td th:text="${person.getName()}"></td>
+            <td th:text="${person.getVorname()}"></td>
+            <td th:text="${person.getAhvnummer()}"></td>
+        </tr>
+    </table>
 </nav>
