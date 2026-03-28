@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
     <body>
-        <h3 style="text-align: center; color: green">
-            <span th:text="'Welcome to ' + ${data.getVorname()} + ' ' + ${data.getName()} + '!'"></span>
-        </h3>
-        <div th:replace="~{reporting/fragments/person :: person}"></div>
+        <h1 style="text-align: center; color: green">Steuerrechnung 2025</h1>
+        <div th:replace="~{fragments/person :: person}"></div>
+        <div th:replace="~{fragments/vergabung :: vergabung}"></div>
     </body>
 </html>

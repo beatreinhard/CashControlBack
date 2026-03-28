@@ -23,6 +23,7 @@ public class CashcontrolApplication {
 		log.info("Umgebung: " + StringUtils.join(profiles));
 		log.info("App-Name: " + appName);
 		log.info("http://localhost:" + serverPort + contextPath + "/api/v1/ausgabe");
+		log.info("http://localhost:" + serverPort + contextPath + "/api/v1/report");
 		log.info("http://localhost:" + serverPort + contextPath + "/swagger-ui.html");
 		log.info("------------------------------------------------");
 	}

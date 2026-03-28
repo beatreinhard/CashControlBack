@@ -1,0 +1,13 @@
+<nav th:fragment="vergabung">
+    <h2>Vergabungen</h2>
+    <table>
+        <tr>
+            <th>Empfänger</th>
+            <th>Betrag</th>
+        </tr>
+        <tr th:each="vergabung : ${var.getVergabungen()}">
+            <td th:text="${vergabung.getEmpfaenger()}"></td>
+            <td th:text="${vergabung.getBetrag()}"></td>
+        </tr>
+    </table>
+</nav>

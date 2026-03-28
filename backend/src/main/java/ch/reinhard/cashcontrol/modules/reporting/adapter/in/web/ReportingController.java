@@ -17,7 +17,7 @@ public class ReportingController {
 
     @GetMapping(value = "/api/v1/report", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> report() {
-        byte[] pdf = reportingServicePort.getReportingPdf();
+        byte[] pdf = reportingServicePort.generatePdf();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
