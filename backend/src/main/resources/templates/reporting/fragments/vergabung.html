@@ -2,10 +2,12 @@
     <h2>Vergabungen</h2>
     <table>
         <tr>
+            <th>Datum</th>
             <th>Empfänger</th>
             <th>Betrag</th>
         </tr>
         <tr th:each="vergabung : ${var.getVergabungen()}">
+            <td th:text="${#temporals.format(vergabung.getZahlungsDatum(),'dd.MM.yyyy')}"></td>
             <td th:text="${vergabung.getEmpfaenger()}"></td>
             <td th:text="${vergabung.getBetrag()}"></td>
         </tr>

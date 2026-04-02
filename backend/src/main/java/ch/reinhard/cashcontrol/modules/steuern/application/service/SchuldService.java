@@ -36,6 +36,18 @@ class SchuldService implements SchuldServicePort {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<SchuldBo> getRechnungen() {
+        return schuldPersistencePort.getRechnungen();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SchuldBo> getHypotheken() {
+        return schuldPersistencePort.getHypotheken();
+    }
+
+    @Override
     @Transactional
     public void updateSchuld(SchuldBo source) {
         schuldPersistencePort.updateSchuld(source);

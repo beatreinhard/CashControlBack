@@ -1,0 +1,35 @@
+<nav th:fragment="schuld">
+    <h2>Schulden</h2>
+    <h3>Rechnungen</h3>
+    <table>
+        <tr>
+            <th>Gläubiger</th>
+            <th>Art</th>
+            <th>Text</th>
+            <th>Betrag</th>
+        </tr>
+        <tr th:each="rechnung : ${var.getRechnungen()}">
+            <td th:text="${rechnung.getGlaeubiger()}"></td>
+            <td th:text="${rechnung.getArt()}"></td>
+            <td th:text="${rechnung.getText()}"></td>
+            <td th:text="${#numbers.formatDecimal(rechnung.getBetrag(),1, 'COMMA',2,'POINT')}"></td>
+        </tr>
+    </table>
+    <h3>Hypotheken</h3>
+    <table>
+        <tr>
+            <th>Gläubiger</th>
+            <th>Art</th>
+            <th>Text</th>
+            <th>Betrag</th>
+            <th>Zinsen</th>
+        </tr>
+        <tr th:each="hyp : ${var.getHypotheken()}">
+            <td th:text="${hyp.getGlaeubiger()}"></td>
+            <td th:text="${hyp.getArt()}"></td>
+            <td th:text="${hyp.getText()}"></td>
+            <td th:text="${#numbers.formatDecimal(hyp.getBetrag(),1, 'COMMA',2,'POINT')}"></td>
+            <td th:text="${#numbers.formatDecimal(hyp.getZinsen(),1, 'COMMA',2,'POINT')}"></td>
+        </tr>
+    </table>
+</nav>

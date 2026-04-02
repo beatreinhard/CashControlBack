@@ -1,11 +1,11 @@
 package ch.reinhard.cashcontrol.modules.reporting.application.service;
 
-import ch.reinhard.cashcontrol.modules.finanzen.application.domain.PersonBo;
 import ch.reinhard.cashcontrol.modules.finanzen.application.port.in.PersonServicePort;
 import ch.reinhard.cashcontrol.modules.reporting.application.domain.ReportingBo;
 import ch.reinhard.cashcontrol.modules.reporting.application.port.in.ReportingServicePort;
 import ch.reinhard.cashcontrol.modules.reporting.application.port.out.HtmlGeneratorPort;
 import ch.reinhard.cashcontrol.modules.reporting.application.port.out.PdfGeneratorPort;
+import ch.reinhard.cashcontrol.modules.steuern.application.port.in.SchuldServicePort;
 import ch.reinhard.cashcontrol.modules.steuern.application.port.in.VergabungServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ public class ReportingService implements ReportingServicePort {
 
     private final HtmlGeneratorPort htmlGeneratorPort;
     private final PdfGeneratorPort pdfGeneratorPort;
+    private final SchuldServicePort schuldServicePort;
 
     @Override
     public byte[] generatePdf() {
@@ -29,23 +30,12 @@ public class ReportingService implements ReportingServicePort {
 
     private ReportingBo createReportingBo() {
 
-        var persons = personServicePort.getAllPerson();
+        var personen = personServicePort.getAllPerson();
         var vergabungen = vergabungServicePort.getAllVergabung();
+        var rechnungen = schuldServicePort.getRechnungen();
+        var hypotheken = schuldServicePort.getHypotheken();
         // TODO evtl. besser eine ReportingBoFactory zu machen
 
-        PersonBo personBo1 = new PersonBo();
-        personBo1.setName("Reinhard");
-        personBo1.setVorname("Beat");
-        personBo1.setAhvnummer("111.222.333.44");
-        PersonBo personBo2 = new PersonBo();
-        personBo2.setName("Reinhard");
-        personBo2.setVorname("Denise");
-        personBo2.setAhvnummer("333.666.111.99");
-        PersonBo personBo3 = new PersonBo();
-        personBo3.setName("Reinhard");
-        personBo3.setVorname("Luc");
-        personBo3.setAhvnummer("noch keine");
-
-        return new ReportingBo(persons, vergabungen);
+        return new ReportingBo(personen, vergabungen, rechnungen, hypotheken);
     }
 }

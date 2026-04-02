@@ -11,6 +11,10 @@ public interface SchuldServicePort {
 
     List<SchuldBo> getAllSchuld();
 
+    List<SchuldBo> getRechnungen();
+
+    List<SchuldBo> getHypotheken();
+
     void updateSchuld(SchuldBo source);
 
     void deleteSchuldById(String id);

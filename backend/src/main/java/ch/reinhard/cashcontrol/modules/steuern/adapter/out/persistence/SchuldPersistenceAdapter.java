@@ -60,4 +60,16 @@ public class SchuldPersistenceAdapter implements SchuldPersistencePort {
         var schuldList = schuldJpaRepository.findSchuldEntitiesByJahr(jahr);
         return toSchuldBoList(schuldList);
     }
+
+    @Override
+    public List<SchuldBo> getRechnungen() {
+        var schuldList = schuldJpaRepository.findSchuldEntitiesByArt(SchuldArtEntity.RECHNUNG);
+        return toSchuldBoList(schuldList);
+    }
+
+    @Override
+    public List<SchuldBo> getHypotheken() {
+        var schuldList = schuldJpaRepository.findSchuldEntitiesByArt(SchuldArtEntity.HYPOTHEK);
+        return toSchuldBoList(schuldList);
+    }
 }

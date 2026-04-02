@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface SchuldJpaRepository extends JpaRepository<SchuldEntity, String>, QuerydslPredicateExecutor<SchuldEntity> {
     List<SchuldEntity> findSchuldEntitiesByJahr(Integer jahr);
+    List<SchuldEntity> findSchuldEntitiesByArt(SchuldArtEntity schuldArt);
 
 }

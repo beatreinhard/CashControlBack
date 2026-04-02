@@ -11,4 +11,6 @@ public interface SchuldPersistencePort {
     void deleteSchuldById(String id);
     List<SchuldBo> getAllSchuld();
     List<SchuldBo> getSchuldByJahr(Integer jahr);
+    List<SchuldBo> getRechnungen();
+    List<SchuldBo> getHypotheken();
 }
