@@ -1,0 +1,12 @@
+<h1 class="page-title">Reporting</h1>
+
+<div>
+  @if (generatePdfInProgress()) {
+    <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+  }
+  <mat-card-actions>
+    <button mat-flat-button color="primary" (click)="pdfGenerieren()">
+      PDF generieren
+    </button>
+  </mat-card-actions>
+</div>

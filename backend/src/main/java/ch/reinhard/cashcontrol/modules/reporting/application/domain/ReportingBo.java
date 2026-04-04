@@ -7,7 +7,7 @@ import ch.reinhard.cashcontrol.modules.steuern.application.domain.VergabungBo;
 import java.util.List;
 
 public record ReportingBo(
-        List<PersonBo> persons,
+        List<PersonBo> personen,
         List<VergabungBo> vergabungen,
         List<SchuldBo> rechnungen,
         List<SchuldBo> hypotheken

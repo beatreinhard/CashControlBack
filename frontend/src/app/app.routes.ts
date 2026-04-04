@@ -9,6 +9,7 @@ import {KostenComponent} from './domains/kosten/kosten/kosten.component';
 import {PersonComponent} from './domains/person/person/person.component';
 import {PersonEditComponent} from './domains/person/person-edit/person-edit.component';
 import {KostenEditComponent} from './domains/kosten/kosten-edit/kosten-edit.component';
+import {ReportingComponent} from './domains/reporting/reporting/reporting.component';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -36,5 +37,6 @@ export const routes: Routes = [
     path: 'person/edit/:personId',
     component: PersonEditComponent,
   },
-  { path: 'person/create', component: PersonEditComponent }
+  { path: 'person/create', component: PersonEditComponent },
+  { path: 'reporting', component: ReportingComponent },
 ];

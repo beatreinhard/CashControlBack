@@ -14,6 +14,8 @@ tags:
     description: Endpoints für Vergabungen
   - name: SchuldController
     description: Endpoints für Schulden
+  - name: ReportingController
+    description: Endpoints für Reporting
 
 paths:
   /api/v1/ausgabe:
@@ -434,6 +436,20 @@ paths:
           description: Person aktualisiert (kein Response-Body)
         '404':
           description: Person nicht gefunden
+
+  /api/v1/reporting/pdf:
+    get:
+      tags: [ReportingController]
+      operationId: generateReport
+      summary: PDF wird generiert
+      responses:
+        '200':
+          description: PDF erfolgreich generiert
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
 
 components:
   schemas:

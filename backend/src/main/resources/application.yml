@@ -33,6 +33,6 @@ logging:
   pattern:
     level: '[%X{correlationId}] %5p'
   level:
-    ch.reinhard: INFO
+    ch.reinhard: DEBUG
 #    org.springframework: DEBUG
 #    org.flywaydb: DEBUG

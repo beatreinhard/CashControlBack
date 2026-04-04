@@ -12,14 +12,14 @@ import java.util.List;
 @Builder
 @Getter
 public class PdfVariables {
-    private List<PersonBo> persons;
+    private List<PersonBo> personen;
     private List<VergabungBo> vergabungen;
     private List<SchuldBo> rechnungen;
     private List<SchuldBo> hypotheken;
 
     public static PdfVariables of(ReportingBo reportingBo) {
         return PdfVariables.builder().
-                persons(reportingBo.persons()).
+                personen(reportingBo.personen()).
                 vergabungen(reportingBo.vergabungen()).
                 rechnungen(reportingBo.rechnungen()).
                 hypotheken(reportingBo.hypotheken()).

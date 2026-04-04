@@ -6,7 +6,7 @@
             <th>Vorname</th>
             <th>Ahv-Nummer</th>
         </tr>
-        <tr th:each="person : ${var.getPersons()}">
+        <tr th:each="person : ${var.getPersonen()}">
             <td th:text="${person.getName()}"></td>
             <td th:text="${person.getVorname()}"></td>
             <td th:text="${person.getAhvnummer()}"></td>
