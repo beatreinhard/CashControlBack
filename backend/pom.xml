@@ -87,19 +87,20 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>1.16.1</version> <!-- Verwenden Sie die neueste Version -->
+            <version>2.0.5</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Testcontainers 2.x: Module heissen jetzt testcontainers-<modul> -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
+            <version>2.0.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>1.16.1</version> <!-- Verwenden Sie die neueste Version -->
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>1.16.1</version> <!-- Verwenden Sie die neueste Version -->
+            <artifactId>testcontainers-postgresql</artifactId>
+            <version>2.0.5</version>
             <scope>test</scope>
         </dependency>
 
@@ -182,14 +183,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.6.0</version>
-                <configuration>
-                    <!-- TODO: AusgabeServiceIT schlaegt mit NoClassDefFoundError fehl, vermutlich wegen
-                         veraltetem testcontainers-junit-jupiter 1.16.1 (JUnit-Platform-Inkompatibilitaet).
-                         Ausschluss aufheben, sobald Testcontainers im Zuge des Spring-Boot-Updates aktualisiert ist. -->
-                    <excludes>
-                        <exclude>**/AusgabeServiceIT.java</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -212,6 +205,12 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <!-- Classifier setzen, damit das normale (nicht-ausfuehrbare) Jar mit flacher
+                         Klassenstruktur das Haupt-Artefakt bleibt. Ohne Classifier ersetzt repackage
+                         das Haupt-Artefakt durch die ausfuehrbare Jar (Klassen unter BOOT-INF/classes/
+                         verschachtelt), was dazu fuehrt, dass Failsafe (laeuft nach der package-Phase)
+                         Projektklassen ueber dieses Jar nicht mehr findet (NoClassDefFoundError). -->
+                    <classifier>exec</classifier>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

@@ -122,7 +122,7 @@ public class AusgabeServiceIT {
         var ausgabeBo1 = new AusgabeBo(
                 null,
                 LocalDate.now(),
-                "",
+                null,
                 "Assura",
                 AusgabeKategorieBo.GESUNDHEIT,
                 "Krankenkasse",
@@ -131,7 +131,7 @@ public class AusgabeServiceIT {
         var ausgabeBo2 = new AusgabeBo(
                 null,
                 LocalDate.now(),
-                "",
+                null,
                 "Steuerverwaltung",
                 AusgabeKategorieBo.STEUERN,
                 "1. Rate",
@@ -152,7 +152,7 @@ public class AusgabeServiceIT {
         var ausgabeBo = new AusgabeBo(
                 null,
                 LocalDate.now(),
-                "",
+                null,
                 empfaenger,
                 AusgabeKategorieBo.GESUNDHEIT,
                 "Krankenkasse",
@@ -176,7 +176,7 @@ public class AusgabeServiceIT {
         var ausgabeBo = new AusgabeBo(
                 null,
                 LocalDate.now(),
-                "",
+                null,
                 empfaenger,
                 AusgabeKategorieBo.GESUNDHEIT,
                 "Krankenkasse",
