@@ -50,7 +50,17 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>9.16.3</version>  <!-- lowering Version after Spring-Boot-Upate: https://stackoverflow.com/questions/78539678/using-postgres-16-with-spring-boot-3-3-0 -->
+            <!-- Flyway 11 entfernt (Spring Boot bis mind. 3.5.10 betroffen, evtl. auch 4.x) die von
+                 Spring Boots FlywayAutoConfiguration intern aufgerufene Methode cleanOnValidationError(),
+                 was zu NoSuchMethodError beim Start fuehrt. Siehe spring-boot#43770 / #49038.
+                 10.22.0 ist die letzte 10.x-Version (vor dieser Aenderung) und daher aktuell das Maximum. -->
+            <version>10.22.0</version>
+        </dependency>
+        <!-- Ab Flyway 10 ist die Datenbank-Unterstuetzung aus flyway-core ausgelagert -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>10.22.0</version>
         </dependency>
 
         <dependency>
