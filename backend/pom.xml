@@ -121,19 +121,16 @@
             <version>2.8.14</version>
         </dependency>
 
-        <!-- Query DSL -->
+        <!-- Query DSL: das Original com.querydsl ist unmaintained (letztes Release 2021).
+             Umgestiegen auf den aktiv gepflegten OpenFeign-Fork (mit Hibernate-7-Support),
+             siehe https://openfeign.github.io/querydsl/migration. Java-Packages bleiben com.querydsl.*,
+             es aendern sich nur GroupId, Classifier und Version. Der Annotation-Processor
+             (querydsl-apt) wird unten im maven-compiler-plugin als annotationProcessorPath
+             eingebunden statt als eigene provided-Dependency. -->
         <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>5.0.0</version>
-            <classifier>jakarta</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.querydsl</groupId>
+            <groupId>io.github.openfeign.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>5.0.0</version>
-            <classifier>jakarta</classifier>
+            <version>7.1</version>
         </dependency>
 
         <!-- Thymeleaf -->
@@ -170,6 +167,29 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- War bisher nicht gepinnt -> stiller Fallback auf die uralte Default-Version 3.1,
+                     die die annotationProcessorPaths-Konfiguration unten nicht unterstuetzt. -->
+                <version>3.16.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>io.github.openfeign.querydsl</groupId>
+                            <artifactId>querydsl-apt</artifactId>
+                            <version>7.1</version>
+                            <classifier>jpa</classifier>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.30</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
 
             <plugin>
