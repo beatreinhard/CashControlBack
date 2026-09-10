@@ -1,16 +1,31 @@
 import {Component, inject, signal} from '@angular/core';
 import {MatButton} from "@angular/material/button";
-import {MatCardActions} from '@angular/material/card';
+import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {ReportingControllerApi} from '../../../generated';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
+
+type ReportingForm  = FormGroup<{
+  kontrollJahr: FormControl<number>;
+}>;
 
 @Component({
   selector: 'app-reporting',
   imports: [
     MatButton,
     MatCardActions,
-    MatProgressSpinner
+    MatProgressSpinner,
+    FormsModule,
+    MatCard,
+    MatCardContent,
+    MatCardTitle,
+    MatError,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule
   ],
   templateUrl: './reporting.component.html',
   styleUrl: './reporting.component.css'
@@ -19,6 +34,8 @@ export class ReportingComponent {
 
   readonly generatePdfInProgress = signal(false);
 
+  private readonly fb = inject(FormBuilder);
+  protected readonly form: ReportingForm = this.buildForm();
   protected reportingController = inject(ReportingControllerApi);
   private readonly snackBar = inject(MatSnackBar);
 
@@ -52,6 +69,16 @@ export class ReportingComponent {
         this.showError("Fehler beim generieren des PDF.")
         this.generatePdfInProgress.set(false);
       },
+    });
+  }
+
+  // -----------------------
+  // private Methoden
+  // -----------------------
+
+  private buildForm(): ReportingForm {
+    return this.fb.group({
+      kontrollJahr: this.fb.control<number>(2026, { nonNullable: true, validators: [Validators.required] })
     });
   }
 

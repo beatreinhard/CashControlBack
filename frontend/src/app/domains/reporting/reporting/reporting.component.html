@@ -1,12 +1,35 @@
 <h1 class="page-title">Reporting</h1>
 
-<div>
+<form class="reporting-form-form" [formGroup]="form" (ngSubmit)="pdfGenerieren()">
   @if (generatePdfInProgress()) {
     <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
   }
-  <mat-card-actions>
-    <button mat-flat-button color="primary" (click)="pdfGenerieren()">
-      PDF generieren
-    </button>
-  </mat-card-actions>
-</div>
+  <mat-card>
+
+    <mat-card-title>PDF generieren</mat-card-title>
+    <mat-card-content>
+
+      <!-- Name -->
+      <mat-form-field class="full-width">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          placeholder="Name"
+        />
+
+        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+          <mat-error>Name ist erforderlich</mat-error>
+        }
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-flat-button color="primary" type="submit">
+        PDF generieren
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+</form>
