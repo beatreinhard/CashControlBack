@@ -47,20 +47,18 @@
         <!--			<artifactId>jakarta.validation-api</artifactId>-->
         <!--			<version>3.0.1</version>-->
         <!--		</dependency>-->
+        <!-- Spring Boot 4 hat die Flyway-Autoconfiguration in ein eigenes Modul ausgelagert,
+             das nur noch ueber diesen Starter (statt der frueheren rohen flyway-core-Dependency)
+             eingebunden wird. Version wird von der Spring-Boot-BOM verwaltet; damit sollte auch
+             der fruehere cleanOnValidationError-NoSuchMethodError (siehe Schritt 4) behoben sein,
+             da Spring Boot die eigene Autoconfiguration entsprechend aktualisiert hat. -->
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <!-- Flyway 11 entfernt (Spring Boot bis mind. 3.5.10 betroffen, evtl. auch 4.x) die von
-                 Spring Boots FlywayAutoConfiguration intern aufgerufene Methode cleanOnValidationError(),
-                 was zu NoSuchMethodError beim Start fuehrt. Siehe spring-boot#43770 / #49038.
-                 10.22.0 ist die letzte 10.x-Version (vor dieser Aenderung) und daher aktuell das Maximum. -->
-            <version>10.22.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
         </dependency>
-        <!-- Ab Flyway 10 ist die Datenbank-Unterstuetzung aus flyway-core ausgelagert -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>10.22.0</version>
         </dependency>
 
         <dependency>
@@ -82,6 +80,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Spring Boot 4 hat spring-boot-test-autoconfigure modularisiert; @WebMvcTest und
+             @AutoConfigureTestDatabase erfordern jetzt diese eigenen Test-Starter. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -115,10 +125,8 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <!-- 2.8.15+ bricht mit server.servlet.context-path (PatternParseException in
-                 AbstractSwaggerConfigurer.combinePatterns), siehe springdoc/springdoc-openapi#3210.
-                 2.8.14 ist die letzte bekannt funktionierende Version. -->
-            <version>2.8.14</version>
+            <!-- springdoc 3.x ist die fuer Spring Boot 4 / Jakarta EE 11 kompatible Major-Version. -->
+            <version>3.1.0</version>
         </dependency>
 
         <!-- Query DSL: das Original com.querydsl ist unmaintained (letztes Release 2021).

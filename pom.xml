@@ -26,7 +26,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>3.4.3</version> <!-- aktuelle Spring Boot Version -->
+				<version>4.1.1</version> <!-- aktuelle Spring Boot Version -->
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
