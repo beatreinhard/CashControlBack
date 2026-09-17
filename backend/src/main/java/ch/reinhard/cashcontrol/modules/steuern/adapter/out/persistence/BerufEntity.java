@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
 @Getter
 @Setter
-public class Beruf {
+public class BerufEntity {
     @Id
     private String id;
 
@@ -47,16 +47,16 @@ public class Beruf {
 
     private String bemerkung;
 
-    public void update(Beruf beruf) {
-        jahr = beruf.jahr;
-        arbeitnehmer = beruf.arbeitnehmer;
-        arbeitgeber = beruf.arbeitgeber;
-        arbeitsort = beruf.arbeitsort;
-        beschaeftigungsgrad = beruf.beschaeftigungsgrad;
-        arbeitstage = beruf.arbeitstage;
-        fahrtkilometerProTag = beruf.fahrtkilometerProTag;
-        grundAutobenutzung = beruf.grundAutobenutzung;
-        ansatzAuswaertigeVerpflegung = beruf.ansatzAuswaertigeVerpflegung;
-        bemerkung = beruf.bemerkung;
+    public void update(BerufEntity berufEntity) {
+        jahr = berufEntity.jahr;
+        arbeitnehmer = berufEntity.arbeitnehmer;
+        arbeitgeber = berufEntity.arbeitgeber;
+        arbeitsort = berufEntity.arbeitsort;
+        beschaeftigungsgrad = berufEntity.beschaeftigungsgrad;
+        arbeitstage = berufEntity.arbeitstage;
+        fahrtkilometerProTag = berufEntity.fahrtkilometerProTag;
+        grundAutobenutzung = berufEntity.grundAutobenutzung;
+        ansatzAuswaertigeVerpflegung = berufEntity.ansatzAuswaertigeVerpflegung;
+        bemerkung = berufEntity.bemerkung;
     }
 }

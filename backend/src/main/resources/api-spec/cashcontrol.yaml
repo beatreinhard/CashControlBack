@@ -14,6 +14,8 @@ tags:
     description: Endpoints für Vergabungen
   - name: SchuldController
     description: Endpoints für Schulden
+  - name: BerufController
+    description: Endpoints für Beruf
   - name: ReportingController
     description: Endpoints für Reporting
 
@@ -256,6 +258,93 @@ paths:
           description: Schuld aktualisiert (kein Response-Body)
         '404':
           description: Schuld nicht gefunden
+
+  /api/v1/beruf:
+    get:
+      tags: [BerufController]
+      operationId: getAllBeruf
+      summary: Alle Berufe
+      responses:
+        '200':
+          description: Alle Berufe gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BerufDto'
+    post:
+      tags: [BerufController]
+      operationId: createBeruf
+      summary: Neuen Beruf erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BerufDto'
+      responses:
+        '201':
+          description: Beruf erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID des neu erstellten Beruf
+
+  /api/v1/beruf/{id}:
+    get:
+      tags: [BerufController]
+      operationId: getBerufById
+      summary: Beruf finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Beruf mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BerufDto'
+        '404':
+          description: Beruf nicht gefunden
+    delete:
+      tags: [BerufController]
+      operationId: deleteBerufById
+      summary: Beruf löschen mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Beruf gelöscht (kein Response-Body)
+        '404':
+          description: Beruf nicht gefunden
+    put:
+      tags: [BerufController]
+      operationId: updateBeruf
+      summary: Beruf aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BerufDto'
+      responses:
+        '204':
+          description: Beruf aktualisiert (kein Response-Body)
+        '404':
+          description: Beruf nicht gefunden
 
   /api/v1/kosten:
     get:
@@ -632,6 +721,69 @@ components:
         - RECHNUNG
         - HYPOTHEK
         -
+
+    BerufDto:
+      title: Beruf
+      type: object
+      description: Datentransferobjekt eines Berufs
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "5c2a1b1e-97f9-4f0a-1b3e-a8f1c7d21b3e"
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr des Berufs
+          example: 2025
+        arbeitnehmer:
+          type: string
+          description: Name des Arbeitnehmers
+          example: "Beat Reinhard"
+        arbeitgeber:
+          type: string
+          description: Name des Arbeitgebers
+          example: "Muster AG"
+        arbeitsort:
+          type: string
+          description: Ort der Arbeitsstätte
+          example: "Bern"
+        beschaeftigungsgrad:
+          type: integer
+          format: int32
+          description: Beschäftigungsgrad in Prozent
+          example: 100
+        arbeitstage:
+          type: integer
+          format: int32
+          description: Anzahl Arbeitstage pro Jahr
+          example: 220
+        fahrtkilometerProTag:
+          type: integer
+          format: int32
+          description: Fahrtkilometer pro Arbeitstag
+          example: 20
+        grundAutobenutzung:
+          type: string
+          description: Grund für Autobenutzung statt öffentlichem Verkehr
+          example: "Kein ÖV-Anschluss"
+        ansatzAuswaertigeVerpflegung:
+          type: number
+          description: Ansatz für auswärtige Verpflegung
+          example: 15.00
+        bemerkung:
+          type: string
+          description: Bemerkung
+          example: "Homeoffice an 2 Tagen pro Woche"
+      required:
+        - jahr
+        - arbeitnehmer
+        - arbeitgeber
+        - arbeitsort
+        - beschaeftigungsgrad
+        - arbeitstage
+        - ansatzAuswaertigeVerpflegung
+
     KostenDto:
       title: Kosten
       type: object
