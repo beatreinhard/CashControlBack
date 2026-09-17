@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
 @Getter
 @Setter
-public class Erbschaft {
+public class ErbschaftEntity {
 
     @Id
     private String id;
@@ -25,7 +25,7 @@ public class Erbschaft {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private ErbschaftArt art;
+    private ErbschaftArtEntity art;
 
     @NotNull
     private BigDecimal betrag;
@@ -44,14 +44,14 @@ public class Erbschaft {
 
     private String bemerkung;
 
-    public void update(Erbschaft erbschaft) {
-        jahr = erbschaft.jahr;
-        art = erbschaft.art;
-        betrag = erbschaft.betrag;
-        datum = erbschaft.datum;
-        geber = erbschaft.geber;
-        verwandtschaftsverhaeltnis = erbschaft.verwandtschaftsverhaeltnis;
-        gegenstand = erbschaft.gegenstand;
-        bemerkung = erbschaft.bemerkung;
+    public void update(ErbschaftEntity erbschaftEntity) {
+        jahr = erbschaftEntity.jahr;
+        art = erbschaftEntity.art;
+        betrag = erbschaftEntity.betrag;
+        datum = erbschaftEntity.datum;
+        geber = erbschaftEntity.geber;
+        verwandtschaftsverhaeltnis = erbschaftEntity.verwandtschaftsverhaeltnis;
+        gegenstand = erbschaftEntity.gegenstand;
+        bemerkung = erbschaftEntity.bemerkung;
     }
 }

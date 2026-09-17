@@ -16,6 +16,8 @@ tags:
     description: Endpoints für Schulden
   - name: BerufController
     description: Endpoints für Beruf
+  - name: ErbschaftController
+    description: Endpoints für Erbschaft
   - name: ReportingController
     description: Endpoints für Reporting
 
@@ -345,6 +347,93 @@ paths:
           description: Beruf aktualisiert (kein Response-Body)
         '404':
           description: Beruf nicht gefunden
+
+  /api/v1/erbschaft:
+    get:
+      tags: [ErbschaftController]
+      operationId: getAllErbschaft
+      summary: Alle Erbschaften
+      responses:
+        '200':
+          description: Alle Erbschaften gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErbschaftDto'
+    post:
+      tags: [ErbschaftController]
+      operationId: createErbschaft
+      summary: Neue Erbschaft erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErbschaftDto'
+      responses:
+        '201':
+          description: Erbschaft erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID der neu erstellten Erbschaft
+
+  /api/v1/erbschaft/{id}:
+    get:
+      tags: [ErbschaftController]
+      operationId: getErbschaftById
+      summary: Erbschaft finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Erbschaft mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErbschaftDto'
+        '404':
+          description: Erbschaft nicht gefunden
+    delete:
+      tags: [ErbschaftController]
+      operationId: deleteErbschaftById
+      summary: Erbschaft löschen mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Erbschaft gelöscht (kein Response-Body)
+        '404':
+          description: Erbschaft nicht gefunden
+    put:
+      tags: [ErbschaftController]
+      operationId: updateErbschaft
+      summary: Erbschaft aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErbschaftDto'
+      responses:
+        '204':
+          description: Erbschaft aktualisiert (kein Response-Body)
+        '404':
+          description: Erbschaft nicht gefunden
 
   /api/v1/kosten:
     get:
@@ -783,6 +872,63 @@ components:
         - beschaeftigungsgrad
         - arbeitstage
         - ansatzAuswaertigeVerpflegung
+
+    ErbschaftDto:
+      title: Erbschaft
+      type: object
+      description: Datentransferobjekt einer Erbschaft
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "5c2a1b1e-97f9-4f0a-1b3e-a8f1c7d21b3e"
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr der Erbschaft
+          example: 2025
+        art:
+          $ref: '#/components/schemas/ErbschaftArtDto'
+        betrag:
+          type: number
+          description: Betrag der Erbschaft
+          example: 5000.00
+        datum:
+          type: string
+          format: date
+          description: Datum des Erhalts
+          example: "2025-06-15"
+        geber:
+          type: string
+          description: Geber der Erbschaft bzw. Schenkung
+          example: "Hans Muster"
+        verwandtschaftsverhaeltnis:
+          type: string
+          description: Verwandtschaftsverhältnis zum Geber
+          example: "Vater"
+        gegenstand:
+          type: string
+          description: Gegenstand der Erbschaft bzw. Schenkung
+          example: "Bargeld"
+        bemerkung:
+          type: string
+          description: Bemerkung
+          example: "Erbvorbezug"
+      required:
+        - jahr
+        - art
+        - betrag
+        - datum
+        - geber
+        - verwandtschaftsverhaeltnis
+        - gegenstand
+
+    ErbschaftArtDto:
+      type: string
+      description: Art der Erbschaft
+      enum:
+        - SCHENKUNG_VOREMPFANG
+        - ERBSCHAFT
 
     KostenDto:
       title: Kosten
