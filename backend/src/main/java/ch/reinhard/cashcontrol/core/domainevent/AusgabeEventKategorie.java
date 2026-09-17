@@ -5,7 +5,7 @@ public enum AusgabeEventKategorie {
     HAUSHALT,
     FERIEN,
     KOMMUNIKATION_MEDIEN,
-    GESUNDHEIT,
+    UNFALL_KRANKHEIT,
     PERSOENLICHE_AUSGABEN,
     SPAREN_VORSORGE,
     STEUERN,
@@ -20,7 +20,7 @@ public enum AusgabeEventKategorie {
         return kategorie == AusgabeEventKategorie.KRANKENKASSE ||
                 kategorie == AusgabeEventKategorie.BERUF ||
                 kategorie == AusgabeEventKategorie.BANKGEBUEHREN ||
-                kategorie == AusgabeEventKategorie.GESUNDHEIT ||
+                kategorie == AusgabeEventKategorie.UNFALL_KRANKHEIT ||
                 kategorie == AusgabeEventKategorie.LIEGENSCHAFT_BETRIEB;
     }
 

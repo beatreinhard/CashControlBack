@@ -26,13 +26,18 @@ public class KostenEventConsumerAdapter {
         log.info("Consume AusgabeCreatedEvent for Category: {}", event.getKategorie());
 
         if (AusgabeEventKategorie.isKategorieForKosten(event.getKategorie())) {
+            var zahlender = event.getZahlender();
+            if (zahlender == null || zahlender.isEmpty()) {
+                log.warn("Zahlender is null or empty for AusgabeCreatedEvent with Kategorie: {}. Setting zahlender to 'Unbekannt'.", event.getKategorie());
+                zahlender = "Unbekannt";
+            }
             KostenDto kostenDto = new KostenDto()
                     .id(null)
                     .ausgabeId(event.getAusgabeId())
                     .jahr(event.getDatum().getYear())
                     .art(EnumMapper.convert(event.getKategorie(), KostenArtDto.class))
                     .empfaenger(event.getEmpfaenger())
-                    .zahlender(event.getZahlender())
+                    .zahlender(zahlender)
                     .betrag(event.getBetrag())
                     .bemerkung(event.getBemerkung());
 
@@ -48,6 +53,11 @@ public class KostenEventConsumerAdapter {
         var kosten = kostenService.getKostenByAusgabeId(event.getAusgabeId());
 
         if (AusgabeEventKategorie.isKategorieForKosten(event.getKategorie())) {
+            var zahlender = event.getZahlender();
+            if (zahlender == null || zahlender.isEmpty()) {
+                log.warn("Zahlender is null or empty for AusgabeCreatedEvent with Kategorie: {}. Setting zahlender to 'Unbekannt'.", event.getKategorie());
+                zahlender = "Unbekannt";
+            }
             //   - falls keine Kosten existiert und EventKategorie gehört zu Kosten, dann Kosten erstellen
             if (kosten == null) {
                 log.info("No Kosten found with AusgbabeId and Event is for KOSTEN, create a new Kosten.");
@@ -58,7 +68,7 @@ public class KostenEventConsumerAdapter {
                         .jahr(event.getDatum().getYear())
                         .art(EnumMapper.convert(event.getKategorie(), KostenArtDto.class))
                         .empfaenger(event.getEmpfaenger())
-                        .zahlender(event.getZahlender())
+                        .zahlender(zahlender)
                         .betrag(event.getBetrag())
                         .bemerkung(null);
 
@@ -75,7 +85,7 @@ public class KostenEventConsumerAdapter {
                         .jahr(event.getDatum().getYear())
                         .art(EnumMapper.convert(event.getKategorie(), KostenArtDto.class))
                         .empfaenger(event.getEmpfaenger())
-                        .zahlender(event.getZahlender())
+                        .zahlender(zahlender)
                         .betrag(event.getBetrag())
                         .bemerkung(event.getBemerkung());
 

@@ -145,6 +145,7 @@ export class KostenEditComponent {
   }
 
   private resetFormForCreate(): void {
+    this.hasAusgabe.set(false);
     this.loadError.set(null);
     this.form.reset({
       jahr: null,

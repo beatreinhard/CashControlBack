@@ -73,7 +73,7 @@ public class AusgabeServiceIT {
         var ausgabeDto = new AusgabeDto(
                 LocalDate.now(),
                 "Assura",
-                AusgabeKategorieDto.GESUNDHEIT,
+                AusgabeKategorieDto.UNFALL_KRANKHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
 
@@ -91,7 +91,7 @@ public class AusgabeServiceIT {
         var ausgabeDto = new AusgabeDto(
                 LocalDate.now(),
                 "Assura",
-                AusgabeKategorieDto.GESUNDHEIT,
+                AusgabeKategorieDto.UNFALL_KRANKHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
         var id = ausgabeService.createAusgabe(toAusgabeBo(ausgabeDto));
@@ -124,7 +124,7 @@ public class AusgabeServiceIT {
                 LocalDate.now(),
                 null,
                 "Assura",
-                AusgabeKategorieBo.GESUNDHEIT,
+                AusgabeKategorieBo.UNFALL_KRANKHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
         ausgabeService.createAusgabe(ausgabeBo1);
@@ -154,7 +154,7 @@ public class AusgabeServiceIT {
                 LocalDate.now(),
                 null,
                 empfaenger,
-                AusgabeKategorieBo.GESUNDHEIT,
+                AusgabeKategorieBo.UNFALL_KRANKHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
         ausgabeService.createAusgabe(ausgabeBo);
@@ -178,7 +178,7 @@ public class AusgabeServiceIT {
                 LocalDate.now(),
                 null,
                 empfaenger,
-                AusgabeKategorieBo.GESUNDHEIT,
+                AusgabeKategorieBo.UNFALL_KRANKHEIT,
                 "Krankenkasse",
                 new BigDecimal("450.35"));
         ausgabeService.createAusgabe(ausgabeBo);
@@ -197,7 +197,7 @@ public class AusgabeServiceIT {
     //    public void searchZahlungenMitSuchkriterium() {
     //        // GIVEN
     //        var ausgabeDto1 = new AusgabeDto(null, null,
-    //                LocalDate.now(), "Assura", AusgabeKategorieDto.GESUNDHEIT, "Krankenkasse", new
+    //                LocalDate.now(), "Assura", AusgabeKategorieDto.UNFALL_KRANKHEIT, "Krankenkasse", new
     // BigDecimal("450.35"));
     //        ausgabeService.createAusgabe(ausgabeDto1);
     //        var ausgabeDto2 = new AusgabeDto(null, null,

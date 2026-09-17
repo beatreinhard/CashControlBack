@@ -543,7 +543,7 @@ components:
         - HAUSHALT
         - FERIEN
         - KOMMUNIKATION_MEDIEN
-        - GESUNDHEIT
+        - UNFALL_KRANKHEIT
         - PERSOENLICHE_AUSGABEN
         - SPAREN_VORSORGE
         - STEUERN
