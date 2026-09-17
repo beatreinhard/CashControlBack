@@ -1,19 +1,18 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import org.hibernate.annotations.Immutable;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "kosten", schema = "cashcontrol")
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
+@Immutable
+@Table(name = "kosten_view", schema = "cashcontrol")
 @Getter
-@Setter
-public class KostenEntity {
+public class KostenView {
     @NotNull
     @Id
     private String id;
@@ -26,7 +25,7 @@ public class KostenEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private KostenArt art;
+    private KostenArtEntity art;
 
     @NotNull
     private String empfaenger;
@@ -39,12 +38,7 @@ public class KostenEntity {
 
     private String bemerkung;
 
-    public void update(KostenEntity kostenEntity) {
-        jahr = kostenEntity.jahr;
-        art = kostenEntity.art;
-        empfaenger = kostenEntity.empfaenger;
-        zahlender = kostenEntity.zahlender;
-        betrag = kostenEntity.betrag;
-        bemerkung = kostenEntity.bemerkung;
-    }
+    // aus Person (LEFT JOIN → können null sein)
+    private String personName;
+    private String personVorname;
 }

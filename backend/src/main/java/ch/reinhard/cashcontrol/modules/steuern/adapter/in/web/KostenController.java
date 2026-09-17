@@ -1,6 +1,6 @@
 package ch.reinhard.cashcontrol.modules.steuern.adapter.in.web;
 
-import ch.reinhard.cashcontrol.modules.steuern.api.KostenService;
+import ch.reinhard.cashcontrol.modules.steuern.application.port.in.KostenServicePort;
 import ch.reinhard.cashcontrol.openapi.api.KostenControllerApi;
 import ch.reinhard.cashcontrol.openapi.model.KostenDto;
 import ch.reinhard.cashcontrol.openapi.model.KostenViewDto;
@@ -11,57 +11,48 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static ch.reinhard.cashcontrol.modules.steuern.adapter.in.web.KostenWebMapper.*;
+
 @RequiredArgsConstructor
 @RestController
 public class KostenController implements KostenControllerApi {
-    private final KostenService kostenService;
+
+    private final KostenServicePort kostenServicePort;
 
     @Override
     public ResponseEntity<String> createKosten(KostenDto kostenDto) {
-        var id = kostenService.createKosten(kostenDto);
+        var id = kostenServicePort.createKosten(toKostenBo(kostenDto));
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<Void> deleteKostenById(String id) {
-        kostenService.deleteKostenById(id);
+        kostenServicePort.deleteKostenById(id);
         return ResponseEntity.noContent().build();
     }
-
-//    @Override
-//    public ResponseEntity<List<KostenDto>> getKosten(Integer jahr) {
-//        List<KostenDto> kostenDtoList;
-//        if (jahr != null) {
-//           kostenDtoList = kostenService.getKostenByJahr(jahr);
-//        } else {
-//            kostenDtoList = kostenService.getAllKosten();
-//        }
-//        return ResponseEntity.ok(kostenDtoList);
-//    }
 
     @Override
     public ResponseEntity<List<KostenViewDto>> getAllKostenView(Integer jahr) {
         List<KostenViewDto> kostenViewDtoList;
         if (jahr != null) {
-            kostenViewDtoList = kostenService.getKostenViewByJahr(jahr);
+            kostenViewDtoList = toKostenViewDtoList(kostenServicePort.getKostenViewByJahr(jahr));
         } else {
-            kostenViewDtoList = kostenService.getKostenView();
+            kostenViewDtoList = toKostenViewDtoList(kostenServicePort.getKostenView());
         }
         return ResponseEntity.ok(kostenViewDtoList);
     }
 
     @Override
     public ResponseEntity<KostenDto> getKostenById(String id) {
-        var kostenDto = kostenService.getKostenById(id);
+        var kostenDto = toKostenDto(kostenServicePort.getKostenById(id));
         return ResponseEntity.ok(kostenDto);
     }
 
     @Override
     public ResponseEntity<Void> updateKosten(String id, KostenDto kostenDto) {
-        // TODO Sicherstellen, dass die ID aus dem Pfad verwendet wird
-
-        kostenDto.setId(id);
-        kostenService.updateKosten(kostenDto);
+        var kostenBo = toKostenBo(kostenDto);
+        kostenBo.setId(id);
+        kostenServicePort.updateKosten(kostenBo);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import ch.reinhard.cashcontrol.core.persistence.ReadOnlyRepository;
 

@@ -1,6 +1,6 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
+package ch.reinhard.cashcontrol.modules.steuern.application.domain;
 
-public enum KostenArt {
+public enum KostenArtBo {
     BANKGEBUEHREN,
     KRANKENKASSE,
     UNFALL_KRANKHEIT,
