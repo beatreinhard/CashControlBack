@@ -20,15 +20,15 @@ public class WebConfig implements WebMvcConfigurer  {
 
     /**
      *
-     * Weiterleitung von allen URLs, die nicht mit "/api" beginnen, auf "index.html
+     * Weiterleitung von allen URLs, die nicht mit "/api", "/swagger-ui" oder "/v3" (OpenAPI/Swagger) beginnen, auf "index.html"
      *
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/{spring:^(?!api$)[^\\.]+}")
+        registry.addViewController("/{spring:^(?!api$|swagger-ui$|v3$)[^\\.]+}")
                 .setViewName("forward:/index.html");
 
-        registry.addViewController("/{spring:^(?!api$)[^\\.]+}/**")
+        registry.addViewController("/{spring:^(?!api$|swagger-ui$|v3$)[^\\.]+}/**")
                 .setViewName("forward:/index.html");
     }
 }
