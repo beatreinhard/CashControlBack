@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain.TODO;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
 @Getter
 @Setter
-public class Grundstueckunterhalt {
+public class GrundstueckunterhaltEntity {
     @Id
     private String id;
 
@@ -42,13 +42,13 @@ public class Grundstueckunterhalt {
     @NotNull
     private BigDecimal anteilUnterhalt; // betragNetto minus anteilAndereKosten
 
-    public void update(Grundstueckunterhalt grundstueckunterhalt) {
-        jahr = grundstueckunterhalt.jahr;
-        rgDatum = grundstueckunterhalt.rgDatum;
-        ausfuehrendeFirma = grundstueckunterhalt.ausfuehrendeFirma;
-        arbeitsArt = grundstueckunterhalt.arbeitsArt;
-        betragNetto = grundstueckunterhalt.betragNetto;
-        anteilAndereKosten = grundstueckunterhalt.anteilAndereKosten;
-        anteilUnterhalt = grundstueckunterhalt.anteilUnterhalt;
+    public void update(GrundstueckunterhaltEntity grundstueckunterhaltEntity) {
+        jahr = grundstueckunterhaltEntity.jahr;
+        rgDatum = grundstueckunterhaltEntity.rgDatum;
+        ausfuehrendeFirma = grundstueckunterhaltEntity.ausfuehrendeFirma;
+        arbeitsArt = grundstueckunterhaltEntity.arbeitsArt;
+        betragNetto = grundstueckunterhaltEntity.betragNetto;
+        anteilAndereKosten = grundstueckunterhaltEntity.anteilAndereKosten;
+        anteilUnterhalt = grundstueckunterhaltEntity.anteilUnterhalt;
     }
 }

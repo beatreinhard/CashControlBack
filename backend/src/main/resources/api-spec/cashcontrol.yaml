@@ -18,6 +18,8 @@ tags:
     description: Endpoints für Beruf
   - name: ErbschaftController
     description: Endpoints für Erbschaft
+  - name: GrundstueckunterhaltController
+    description: Endpoints für Grundstueckunterhalt
   - name: ReportingController
     description: Endpoints für Reporting
 
@@ -434,6 +436,93 @@ paths:
           description: Erbschaft aktualisiert (kein Response-Body)
         '404':
           description: Erbschaft nicht gefunden
+
+  /api/v1/grundstueckunterhalt:
+    get:
+      tags: [GrundstueckunterhaltController]
+      operationId: getAllGrundstueckunterhalt
+      summary: Alle Grundstueckunterhalte
+      responses:
+        '200':
+          description: Alle Grundstueckunterhalte gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GrundstueckunterhaltDto'
+    post:
+      tags: [GrundstueckunterhaltController]
+      operationId: createGrundstueckunterhalt
+      summary: Neuen Grundstueckunterhalt erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrundstueckunterhaltDto'
+      responses:
+        '201':
+          description: Grundstueckunterhalt erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID des neu erstellten Grundstueckunterhalt
+
+  /api/v1/grundstueckunterhalt/{id}:
+    get:
+      tags: [GrundstueckunterhaltController]
+      operationId: getGrundstueckunterhaltById
+      summary: Grundstueckunterhalt finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Grundstueckunterhalt mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrundstueckunterhaltDto'
+        '404':
+          description: Grundstueckunterhalt nicht gefunden
+    delete:
+      tags: [GrundstueckunterhaltController]
+      operationId: deleteGrundstueckunterhaltById
+      summary: Grundstueckunterhalt löschen mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Grundstueckunterhalt gelöscht (kein Response-Body)
+        '404':
+          description: Grundstueckunterhalt nicht gefunden
+    put:
+      tags: [GrundstueckunterhaltController]
+      operationId: updateGrundstueckunterhalt
+      summary: Grundstueckunterhalt aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrundstueckunterhaltDto'
+      responses:
+        '204':
+          description: Grundstueckunterhalt aktualisiert (kein Response-Body)
+        '404':
+          description: Grundstueckunterhalt nicht gefunden
 
   /api/v1/kosten:
     get:
@@ -929,6 +1018,54 @@ components:
       enum:
         - SCHENKUNG_VOREMPFANG
         - ERBSCHAFT
+
+    GrundstueckunterhaltDto:
+      title: Grundstueckunterhalt
+      type: object
+      description: Datentransferobjekt eines Grundstückunterhalts
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "5c2a1b1e-97f9-4f0a-1b3e-a8f1c7d21b3e"
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr des Grundstückunterhalts
+          example: 2025
+        rgDatum:
+          type: string
+          format: date
+          description: Datum der Rechnung
+          example: "2025-09-10"
+        ausfuehrendeFirma:
+          type: string
+          description: Ausführende Firma
+          example: "Muster Bau AG"
+        arbeitsArt:
+          type: string
+          description: Art der Arbeit
+          example: "Dachsanierung"
+        betragNetto:
+          type: number
+          description: Effektiver Rechnungsbetrag
+          example: 12500.00
+        anteilAndereKosten:
+          type: number
+          description: Nicht für die Steuerrechnung relevanter Anteil
+          example: 2500.00
+        anteilUnterhalt:
+          type: number
+          description: Steuerlich relevanter Unterhaltsanteil (betragNetto minus anteilAndereKosten)
+          example: 10000.00
+      required:
+        - jahr
+        - rgDatum
+        - ausfuehrendeFirma
+        - arbeitsArt
+        - betragNetto
+        - anteilAndereKosten
+        - anteilUnterhalt
 
     KostenDto:
       title: Kosten
