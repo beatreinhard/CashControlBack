@@ -1,4 +1,4 @@
-package ch.reinhard.cashcontrol.modules.steuern.application.domain;
+package ch.reinhard.cashcontrol.modules.steuern.adapter.out.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA
 @Getter
 @Setter
-public class Vermoegenswert {
+public class VermoegenswertEntity {
     @Id
     private String id;
 
@@ -33,10 +33,10 @@ public class Vermoegenswert {
     @NotNull
     private BigDecimal anschaffungspreis;
 
-    public void update(Vermoegenswert vermoegenswert) {
-        jahr = vermoegenswert.jahr;
-        bezeichnung = vermoegenswert.bezeichnung;
-        anschaffungsjahr = vermoegenswert.anschaffungsjahr;
-        anschaffungspreis = vermoegenswert.anschaffungspreis;
+    public void update(VermoegenswertEntity vermoegenswertEntity) {
+        jahr = vermoegenswertEntity.jahr;
+        bezeichnung = vermoegenswertEntity.bezeichnung;
+        anschaffungsjahr = vermoegenswertEntity.anschaffungsjahr;
+        anschaffungspreis = vermoegenswertEntity.anschaffungspreis;
     }
 }

@@ -20,6 +20,8 @@ tags:
     description: Endpoints für Erbschaft
   - name: GrundstueckunterhaltController
     description: Endpoints für Grundstueckunterhalt
+  - name: VermoegenswertController
+    description: Endpoints für Vermoegenswert
   - name: ReportingController
     description: Endpoints für Reporting
 
@@ -523,6 +525,93 @@ paths:
           description: Grundstueckunterhalt aktualisiert (kein Response-Body)
         '404':
           description: Grundstueckunterhalt nicht gefunden
+
+  /api/v1/vermoegenswert:
+    get:
+      tags: [VermoegenswertController]
+      operationId: getAllVermoegenswert
+      summary: Alle Vermoegenswerte
+      responses:
+        '200':
+          description: Alle Vermoegenswerte gefunden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VermoegenswertDto'
+    post:
+      tags: [VermoegenswertController]
+      operationId: createVermoegenswert
+      summary: Neuen Vermoegenswert erfassen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VermoegenswertDto'
+      responses:
+        '201':
+          description: Vermoegenswert erfasst (ID im Response-Body)
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: ID des neu erstellten Vermoegenswert
+
+  /api/v1/vermoegenswert/{id}:
+    get:
+      tags: [VermoegenswertController]
+      operationId: getVermoegenswertById
+      summary: Vermoegenswert finden mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Vermoegenswert mit ID gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VermoegenswertDto'
+        '404':
+          description: Vermoegenswert nicht gefunden
+    delete:
+      tags: [VermoegenswertController]
+      operationId: deleteVermoegenswertById
+      summary: Vermoegenswert löschen mit ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Vermoegenswert gelöscht (kein Response-Body)
+        '404':
+          description: Vermoegenswert nicht gefunden
+    put:
+      tags: [VermoegenswertController]
+      operationId: updateVermoegenswert
+      summary: Vermoegenswert aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VermoegenswertDto'
+      responses:
+        '204':
+          description: Vermoegenswert aktualisiert (kein Response-Body)
+        '404':
+          description: Vermoegenswert nicht gefunden
 
   /api/v1/kosten:
     get:
@@ -1066,6 +1155,39 @@ components:
         - betragNetto
         - anteilAndereKosten
         - anteilUnterhalt
+
+    VermoegenswertDto:
+      title: Vermoegenswert
+      type: object
+      description: Datentransferobjekt eines Vermögenswerts
+      properties:
+        id:
+          type: string
+          description: Technische ID (bei Create optional)
+          example: "5c2a1b1e-97f9-4f0a-1b3e-a8f1c7d21b3e"
+        jahr:
+          type: integer
+          format: int32
+          description: Steuerjahr des Vermögenswerts
+          example: 2025
+        bezeichnung:
+          type: string
+          description: Bezeichnung des Vermögenswerts
+          example: "Sparkonto UBS"
+        anschaffungsjahr:
+          type: integer
+          format: int32
+          description: Anschaffungsjahr
+          example: 2020
+        anschaffungspreis:
+          type: number
+          description: Anschaffungspreis
+          example: 10000.00
+      required:
+        - jahr
+        - bezeichnung
+        - anschaffungsjahr
+        - anschaffungspreis
 
     KostenDto:
       title: Kosten
