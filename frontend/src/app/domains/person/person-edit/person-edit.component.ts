@@ -1,4 +1,5 @@
-import {Component, computed, effect, inject, input, signal} from '@angular/core';
+import {Component, computed, DestroyRef, effect, inject, input, signal} from '@angular/core';
+import {rxResource, takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
@@ -7,6 +8,7 @@ import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/ma
 import {PersonControllerApi, PersonDto} from '../../../generated';
 import {Router, RouterLink} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {filter, finalize, Observable, switchMap} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -36,6 +38,7 @@ type PersonForm = FormGroup<{
     MatFormField,
     MatInput,
     MatLabel,
+    MatProgressBar,
     MatSuffix,
     ReactiveFormsModule,
     RouterLink
@@ -50,20 +53,37 @@ export class PersonEditComponent {
   private readonly fb = inject(FormBuilder);
   private readonly personController = inject(PersonControllerApi);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly isLoading = signal(false);
+  /** Lädt die Person im Edit-Modus; bei personId == null bleibt die Resource idle. */
+  private readonly personResource = rxResource({
+    request: () => this.personId() ?? undefined,
+    loader: ({ request: id }) => this.personController.getPersonById(id)
+  });
+
+  protected readonly isLoading = this.personResource.isLoading;
   protected readonly isSaving = signal(false);
-  protected readonly loadError = signal<string | null>(null);
+  protected readonly loadError = computed(() =>
+    this.personResource.error() ? 'Die Person konnte nicht geladen werden.' : null
+  );
 
   protected readonly isEditMode = computed(() => !!this.personId());
   protected readonly title = computed(() => (this.isEditMode() ? 'Person bearbeiten' : 'Neue Person erfassen'));
 
-  private readonly snackBar = inject(MatSnackBar);
-  private readonly dialog = inject(MatDialog);
   protected readonly form: PersonForm = this.buildForm();
 
   constructor() {
-    effect(() => this.handleIdChange(this.personId()));
+    // Bridge: Resource-Signal -> imperatives Reactive-Forms-API
+    effect(() => {
+      if (!this.personId()) {
+        this.resetFormForCreate();
+        return;
+      }
+      const person = this.personResource.value();
+      if (person) this.patchFormFromDto(person);
+    });
   }
 
   save(): void {
@@ -77,7 +97,10 @@ export class PersonEditComponent {
     this.isSaving.set(true);
 
     this.saveRequest$(dto)
-      .pipe(finalize(() => this.isSaving.set(false)))
+      .pipe(
+        finalize(() => this.isSaving.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
         next: () => {
           this.showSuccess('Person wurde erfolgreich gespeichert.');
@@ -108,7 +131,8 @@ export class PersonEditComponent {
         switchMap(() => {
           this.isSaving.set(true);
           return this.personController.deletePersonById(id).pipe(finalize(() => this.isSaving.set(false)));
-        })
+        }),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: () => {
@@ -135,37 +159,12 @@ export class PersonEditComponent {
     });
   }
 
-  private handleIdChange(id: string | null): void {
-    if (!id) {
-      this.resetFormForCreate();
-      return;
-    }
-    this.loadForEdit(id);
-  }
-
   private resetFormForCreate(): void {
-    this.loadError.set(null);
     this.form.reset({
       name: '',
       vorname: '',
       geburtsdatum: null,
       ahvnummer: ''
-    });
-  }
-
-  private loadForEdit(id: string): void {
-    this.setLoading(true);
-
-    this.personController.getPersonById(id).subscribe({
-      next: (person) => {
-        this.patchFormFromDto(person);
-        this.setLoading(false);
-      },
-      error: (err) => {
-        console.error('Fehler beim Laden der Person', err);
-        this.loadError.set('Die Person konnte nicht geladen werden.');
-        this.setLoading(false);
-      }
     });
   }
 
@@ -197,11 +196,6 @@ export class PersonEditComponent {
 
   private markFormTouched(): void {
     this.form.markAllAsTouched();
-  }
-
-  private setLoading(isLoading: boolean): void {
-    this.isLoading.set(isLoading);
-    if (isLoading) this.loadError.set(null);
   }
 
   private parseBackendDate(value?: string | null): Date | null {

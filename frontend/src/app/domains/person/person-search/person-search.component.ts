@@ -1,6 +1,7 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
+import {rxResource} from '@angular/core/rxjs-interop';
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {PersonControllerApi, PersonDto} from '../../../generated';
+import {PersonControllerApi} from '../../../generated';
 import {PersonListComponent} from '../person-list/person-list.component';
 
 @Component({
@@ -12,25 +13,17 @@ import {PersonListComponent} from '../person-list/person-list.component';
   templateUrl: './person-search.component.html',
   styleUrl: './person-search.component.css'
 })
-export class PersonSearchComponent implements OnInit {
+export class PersonSearchComponent {
 
-  readonly loading = signal(true);
-  readonly error = signal<string | undefined>("");
-  readonly result = signal<PersonDto[]>([]);
+  private readonly personController = inject(PersonControllerApi);
 
-  protected personController = inject(PersonControllerApi);
+  private readonly personsResource = rxResource({
+    loader: () => this.personController.getAllPerson()
+  });
 
-  ngOnInit(): void {
-    this.personController.getAllPerson().subscribe({
-      next: (res) => {
-        this.result.set((res as PersonDto[]) ?? []);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('API error:', err);
-        this.error.set('Konnte Personen nicht laden.');
-        this.loading.set(false);
-      },
-    });
-  }
+  protected readonly loading = this.personsResource.isLoading;
+  protected readonly error = computed(() =>
+    this.personsResource.error() ? 'Konnte Personen nicht laden.' : null
+  );
+  protected readonly result = computed(() => this.personsResource.value() ?? []);
 }
