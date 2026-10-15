@@ -7,7 +7,9 @@ import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/ma
 import {PersonControllerApi, PersonDto} from '../../../generated';
 import {Router, RouterLink} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Observable} from 'rxjs';
+import {filter, finalize, Observable, switchMap} from 'rxjs';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {format, parseISO} from 'date-fns';
 
 
@@ -50,12 +52,14 @@ export class PersonEditComponent {
   private readonly router = inject(Router);
 
   protected readonly isLoading = signal(false);
+  protected readonly isSaving = signal(false);
   protected readonly loadError = signal<string | null>(null);
 
   protected readonly isEditMode = computed(() => !!this.personId());
   protected readonly title = computed(() => (this.isEditMode() ? 'Person bearbeiten' : 'Neue Person erfassen'));
 
   private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
   protected readonly form: PersonForm = this.buildForm();
 
   constructor() {
@@ -63,32 +67,59 @@ export class PersonEditComponent {
   }
 
   save(): void {
+    if (this.isSaving()) return;
     if (this.form.invalid) {
       this.markFormTouched();
       return;
     }
 
     const dto = this.buildDtoFromForm();
-    const request$ = this.saveRequest$(dto);
+    this.isSaving.set(true);
 
-    request$.subscribe({
-      next: (result) => {
-        console.log('Person gespeichert:', result);
-        this.showSuccess('Person wurde erfolgreich gespeichert.');
-        // optional: Navigation / Reset / Emit
-      },
-      error: (err) => {
-        console.error('Fehler beim Speichern der Person:', err);
-        this.showError('Fehler beim Speichern der Person.');
-      }
-    });
+    this.saveRequest$(dto)
+      .pipe(finalize(() => this.isSaving.set(false)))
+      .subscribe({
+        next: () => {
+          this.showSuccess('Person wurde erfolgreich gespeichert.');
+          this.router.navigate(['/person']);
+        },
+        error: (err) => {
+          console.error('Fehler beim Speichern der Person:', err);
+          this.showError('Fehler beim Speichern der Person.');
+        }
+      });
   }
 
   delete(): void {
-    if (this.personId() != null) {
-      this.personController.deletePersonById(this.personId()!).subscribe();
-      this.router.navigate(['/person']);
-    }
+    const id = this.personId();
+    if (!id || this.isSaving()) return;
+
+    this.dialog
+      .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: 'Person löschen',
+          message: 'Soll diese Person wirklich gelöscht werden?',
+          confirmLabel: 'Löschen'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.isSaving.set(true);
+          return this.personController.deletePersonById(id).pipe(finalize(() => this.isSaving.set(false)));
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.showSuccess('Person wurde gelöscht.');
+          this.router.navigate(['/person']);
+        },
+        error: (err) => {
+          console.error('Fehler beim Löschen der Person:', err);
+          this.showError('Fehler beim Löschen der Person.');
+        }
+      });
   }
 
   // -----------------------
