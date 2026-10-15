@@ -1,12 +1,10 @@
-import {AfterViewInit, Component, effect, inject, input, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatFooterCell,
-  MatFooterCellDef,
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow,
@@ -17,7 +15,6 @@ import {
   MatTableDataSource
 } from '@angular/material/table';
 import {PersonDto} from '../../../generated';
-import {Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
 
 @Component({
@@ -27,46 +24,44 @@ import {DatePipe} from '@angular/common';
     MatCell,
     MatCellDef,
     MatColumnDef,
-    MatFooterCell,
     MatHeaderCell,
+    MatHeaderCellDef,
     MatHeaderRow,
     MatHeaderRowDef,
     MatPaginator,
     MatRow,
     MatRowDef,
     MatSort,
-    MatTable,
-    MatHeaderCellDef,
-    MatFooterCellDef
+    MatSortHeader,
+    MatTable
   ],
   templateUrl: './person-list.component.html',
-  styleUrl: './person-list.component.css'
+  styleUrl: './person-list.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PersonListComponent  implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['name','vorname', 'geburtsdatum','ahvnummer'];
-  protected dataSource = new MatTableDataSource<PersonDto>([]);
-
-  private router = inject(Router);
-
+export class PersonListComponent implements AfterViewInit {
   readonly items = input.required<PersonDto[]>();
+  readonly personSelected = output<string>();
+
+  private readonly paginator = viewChild.required(MatPaginator);
+  private readonly sort = viewChild.required(MatSort);
+
+  protected readonly displayedColumns: string[] = ['name', 'vorname', 'geburtsdatum', 'ahvnummer'];
+  protected readonly dataSource = new MatTableDataSource<PersonDto>([]);
 
   constructor() {
-    // Bridge: Signal -> Imperative API von MatTableDataSource
+    // Bridge: Signal -> imperatives API von MatTableDataSource
     effect(() => {
-      const data = this.items(); // kein ?? [] nötig bei required
-      this.dataSource.data = data;
+      this.dataSource.data = this.items();
     });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator();
+    this.dataSource.sort = this.sort();
   }
 
-
-  selectRow(rowId: string) {
-    this.router.navigate(['/person/edit', rowId]);
+  protected selectRow(person: PersonDto): void {
+    if (person.id) this.personSelected.emit(person.id);
   }
 }

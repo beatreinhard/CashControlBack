@@ -6,8 +6,6 @@ import {VergabungComponent} from './domains/vergabung/vergabung/vergabung/vergab
 import {SchuldComponent} from './domains/schuld/schuld/schuld.component';
 import {SchuldEditComponent} from './domains/schuld/schuld-edit/schuld-edit.component';
 import {KostenComponent} from './domains/kosten/kosten/kosten.component';
-import {PersonComponent} from './domains/person/person/person.component';
-import {PersonEditComponent} from './domains/person/person-edit/person-edit.component';
 import {KostenEditComponent} from './domains/kosten/kosten-edit/kosten-edit.component';
 import {ReportingComponent} from './domains/reporting/reporting/reporting.component';
 
@@ -32,11 +30,6 @@ export const routes: Routes = [
     component: SchuldEditComponent,
   },
   { path: 'schuld/create', component: SchuldEditComponent },
-  { path: 'person',  component: PersonComponent },
-  {
-    path: 'person/edit/:personId',
-    component: PersonEditComponent,
-  },
-  { path: 'person/create', component: PersonEditComponent },
+  { path: 'person', loadChildren: () => import('./domains/person/person.routes').then(m => m.PERSON_ROUTES) },
   { path: 'reporting', component: ReportingComponent },
 ];

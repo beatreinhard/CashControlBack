@@ -1,9 +1,15 @@
+<mat-form-field class="search">
+  <mat-label>Suchen (Name, Vorname, AHV-Nummer)</mat-label>
+  <input matInput type="search" [value]="searchTerm()" (input)="onSearch($event)" />
+</mat-form-field>
+
 @if (loading()) {
   <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
 } @else if (error()) {
   <p class="error">{{ error() }}</p>
 } @else {
   <app-person-list
-    [items]="result()">
+    [items]="result()"
+    (personSelected)="openPerson($event)">
   </app-person-list>
 }

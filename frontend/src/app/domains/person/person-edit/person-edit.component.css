@@ -3,12 +3,6 @@
   margin: 0 auto;
 }
 
-.form-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .full-width {
   width: 100%;
 }

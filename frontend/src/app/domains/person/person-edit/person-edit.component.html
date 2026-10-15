@@ -14,63 +14,59 @@
       <!-- Name -->
       <mat-form-field class="full-width">
         <mat-label>Name</mat-label>
-        <input
-          matInput
-          formControlName="name"
-          placeholder="Name"
-        />
-
-        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
-          <mat-error>Name ist erforderlich</mat-error>
-        }
+        <input matInput formControlName="name" />
+        <mat-error>
+          @if (form.controls.name.hasError('required')) {
+            Name ist erforderlich
+          } @else if (form.controls.name.hasError('maxlength')) {
+            Maximal {{ maxTextLength }} Zeichen
+          }
+        </mat-error>
       </mat-form-field>
 
       <!-- Vorname -->
       <mat-form-field class="full-width">
         <mat-label>Vorname</mat-label>
-        <input
-          matInput
-          formControlName="vorname"
-          placeholder="Vorname"
-        />
-
-        @if (form.get('vorname')?.hasError('required') && form.get('vorname')?.touched) {
-          <mat-error>Vorname ist erforderlich</mat-error>
-        }
+        <input matInput formControlName="vorname" />
+        <mat-error>
+          @if (form.controls.vorname.hasError('required')) {
+            Vorname ist erforderlich
+          } @else if (form.controls.vorname.hasError('maxlength')) {
+            Maximal {{ maxTextLength }} Zeichen
+          }
+        </mat-error>
       </mat-form-field>
 
       <!-- Geburtsdatum -->
       <mat-form-field class="full-width">
         <mat-label>Geburtsdatum</mat-label>
-        <input
-          matInput
-          [matDatepicker]="picker"
-          formControlName="geburtsdatum"
-          placeholder="Geburtsdatum"
-        />
+        <input matInput [matDatepicker]="picker" formControlName="geburtsdatum" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-
-        @if (form.get('geburtsdatum')?.hasError('required') && form.get('geburtsdatum')?.touched) {
-          <mat-error>Geburtsdatum ist erforderlich</mat-error>
-        }
+        <mat-error>
+          @if (form.controls.geburtsdatum.hasError('matDatepickerParse')) {
+            Ungültiges Datum
+          } @else if (form.controls.geburtsdatum.hasError('required')) {
+            Geburtsdatum ist erforderlich
+          } @else if (form.controls.geburtsdatum.hasError('futureDate')) {
+            Geburtsdatum darf nicht in der Zukunft liegen
+          }
+        </mat-error>
       </mat-form-field>
 
       <!-- AHV-Nummer -->
       <mat-form-field class="full-width">
         <mat-label>AHV-Nummer</mat-label>
-        <input
-          matInput
-          formControlName="ahvnummer"
-          placeholder="AHV-Nummer"
-        />
+        <input matInput formControlName="ahvnummer" />
+        <mat-hint>Format: 756.1234.5678.90</mat-hint>
+        <mat-error>Format: 756.1234.5678.90</mat-error>
       </mat-form-field>
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <button mat-button type="button" [routerLink]="'/person'">
+      <a mat-button routerLink="/person">
         Abbrechen
-      </button>
+      </a>
       @if (isEditMode()) {
         <button mat-button type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
           Löschen
