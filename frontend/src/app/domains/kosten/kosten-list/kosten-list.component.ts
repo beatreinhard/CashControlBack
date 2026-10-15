@@ -1,11 +1,12 @@
-import {AfterViewInit, Component, effect, inject, input, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
+import {DecimalPipe} from '@angular/common';
+import {MatChip, MatChipSet} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatFooterCell,
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow,
@@ -16,65 +17,62 @@ import {
   MatTableDataSource
 } from '@angular/material/table';
 import {KostenViewDto} from '../../../generated';
-import {Router} from '@angular/router';
-import {MatChip, MatChipSet} from '@angular/material/chips';
+import {FullNamePipe} from '../../../shared/full-name.pipe';
 
 @Component({
   selector: 'app-kosten-list',
   imports: [
+    DecimalPipe,
+    FullNamePipe,
     MatCell,
     MatCellDef,
     MatChip,
     MatChipSet,
     MatColumnDef,
-    MatFooterCell,
     MatHeaderCell,
+    MatHeaderCellDef,
     MatHeaderRow,
     MatHeaderRowDef,
     MatPaginator,
     MatRow,
     MatRowDef,
     MatSort,
-    MatTable,
-    MatHeaderCellDef
+    MatSortHeader,
+    MatTable
   ],
   templateUrl: './kosten-list.component.html',
-  styleUrl: './kosten-list.component.css'
+  styleUrls: ['../../../shared/list-styles.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KostenListComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['jahr','art','zahlender','empfaenger','bemerkung','betrag'];
-  protected dataSource = new MatTableDataSource<KostenViewDto>([]);
-
-  private router = inject(Router);
-
   readonly items = input.required<KostenViewDto[]>();
-  // readonly error = signal<string | undefined>(undefined);
+  readonly kostenSelected = output<string>();
 
+  private readonly paginator = viewChild.required(MatPaginator);
+  private readonly sort = viewChild.required(MatSort);
+
+  protected readonly displayedColumns: string[] = ['jahr', 'art', 'zahlender', 'empfaenger', 'bemerkung', 'betrag'];
+  protected readonly dataSource = new MatTableDataSource<KostenViewDto>([]);
 
   constructor() {
-    // Bridge: Signal -> Imperative API von MatTableDataSource
+    // Sortierung nach angezeigtem Namen statt nach Personen-ID
+    this.dataSource.sortingDataAccessor = (row, column) =>
+      column === 'zahlender'
+        ? `${row.zahlenderName ?? ''} ${row.zahlenderVorname ?? ''}`.trim().toLowerCase()
+        : (row as unknown as Record<string, string | number>)[column];
+
+    // Bridge: Signal -> imperatives API von MatTableDataSource
     effect(() => {
-      const data = this.items(); // kein ?? [] nötig bei required
-      this.dataSource.data = data;
+      this.dataSource.data = this.items();
     });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator();
+    this.dataSource.sort = this.sort();
   }
 
-
-  selectRow(rowId: string) {
-    this.router.navigate(['/kosten/edit', rowId]);
-  }
-
-  zahlenderNameVorname(zahlenderName: string,  zahlenderVorname: string): string {
-    if (zahlenderName && zahlenderVorname) {
-      return zahlenderName + ' ' + zahlenderVorname;
-    }
-    return '';
+  protected selectRow(kosten: KostenViewDto): void {
+    if (kosten.id) this.kostenSelected.emit(kosten.id);
   }
 }

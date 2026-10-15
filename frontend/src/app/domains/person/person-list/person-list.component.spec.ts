@@ -27,7 +27,7 @@ describe('PersonListComponent', () => {
   });
 
   function rows(): HTMLElement[] {
-    return Array.from((fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('tr.person-row'));
+    return Array.from((fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('tr.clickable-row'));
   }
 
   it('zeigt eine Zeile pro Person', () => {

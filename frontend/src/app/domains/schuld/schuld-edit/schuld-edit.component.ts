@@ -1,21 +1,28 @@
-import {Component, computed, effect, inject, input, signal} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatButton} from '@angular/material/button';
+import {ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, signal} from '@angular/core';
+import {rxResource, takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAnchor, MatButton} from '@angular/material/button';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
-import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatError, MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatSelect} from '@angular/material/select';
-import {Observable} from 'rxjs';
-import {SchuldArtDto, SchuldControllerApi, SchuldDto} from '../../../generated';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router, RouterLink} from '@angular/router';
-import {HttpResponse} from '@angular/common/http';
+import {filter, finalize, Observable, switchMap} from 'rxjs';
+import {SchuldArtDto, SchuldControllerApi, SchuldDto} from '../../../generated';
+import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm-dialog/confirm-dialog.component';
+import {NotificationService} from '../../../shared/notification.service';
+import {MIN_YEAR} from '../../../shared/year-filter/year-filter.component';
+
+const MAX_TEXT_LENGTH = 255;
 
 type SchuldForm = FormGroup<{
-  jahr: FormControl<number>;
-  glaeubiger: FormControl<string>;
+  jahr: FormControl<number | null>;
   art: FormControl<SchuldArtDto | null>;
-  text: FormControl<string | null>;
+  glaeubiger: FormControl<string>;
+  text: FormControl<string>;
   betrag: FormControl<number | null>;
   zinsen: FormControl<number | null>;
 }>;
@@ -23,7 +30,7 @@ type SchuldForm = FormGroup<{
 @Component({
   selector: 'app-schuld-edit',
   imports: [
-    FormsModule,
+    MatAnchor,
     MatButton,
     MatCard,
     MatCardActions,
@@ -34,70 +41,112 @@ type SchuldForm = FormGroup<{
     MatInput,
     MatLabel,
     MatOption,
+    MatProgressBar,
     MatSelect,
     MatSuffix,
     ReactiveFormsModule,
     RouterLink
   ],
   templateUrl: './schuld-edit.component.html',
-  styleUrl: './schuld-edit.component.css'
+  styleUrl: './schuld-edit.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SchuldEditComponent {
   /** undefined/null => Create, string => Edit */
   readonly schuldId = input<string | null>(null);
-  // private schuldId: string | undefined = undefined;
 
   private readonly fb = inject(FormBuilder);
   private readonly schuldController = inject(SchuldControllerApi);
   private readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Lädt die Schuld im Edit-Modus; bei schuldId == null bleibt die Resource idle. */
+  private readonly schuldResource = rxResource({
+    request: () => this.schuldId() ?? undefined,
+    loader: ({ request: id }) => this.schuldController.getSchuldById(id)
+  });
 
   protected readonly artValues = Object.values(SchuldArtDto);
 
-  protected readonly isLoading = signal(false);
-  protected readonly loadError = signal<string | null>(null);
+  protected readonly isLoading = this.schuldResource.isLoading;
+  protected readonly isSaving = signal(false);
+  protected readonly loadError = computed(() =>
+    this.schuldResource.error() ? 'Die Schuld konnte nicht geladen werden.' : null
+  );
 
   protected readonly isEditMode = computed(() => !!this.schuldId());
-
   protected readonly title = computed(() => (this.isEditMode() ? 'Schuld bearbeiten' : 'Neue Schuld erfassen'));
 
-  private readonly snackBar = inject(MatSnackBar);
+  protected readonly minYear = MIN_YEAR;
+  protected readonly maxTextLength = MAX_TEXT_LENGTH;
   protected readonly form: SchuldForm = this.buildForm();
 
   constructor() {
-    effect(() => this.handleIdChange(this.schuldId()));
+    // Bridge: Resource-Signal -> imperatives Reactive-Forms-API
+    effect(() => {
+      if (!this.schuldId()) {
+        this.resetFormForCreate();
+        return;
+      }
+      const schuld = this.schuldResource.value();
+      if (schuld) this.resetFormFromDto(schuld);
+    });
   }
 
   save(): void {
-    console.log('save');
+    if (this.isSaving()) return;
     if (this.form.invalid) {
-      this.markFormTouched();
+      this.form.markAllAsTouched();
       return;
     }
 
     const dto = this.buildDtoFromForm();
-    const request$ = this.saveRequest$(dto);
+    this.isSaving.set(true);
 
-    request$.subscribe({
-      next: (result) => {
-        console.log('Schuld gespeichert', result);
-        if (result instanceof HttpResponse) {
-          console.log(result.body);
-        }
-        this.showSuccess('Schuld wurde erfolgreich gespeichert.');
-        // optional: Navigation / Reset / Emit
-      },
-      error: (err) => {
-        console.error('Fehler beim Speichern der Schuld:', err);
-        this.showError('Fehler beim Speichern der Schuld.');
-      }
-    });
+    this.saveRequest$(dto)
+      .pipe(
+        finalize(() => this.isSaving.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.notification.success('Schuld wurde erfolgreich gespeichert.');
+          this.router.navigate(['/schuld']);
+        },
+        error: () => this.notification.error('Fehler beim Speichern der Schuld.')
+      });
   }
 
   delete(): void {
-    if (this.schuldId() != null) {
-      this.schuldController.deleteSchuldById(this.schuldId()!).subscribe();
-      this.router.navigate(['/schuld']);
-    }
+    const id = this.schuldId();
+    if (!id || this.isSaving()) return;
+
+    this.dialog
+      .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: 'Schuld löschen',
+          message: 'Soll diese Schuld wirklich gelöscht werden?',
+          confirmLabel: 'Löschen'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.isSaving.set(true);
+          return this.schuldController.deleteSchuldById(id).pipe(finalize(() => this.isSaving.set(false)));
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.notification.success('Schuld wurde gelöscht.');
+          this.router.navigate(['/schuld']);
+        },
+        error: () => this.notification.error('Fehler beim Löschen der Schuld.')
+      });
   }
 
   // -----------------------
@@ -106,68 +155,32 @@ export class SchuldEditComponent {
 
   private buildForm(): SchuldForm {
     return this.fb.group({
-      jahr: this.fb.control<number>(this.defaultYear(), {
-        nonNullable: true,
-        validators: [Validators.required, Validators.min(2000)]
-      }),
-      glaeubiger: this.fb.control<string>('', {
-        nonNullable: true,
-        validators: [Validators.required]
-      }),
-      text: this.fb.control<string | null>(null),
-      art: this.fb.control<SchuldArtDto | null>(null, {
-        validators: [Validators.required]
-      }),
-      betrag: this.fb.control<number | null>(null, {
-        validators: [Validators.required, Validators.min(0.01)]
-      }),
-      zinsen: this.fb.control<number | null>(null, {
-        validators: [Validators.min(0)]
-      })
+      jahr: this.fb.control<number | null>(this.defaultYear(), [Validators.required, Validators.min(MIN_YEAR)]),
+      art: this.fb.control<SchuldArtDto | null>(null, [Validators.required]),
+      glaeubiger: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(MAX_TEXT_LENGTH)]),
+      text: this.fb.nonNullable.control('', [Validators.maxLength(MAX_TEXT_LENGTH)]),
+      betrag: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
+      zinsen: this.fb.control<number | null>(null, [Validators.min(0)])
     });
   }
 
-  private handleIdChange(id: string | null): void {
-    if (!id) {
-      this.resetFormForCreate();
-      return;
-    }
-    this.loadForEdit(id);
-  }
-
   private resetFormForCreate(): void {
-    this.loadError.set(null);
     this.form.reset({
       jahr: this.defaultYear(),
-      glaeubiger: '',
       art: null,
-      text: null,
+      glaeubiger: '',
+      text: '',
       betrag: null,
       zinsen: null
     });
   }
 
-  private loadForEdit(id: string): void {
-    this.setLoading(true);
-    this.schuldController.getSchuldById(id).subscribe({
-      next: (schuld) => {
-        this.patchFormFromDto(schuld);
-        this.setLoading(false);
-      },
-      error: (err) => {
-        console.error('Fehler beim Laden der Schuld', err);
-        this.loadError.set('Die Schuld konnte nicht geladen werden.');
-        this.setLoading(false);
-      }
-    });
-  }
-
-  private patchFormFromDto(schuld: SchuldDto): void {
-    this.form.patchValue({
+  private resetFormFromDto(schuld: SchuldDto): void {
+    this.form.reset({
       jahr: schuld.jahr ?? this.defaultYear(),
-      glaeubiger: schuld.glaeubiger ?? '',
       art: schuld.art ?? null,
-      text: schuld.text ?? null,
+      glaeubiger: schuld.glaeubiger ?? '',
+      text: schuld.text ?? '',
       betrag: schuld.betrag ?? null,
       zinsen: schuld.zinsen ?? null
     });
@@ -177,14 +190,14 @@ export class SchuldEditComponent {
     const raw = this.form.getRawValue();
 
     return {
-      jahr: raw.jahr,
-      glaeubiger: raw.glaeubiger,
+      id: this.schuldId() ?? undefined,
+      // required-Validatoren garantieren Jahr, Art und Betrag
+      jahr: raw.jahr!,
       art: raw.art!,
+      glaeubiger: raw.glaeubiger.trim(),
+      text: raw.text.trim() || undefined,
       betrag: Number(raw.betrag),
-      text: raw.text ?? undefined,
-      // falls null/undefined => nicht mitschicken (oder auf null setzen, je nach Backend)
-      zinsen: raw.zinsen == null ? undefined : Number(raw.zinsen),
-      id: this.schuldId() ?? undefined
+      zinsen: raw.zinsen == null ? undefined : Number(raw.zinsen)
     };
   }
 
@@ -193,34 +206,7 @@ export class SchuldEditComponent {
     return id ? this.schuldController.updateSchuld(id, dto) : this.schuldController.createSchuld(dto);
   }
 
-  private markFormTouched(): void {
-    this.form.markAllAsTouched();
-  }
-
-  private setLoading(isLoading: boolean): void {
-    this.isLoading.set(isLoading);
-    if (isLoading) this.loadError.set(null);
-  }
-
   private defaultYear(): number {
     return new Date().getFullYear();
-  }
-
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'OK', {
-      duration: 3000,
-      panelClass: ['snackbar-success'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
-  }
-
-  private showError(message: string): void {
-    this.snackBar.open(message, 'Schließen', {
-      duration: 5000,
-      panelClass: ['snackbar-error'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
   }
 }

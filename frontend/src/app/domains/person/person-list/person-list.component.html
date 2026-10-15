@@ -28,7 +28,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
       mat-row
-      class="person-row"
+      class="clickable-row"
       *matRowDef="let row; columns: displayedColumns;"
       tabindex="0"
       [attr.aria-label]="'Person ' + row.vorname + ' ' + row.name + ' bearbeiten'"

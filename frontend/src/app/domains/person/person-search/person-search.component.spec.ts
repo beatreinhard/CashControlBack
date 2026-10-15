@@ -41,7 +41,7 @@ describe('PersonSearchComponent', () => {
   }
 
   function rows(): HTMLElement[] {
-    return Array.from(element().querySelectorAll<HTMLElement>('tr.person-row'));
+    return Array.from(element().querySelectorAll<HTMLElement>('tr.clickable-row'));
   }
 
   function search(term: string): void {

@@ -1,14 +1,13 @@
-.schuld-form {
+.edit-form {
   max-width: 600px;
   margin: 0 auto;
 }
 
-.form-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .full-width {
   width: 100%;
+}
+
+.error {
+  color: #b00020;
+  margin: 8px 0 16px;
 }

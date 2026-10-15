@@ -1,23 +1,26 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
+import {provideRouter} from '@angular/router';
+import {provideNoopAnimations} from '@angular/platform-browser/animations';
+import {of} from 'rxjs';
 
 import {SchuldComponent} from './schuld.component';
+import {SchuldControllerApi} from '../../../generated';
 
 describe('SchuldComponent', () => {
-  let component: SchuldComponent;
-  let fixture: ComponentFixture<SchuldComponent>;
+  it('zeigt Suche und einen Link zum Erfassen', async () => {
+    const api = jasmine.createSpyObj<SchuldControllerApi>('SchuldControllerApi', ['getSchulden']);
+    api.getSchulden.and.returnValue(of([]) as never);
 
-  beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SchuldComponent]
-    })
-    .compileComponents();
+      imports: [SchuldComponent],
+      providers: [provideRouter([]), provideNoopAnimations(), { provide: SchuldControllerApi, useValue: api }]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(SchuldComponent);
-    component = fixture.componentInstance;
+    const fixture = TestBed.createComponent(SchuldComponent);
     fixture.detectChanges();
-  });
+    const element = fixture.nativeElement as HTMLElement;
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(element.querySelector('app-schuld-search')).not.toBeNull();
+    expect(element.querySelector('a[href="/schuld/create"]')?.textContent).toContain('Schuld erfassen');
   });
 });

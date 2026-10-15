@@ -1,49 +1,61 @@
-import {Component, computed, effect, inject, input, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, signal} from '@angular/core';
+import {rxResource, takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AusgabeControllerApi, AusgabeDto, AusgabeKategorieDto, PersonControllerApi} from '../../../generated';
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {format, parseISO} from 'date-fns';
-import {catchError, map, Observable, of} from 'rxjs';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatAnchor, MatButton} from '@angular/material/button';
+import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
+import {MatOption} from '@angular/material/core';
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import {MatDialog} from '@angular/material/dialog';
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {MatSelect} from '@angular/material/select';
 import {Router, RouterLink} from '@angular/router';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {filter, finalize, Observable, switchMap} from 'rxjs';
+import {AusgabeControllerApi, AusgabeDto, AusgabeKategorieDto} from '../../../generated';
+import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm-dialog/confirm-dialog.component';
+import {NotificationService} from '../../../shared/notification.service';
+import {parseBackendDate, toBackendDate} from '../../../shared/date-utils';
+import {injectPersonOptions} from '../../../shared/person-options';
+
+const MAX_TEXT_LENGTH = 255;
 
 type AusgabeForm = FormGroup<{
   datum: FormControl<Date | null>;
-  empfaenger: FormControl<string | null>;
   zahlender: FormControl<string | null>;
+  empfaenger: FormControl<string>;
   kategorie: FormControl<AusgabeKategorieDto | null>;
-  text: FormControl<string | null>;
+  text: FormControl<string>;
   betrag: FormControl<number | null>;
-  personSelect: FormControl<string | null>;
 }>;
-
-interface Zahlender {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-ausgabe-edit',
   imports: [
+    MatAnchor,
+    MatButton,
+    MatCard,
+    MatCardActions,
+    MatCardContent,
+    MatCardTitle,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatError,
+    MatFormField,
+    MatHint,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatProgressBar,
+    MatSelect,
+    MatSuffix,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatIconModule,
-    MatCardModule,
-    MatSelectModule,
-    MatButtonModule,
     RouterLink
   ],
   templateUrl: './ausgabe-edit.component.html',
-  styleUrl: './ausgabe-edit.component.css'
+  styleUrl: './ausgabe-edit.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AusgabeEditComponent {
   /** undefined/null => Create, string => Edit */
@@ -51,69 +63,99 @@ export class AusgabeEditComponent {
 
   private readonly fb = inject(FormBuilder);
   private readonly ausgabeController = inject(AusgabeControllerApi);
-  private readonly personController:PersonControllerApi = inject(PersonControllerApi);
   private readonly router = inject(Router);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly notification = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Lädt die Ausgabe im Edit-Modus; bei ausgabeId == null bleibt die Resource idle. */
+  private readonly ausgabeResource = rxResource({
+    request: () => this.ausgabeId() ?? undefined,
+    loader: ({ request: id }) => this.ausgabeController.getAusgabeById(id)
+  });
+
+  private readonly personOptions = injectPersonOptions();
 
   protected readonly kategorien = Object.values(AusgabeKategorieDto);
+  protected readonly zahlender = this.personOptions.options;
 
-  protected readonly isLoading = signal(false);
-  protected readonly loadError = signal<string | null>(null);
+  protected readonly isLoading = this.ausgabeResource.isLoading;
+  protected readonly isSaving = signal(false);
+  protected readonly loadError = computed(() =>
+    this.ausgabeResource.error() ? 'Die Ausgabe konnte nicht geladen werden.' : null
+  );
+  protected readonly zahlenderError = this.personOptions.error;
 
   protected readonly isEditMode = computed(() => !!this.ausgabeId());
   protected readonly title = computed(() => (this.isEditMode() ? 'Ausgabe bearbeiten' : 'Neue Ausgabe erfassen'));
 
+  protected readonly maxTextLength = MAX_TEXT_LENGTH;
   protected readonly form: AusgabeForm = this.buildForm();
 
-  protected readonly zahlender = toSignal(
-    this.personController.getAllPerson().pipe(
-      map((persons) =>
-        persons.map((p) => ({
-          value: String(p.id),
-          viewValue: `${p.name} ${p.vorname}`.trim(),
-        }))
-      ),
-      catchError(() => {
-        this.loadError.set('Personen konnten nicht geladen werden.');
-        return of([] as Zahlender[]);
-      })
-    ),
-    { initialValue: [] as Zahlender[] }
-  );
-
-
   constructor() {
-    effect(() => this.handleIdChange(this.ausgabeId()));
+    // Bridge: Resource-Signal -> imperatives Reactive-Forms-API
+    effect(() => {
+      if (!this.ausgabeId()) {
+        this.resetFormForCreate();
+        return;
+      }
+      const ausgabe = this.ausgabeResource.value();
+      if (ausgabe) this.resetFormFromDto(ausgabe);
+    });
   }
 
   save(): void {
+    if (this.isSaving()) return;
     if (this.form.invalid) {
-      this.markFormTouched();
+      this.form.markAllAsTouched();
       return;
     }
 
     const dto = this.buildDtoFromForm();
-    const request$ = this.saveRequest$(dto);
+    this.isSaving.set(true);
 
-    request$.subscribe({
-      next: (result) => {
-        console.log('Ausgabe gespeichert:', result);
-        this.showSuccess('Ausgabe wurde erfolgreich gespeichert.');
-        // optional: Navigation / Reset / Emit
-      },
-      error: (err) => {
-        console.error('Fehler beim Speichern der Ausgabe:', err);
-        this.showError('Fehler beim Speichern der Ausgabe.');
-      }
-    });
+    this.saveRequest$(dto)
+      .pipe(
+        finalize(() => this.isSaving.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.notification.success('Ausgabe wurde erfolgreich gespeichert.');
+          this.router.navigate(['/ausgabe']);
+        },
+        error: () => this.notification.error('Fehler beim Speichern der Ausgabe.')
+      });
   }
 
   delete(): void {
-    if (this.ausgabeId() != null) {
-      console.log('Ausgabe gelöscht');
-      this.ausgabeController.deleteAusgabeById(this.ausgabeId()!).subscribe();
-      this.router.navigate(['/ausgabe']);
-    }
+    const id = this.ausgabeId();
+    if (!id || this.isSaving()) return;
+
+    this.dialog
+      .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: 'Ausgabe löschen',
+          message: 'Soll diese Ausgabe wirklich gelöscht werden?',
+          confirmLabel: 'Löschen'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.isSaving.set(true);
+          return this.ausgabeController.deleteAusgabeById(id).pipe(finalize(() => this.isSaving.set(false)));
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.notification.success('Ausgabe wurde gelöscht.');
+          this.router.navigate(['/ausgabe']);
+        },
+        error: () => this.notification.error('Fehler beim Löschen der Ausgabe.')
+      });
   }
 
   // -----------------------
@@ -122,60 +164,33 @@ export class AusgabeEditComponent {
 
   private buildForm(): AusgabeForm {
     return this.fb.group({
-      datum: this.fb.control<Date | null>(null, { validators: [Validators.required] }),
+      datum: this.fb.control<Date | null>(null, [Validators.required]),
       zahlender: this.fb.control<string | null>(null),
-      empfaenger: this.fb.control<string | null>(null, { validators: [Validators.required] }),
-      kategorie: this.fb.control<AusgabeKategorieDto | null>(null, { validators: [Validators.required] }),
-      text: this.fb.control<string | null>(null),
-      betrag: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] }),
-      personSelect: this.fb.control<string | null>(null),
+      empfaenger: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(MAX_TEXT_LENGTH)]),
+      kategorie: this.fb.control<AusgabeKategorieDto | null>(null, [Validators.required]),
+      text: this.fb.nonNullable.control('', [Validators.maxLength(MAX_TEXT_LENGTH)]),
+      betrag: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)])
     });
-  }
-
-  private handleIdChange(id: string | null): void {
-    if (!id) {
-      this.resetFormForCreate();
-      return;
-    }
-    this.loadForEdit(id);
   }
 
   private resetFormForCreate(): void {
-    this.loadError.set(null);
     this.form.reset({
       datum: null,
       zahlender: null,
-      empfaenger: undefined,
+      empfaenger: '',
       kategorie: null,
-      text: null,
-      betrag: null,
-      personSelect: null
+      text: '',
+      betrag: null
     });
   }
 
-  private loadForEdit(id: string): void {
-    this.setLoading(true);
-
-    this.ausgabeController.getAusgabeById(id).subscribe({
-      next: (ausgabe) => {
-        this.patchFormFromDto(ausgabe);
-        this.setLoading(false);
-      },
-      error: (err) => {
-        console.error('Fehler beim Laden der Ausgabe', err);
-        this.loadError.set('Die Ausgabe konnte nicht geladen werden.');
-        this.setLoading(false);
-      }
-    });
-  }
-
-  private patchFormFromDto(ausgabe: AusgabeDto): void {
-    this.form.patchValue({
-      datum: this.parseBackendDate(ausgabe.datum),
+  private resetFormFromDto(ausgabe: AusgabeDto): void {
+    this.form.reset({
+      datum: parseBackendDate(ausgabe.datum),
       zahlender: ausgabe.zahlender ?? null,
       empfaenger: ausgabe.empfaenger ?? '',
       kategorie: ausgabe.kategorie ?? null,
-      text: ausgabe.text ?? null,
+      text: ausgabe.text ?? '',
       betrag: ausgabe.betrag ?? null
     });
   }
@@ -184,54 +199,19 @@ export class AusgabeEditComponent {
     const raw = this.form.getRawValue();
 
     return {
-      datum: this.toBackendDate(raw.datum) ?? '',
+      id: this.ausgabeId() ?? undefined,
+      // required-Validatoren garantieren Datum, Kategorie und Betrag
+      datum: toBackendDate(raw.datum)!,
       zahlender: raw.zahlender ?? undefined,
-      empfaenger: raw.empfaenger ?? '',
+      empfaenger: raw.empfaenger.trim(),
       kategorie: raw.kategorie!,
-      text: raw.text ?? '',
-      betrag: Number(raw.betrag),
-      id: this.ausgabeId() ?? undefined
+      text: raw.text.trim(),
+      betrag: Number(raw.betrag)
     };
   }
 
   private saveRequest$(dto: AusgabeDto): Observable<unknown> {
     const id = this.ausgabeId();
     return id ? this.ausgabeController.updateAusgabe(id, dto) : this.ausgabeController.createAusgabe(dto);
-  }
-
-  private markFormTouched(): void {
-    this.form.markAllAsTouched();
-  }
-
-  private setLoading(isLoading: boolean): void {
-    this.isLoading.set(isLoading);
-    if (isLoading) this.loadError.set(null);
-  }
-
-  private parseBackendDate(value?: string | null): Date | null {
-    return value ? parseISO(value) : null;
-  }
-
-  private toBackendDate(date: Date | null): string | undefined {
-    if (!date) return undefined;
-    return format(date, 'yyyy-MM-dd');
-  }
-
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'OK', {
-      duration: 3000,
-      panelClass: ['snackbar-success'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
-  }
-
-  private showError(message: string): void {
-    this.snackBar.open(message, 'Schließen', {
-      duration: 5000,
-      panelClass: ['snackbar-error'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
   }
 }

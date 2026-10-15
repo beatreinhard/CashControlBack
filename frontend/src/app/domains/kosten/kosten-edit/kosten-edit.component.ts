@@ -1,35 +1,37 @@
-import {Component, computed, effect, inject, input, signal} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {KostenArtDto, KostenControllerApi, KostenDto, PersonControllerApi} from '../../../generated';
-import {Router, RouterLink} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {catchError, map, Observable, of} from 'rxjs';
-import {MatButton} from '@angular/material/button';
+import {ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, signal} from '@angular/core';
+import {rxResource, takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAnchor, MatButton} from '@angular/material/button';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
-import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatSelect} from '@angular/material/select';
+import {Router, RouterLink} from '@angular/router';
+import {filter, finalize, Observable, switchMap} from 'rxjs';
+import {KostenArtDto, KostenControllerApi, KostenDto} from '../../../generated';
+import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm-dialog/confirm-dialog.component';
+import {NotificationService} from '../../../shared/notification.service';
+import {injectPersonOptions} from '../../../shared/person-options';
+import {MIN_YEAR} from '../../../shared/year-filter/year-filter.component';
+
+const MAX_TEXT_LENGTH = 255;
 
 type KostenForm = FormGroup<{
   jahr: FormControl<number | null>;
   art: FormControl<KostenArtDto | null>;
   zahlender: FormControl<string | null>;
-  empfaenger: FormControl<string | null>;
-  bemerkung: FormControl<string | null>;
+  empfaenger: FormControl<string>;
+  bemerkung: FormControl<string>;
   betrag: FormControl<number | null>;
-  personSelect: FormControl<string | null>;
 }>;
-
-interface Zahlender {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-kosten-edit',
   imports: [
-    FormsModule,
+    MatAnchor,
     MatButton,
     MatCard,
     MatCardActions,
@@ -37,16 +39,19 @@ interface Zahlender {
     MatCardTitle,
     MatError,
     MatFormField,
+    MatHint,
     MatInput,
     MatLabel,
     MatOption,
+    MatProgressBar,
     MatSelect,
     MatSuffix,
     ReactiveFormsModule,
     RouterLink
   ],
   templateUrl: './kosten-edit.component.html',
-  styleUrl: './kosten-edit.component.css'
+  styleUrl: './kosten-edit.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KostenEditComponent {
   /** undefined/null => Create, string => Edit */
@@ -54,70 +59,115 @@ export class KostenEditComponent {
 
   private readonly fb = inject(FormBuilder);
   private readonly kostenController = inject(KostenControllerApi);
-  private readonly personController:PersonControllerApi = inject(PersonControllerApi);
   private readonly router = inject(Router);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly notification = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Lädt die Kosten im Edit-Modus; bei kostenId == null bleibt die Resource idle. */
+  private readonly kostenResource = rxResource({
+    request: () => this.kostenId() ?? undefined,
+    loader: ({ request: id }) => this.kostenController.getKostenById(id)
+  });
+
+  private readonly personOptions = injectPersonOptions();
 
   protected readonly kostenArten = Object.values(KostenArtDto);
+  protected readonly zahlender = this.personOptions.options;
+  protected readonly zahlenderError = this.personOptions.error;
 
-  protected readonly isLoading = signal(false);
-  protected readonly loadError = signal<string | null>(null);
-  protected readonly hasAusgabe = signal(true);
+  protected readonly isLoading = this.kostenResource.isLoading;
+  protected readonly isSaving = signal(false);
+  protected readonly loadError = computed(() =>
+    this.kostenResource.error() ? 'Die Kosten konnten nicht geladen werden.' : null
+  );
+
+  /** Kosten, die aus einer Ausgabe entstanden sind, werden über die Ausgabe gepflegt. */
+  protected readonly hasAusgabe = computed(() => !!this.kostenResource.value()?.ausgabeId);
+  /** Im Edit-Modus erst nach dem Laden bearbeitbar. */
+  protected readonly isReadOnly = computed(() =>
+    this.hasAusgabe() || (this.isEditMode() && !this.kostenResource.value())
+  );
 
   protected readonly isEditMode = computed(() => !!this.kostenId());
   protected readonly title = computed(() => (this.isEditMode() ? 'Kosten bearbeiten' : 'Neue Kosten erfassen'));
 
+  protected readonly minYear = MIN_YEAR;
+  protected readonly maxTextLength = MAX_TEXT_LENGTH;
   protected readonly form: KostenForm = this.buildForm();
 
-  protected readonly zahlender = toSignal(
-    this.personController.getAllPerson().pipe(
-      map((persons) =>
-        persons.map((p) => ({
-          value: String(p.id),
-          viewValue: `${p.name} ${p.vorname}`.trim(),
-        }))
-      ),
-      catchError(() => {
-        this.loadError.set('Personen konnten nicht geladen werden.');
-        return of([] as Zahlender[]);
-      })
-    ),
-    { initialValue: [] as Zahlender[] }
-  );
-
-
   constructor() {
-    effect(() => this.handleIdChange(this.kostenId()));
-  }
+    // Bridge: Resource-Signal -> imperatives Reactive-Forms-API
+    effect(() => {
+      if (!this.kostenId()) {
+        this.resetFormForCreate();
+        return;
+      }
+      const kosten = this.kostenResource.value();
+      if (kosten) this.resetFormFromDto(kosten);
+    });
 
-  save(): void {
-    if (this.form.invalid) {
-      this.markFormTouched();
-      return;
-    }
-
-    const dto = this.buildDtoFromForm();
-    const request$ = this.saveRequest$(dto);
-
-    request$.subscribe({
-      next: (result) => {
-        console.log('Kosten gespeichert:', result);
-        this.showSuccess('Kosten wurde erfolgreich gespeichert.');
-        // optional: Navigation / Reset / Emit
-      },
-      error: (err) => {
-        console.error('Fehler beim Speichern der Kosten:', err);
-        this.showError('Fehler beim Speichern der Kosten.');
+    effect(() => {
+      if (this.hasAusgabe()) {
+        this.form.disable();
+      } else {
+        this.form.enable();
       }
     });
   }
 
-  delete(): void {
-    if (this.kostenId() != null) {
-      console.log('Kosten gelöscht');
-      this.kostenController.deleteKostenById(this.kostenId()!).subscribe();
-      this.router.navigate(['/kosten']);
+  save(): void {
+    if (this.isSaving() || this.isReadOnly()) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
+
+    const dto = this.buildDtoFromForm();
+    this.isSaving.set(true);
+
+    this.saveRequest$(dto)
+      .pipe(
+        finalize(() => this.isSaving.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.notification.success('Kosten wurden erfolgreich gespeichert.');
+          this.router.navigate(['/kosten']);
+        },
+        error: () => this.notification.error('Fehler beim Speichern der Kosten.')
+      });
+  }
+
+  delete(): void {
+    const id = this.kostenId();
+    if (!id || this.isSaving() || this.isReadOnly()) return;
+
+    this.dialog
+      .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: 'Kosten löschen',
+          message: 'Sollen diese Kosten wirklich gelöscht werden?',
+          confirmLabel: 'Löschen'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.isSaving.set(true);
+          return this.kostenController.deleteKostenById(id).pipe(finalize(() => this.isSaving.set(false)));
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.notification.success('Kosten wurden gelöscht.');
+          this.router.navigate(['/kosten']);
+        },
+        error: () => this.notification.error('Fehler beim Löschen der Kosten.')
+      });
   }
 
   // -----------------------
@@ -126,66 +176,33 @@ export class KostenEditComponent {
 
   private buildForm(): KostenForm {
     return this.fb.group({
-      jahr: this.fb.control<number | null>(null, { validators: [Validators.required] }),
-      art: this.fb.control<KostenArtDto | null>(null, { validators: [Validators.required] }),
+      jahr: this.fb.control<number | null>(new Date().getFullYear(), [Validators.required, Validators.min(MIN_YEAR)]),
+      art: this.fb.control<KostenArtDto | null>(null, [Validators.required]),
       zahlender: this.fb.control<string | null>(null),
-      empfaenger: this.fb.control<string | null>(null, { validators: [Validators.required] }),
-      bemerkung: this.fb.control<string | null>(null),
-      betrag: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] }),
-      personSelect: this.fb.control<string | null>(null),
+      empfaenger: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(MAX_TEXT_LENGTH)]),
+      bemerkung: this.fb.nonNullable.control('', [Validators.maxLength(MAX_TEXT_LENGTH)]),
+      betrag: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)])
     });
-  }
-
-  private handleIdChange(id: string | null): void {
-    if (!id) {
-      this.resetFormForCreate();
-      return;
-    }
-    this.loadForEdit(id);
   }
 
   private resetFormForCreate(): void {
-    this.hasAusgabe.set(false);
-    this.loadError.set(null);
     this.form.reset({
-      jahr: null,
+      jahr: new Date().getFullYear(),
       art: null,
       zahlender: null,
-      empfaenger: null,
-      bemerkung: null,
-      betrag: null,
-      personSelect: null
+      empfaenger: '',
+      bemerkung: '',
+      betrag: null
     });
   }
 
-  private loadForEdit(id: string): void {
-    this.setLoading(true);
-
-    this.kostenController.getKostenById(id).subscribe({
-      next: (kosten) => {
-        this.patchFormFromDto(kosten);
-        this.setLoading(false);
-        if (kosten.ausgabeId != undefined) {
-          this.hasAusgabe.set(true);
-        } else {
-          this.hasAusgabe.set(false);
-        }
-      },
-      error: (err) => {
-        console.error('Fehler beim Laden der Kosten', err);
-        this.loadError.set('Die Kosten konnte nicht geladen werden.');
-        this.setLoading(false);
-      }
-    });
-  }
-
-  private patchFormFromDto(kosten: KostenDto): void {
-    this.form.patchValue({
+  private resetFormFromDto(kosten: KostenDto): void {
+    this.form.reset({
       jahr: kosten.jahr,
       art: kosten.art,
-      zahlender: kosten.zahlender ?? null,
-      empfaenger: kosten.empfaenger ?? null,
-      bemerkung: kosten.bemerkung ?? null,
+      zahlender: kosten.zahlender || null,
+      empfaenger: kosten.empfaenger ?? '',
+      bemerkung: kosten.bemerkung ?? '',
       betrag: kosten.betrag ?? null
     });
   }
@@ -194,11 +211,14 @@ export class KostenEditComponent {
     const raw = this.form.getRawValue();
 
     return {
+      id: this.kostenId() ?? undefined,
+      // required-Validatoren garantieren Jahr, Art und Betrag
       jahr: raw.jahr!,
       art: raw.art!,
-      empfaenger: raw.empfaenger ?? '',
+      empfaenger: raw.empfaenger.trim(),
+      // Pflichtfeld im API-Vertrag; leer = kein Zahlender
       zahlender: raw.zahlender ?? '',
-      bemerkung: raw.bemerkung ?? '',
+      bemerkung: raw.bemerkung.trim() || undefined,
       betrag: Number(raw.betrag)
     };
   }
@@ -206,32 +226,5 @@ export class KostenEditComponent {
   private saveRequest$(dto: KostenDto): Observable<unknown> {
     const id = this.kostenId();
     return id ? this.kostenController.updateKosten(id, dto) : this.kostenController.createKosten(dto);
-  }
-
-  private setLoading(isLoading: boolean): void {
-    this.isLoading.set(isLoading);
-    if (isLoading) this.loadError.set(null);
-  }
-
-  private markFormTouched(): void {
-    this.form.markAllAsTouched();
-  }
-
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'OK', {
-      duration: 3000,
-      panelClass: ['snackbar-success'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
-  }
-
-  private showError(message: string): void {
-    this.snackBar.open(message, 'Schließen', {
-      duration: 5000,
-      panelClass: ['snackbar-error'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
   }
 }

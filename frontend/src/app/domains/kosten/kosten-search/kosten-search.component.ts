@@ -1,76 +1,43 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {KostenControllerApi, KostenViewDto} from '../../../generated';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
+import {rxResource} from '@angular/core/rxjs-interop';
+import {Router} from '@angular/router';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {KostenControllerApi} from '../../../generated';
 import {KostenListComponent} from '../kosten-list/kosten-list.component';
-import {MatButton} from '@angular/material/button';
-import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
-import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
 
 @Component({
   selector: 'app-kosten-search',
   imports: [
-    MatProgressSpinner,
     KostenListComponent,
-    MatButton,
-    MatCard,
-    MatCardActions,
-    MatCardContent,
-    MatCardTitle,
-    MatError,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    ReactiveFormsModule
+    MatProgressSpinner,
+    YearFilterComponent
   ],
   templateUrl: './kosten-search.component.html',
-  styleUrl: './kosten-search.component.css'
+  styleUrl: './kosten-search.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KostenSearchComponent implements OnInit {
-  private readonly fb = inject(FormBuilder);
-  readonly loading = signal(true);
-  readonly error = signal<string | undefined>("");
-  readonly result = signal<KostenViewDto[]>([]);
+export class KostenSearchComponent {
 
-  protected kostenController = inject(KostenControllerApi);
+  private readonly kostenController = inject(KostenControllerApi);
+  private readonly router = inject(Router);
 
-  // typisiertes FormGroup
-  protected readonly form: FormGroup<{
-    jahr: FormControl<number | null>;
-  }>;
+  /** Gewähltes Jahr; undefined => alle Jahre. */
+  protected readonly jahr = signal<number | undefined>(undefined);
 
-  constructor() {
-    this.form = this.fb.group({
-      jahr: this.fb.control<number | null>(null, {
-        validators: [Validators.min(2000)]
-      }),
-    });
-  }
+  private readonly kostenResource = rxResource({
+    // Objekt statt nackter Zahl, damit auch "alle Jahre" (undefined) einen Request auslöst
+    request: () => ({ jahr: this.jahr() }),
+    loader: ({ request }) => this.kostenController.getAllKostenView(request.jahr)
+  });
 
-  ngOnInit(): void {
-    this.fetchData();
-  }
+  protected readonly loading = this.kostenResource.isLoading;
+  protected readonly error = computed(() =>
+    this.kostenResource.error() ? 'Konnte Kosten nicht laden.' : null
+  );
+  protected readonly result = computed(() => this.kostenResource.value() ?? []);
 
-  filtern(): void {
-    const form = this.form.getRawValue();
-    if (form.jahr === null) {
-      this.fetchData();
-    } else {
-      this.fetchData(form.jahr);
-    }
-  }
-
-  private fetchData(jahr?: number): void {
-    this.kostenController.getAllKostenView(jahr).subscribe({
-      next: (res) => {
-        this.result.set((res as KostenViewDto[]) ?? []);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('API error:', err);
-        this.error.set('Konnte Kosten nicht laden.');
-        this.loading.set(false);
-      },
-    });
+  protected openKosten(kostenId: string): void {
+    this.router.navigate(['/kosten/edit', kostenId]);
   }
 }

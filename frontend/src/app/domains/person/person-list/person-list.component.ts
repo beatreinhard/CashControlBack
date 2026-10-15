@@ -36,7 +36,7 @@ import {DatePipe} from '@angular/common';
     MatTable
   ],
   templateUrl: './person-list.component.html',
-  styleUrl: './person-list.component.css',
+  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonListComponent implements AfterViewInit {

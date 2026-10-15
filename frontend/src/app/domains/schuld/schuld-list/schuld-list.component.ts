@@ -1,12 +1,12 @@
-import {AfterViewInit, Component, effect, inject, input, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
+import {DecimalPipe} from '@angular/common';
+import {MatChip, MatChipSet} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatFooterCell,
-  MatFooterCellDef,
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow,
@@ -17,57 +17,54 @@ import {
   MatTableDataSource
 } from '@angular/material/table';
 import {SchuldDto} from '../../../generated';
-import {Router} from '@angular/router';
-import {MatChip, MatChipSet} from '@angular/material/chips';
 
 @Component({
   selector: 'app-schuld-list',
   imports: [
+    DecimalPipe,
     MatCell,
     MatCellDef,
     MatChip,
     MatChipSet,
     MatColumnDef,
-    MatFooterCell,
     MatHeaderCell,
+    MatHeaderCellDef,
     MatHeaderRow,
     MatHeaderRowDef,
     MatPaginator,
     MatRow,
     MatRowDef,
     MatSort,
-    MatTable,
-    MatHeaderCellDef,
-    MatFooterCellDef
+    MatSortHeader,
+    MatTable
   ],
   templateUrl: './schuld-list.component.html',
-  styleUrl: './schuld-list.component.css'
+  styleUrls: ['../../../shared/list-styles.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SchuldListComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['jahr','art', 'glaeubiger', 'text','betrag','zinsen'];
-  protected dataSource = new MatTableDataSource<SchuldDto>([]);
-
-  private router = inject(Router);
-
   readonly items = input.required<SchuldDto[]>();
+  readonly schuldSelected = output<string>();
+
+  private readonly paginator = viewChild.required(MatPaginator);
+  private readonly sort = viewChild.required(MatSort);
+
+  protected readonly displayedColumns: string[] = ['jahr', 'art', 'glaeubiger', 'text', 'betrag', 'zinsen'];
+  protected readonly dataSource = new MatTableDataSource<SchuldDto>([]);
 
   constructor() {
-    // Bridge: Signal -> Imperative API von MatTableDataSource
+    // Bridge: Signal -> imperatives API von MatTableDataSource
     effect(() => {
-      const data = this.items(); // kein ?? [] nötig bei required
-      this.dataSource.data = data;
+      this.dataSource.data = this.items();
     });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator();
+    this.dataSource.sort = this.sort();
   }
 
-
-  selectRow(rowId: string) {
-    this.router.navigate(['/schuld/edit', rowId]);
+  protected selectRow(schuld: SchuldDto): void {
+    if (schuld.id) this.schuldSelected.emit(schuld.id);
   }
 }

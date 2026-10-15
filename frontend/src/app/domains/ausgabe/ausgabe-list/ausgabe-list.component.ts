@@ -1,11 +1,12 @@
-import {AfterViewInit, Component, effect, inject, input, ViewChild} from '@angular/core';
-import {AusgabeViewDto} from '../../../generated';
+import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
+import {DatePipe, DecimalPipe} from '@angular/common';
+import {MatChip, MatChipSet} from '@angular/material/chips';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatFooterCell,
-  MatFooterCellDef,
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow,
@@ -15,71 +16,64 @@ import {
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatChip, MatChipSet} from '@angular/material/chips';
-import {DatePipe} from '@angular/common';
-import {Router} from '@angular/router';
-
+import {AusgabeViewDto} from '../../../generated';
+import {FullNamePipe} from '../../../shared/full-name.pipe';
 
 @Component({
   selector: 'app-ausgabe-list',
   imports: [
-    MatPaginator,
-    MatChipSet,
-    MatChip,
-    MatTable,
-    MatHeaderCellDef,
+    DatePipe,
+    DecimalPipe,
+    FullNamePipe,
+    MatCell,
     MatCellDef,
-    MatFooterCellDef,
-    MatHeaderRowDef,
-    MatRowDef,
+    MatChip,
+    MatChipSet,
     MatColumnDef,
     MatHeaderCell,
-    MatSort,
-    MatCell,
-    MatFooterCell,
+    MatHeaderCellDef,
     MatHeaderRow,
+    MatHeaderRowDef,
+    MatPaginator,
     MatRow,
-    DatePipe
+    MatRowDef,
+    MatSort,
+    MatSortHeader,
+    MatTable
   ],
   templateUrl: './ausgabe-list.component.html',
-  styleUrl: './ausgabe-list.component.css'
+  styleUrls: ['../../../shared/list-styles.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AusgabeListComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['datum','zahlender', 'empfaenger','text','kategorie','betrag'];
-  protected dataSource = new MatTableDataSource<AusgabeViewDto>([]);
-
-  private router = inject(Router);
-
   readonly items = input.required<AusgabeViewDto[]>();
-  // readonly error = signal<string | undefined>(undefined);
+  readonly ausgabeSelected = output<string>();
 
+  private readonly paginator = viewChild.required(MatPaginator);
+  private readonly sort = viewChild.required(MatSort);
+
+  protected readonly displayedColumns: string[] = ['datum', 'zahlender', 'empfaenger', 'kategorie', 'betrag'];
+  protected readonly dataSource = new MatTableDataSource<AusgabeViewDto>([]);
 
   constructor() {
-    // Bridge: Signal -> Imperative API von MatTableDataSource
+    // Sortierung nach angezeigtem Namen statt nach Personen-ID
+    this.dataSource.sortingDataAccessor = (row, column) =>
+      column === 'zahlender'
+        ? `${row.zahlenderName ?? ''} ${row.zahlenderVorname ?? ''}`.trim().toLowerCase()
+        : (row as unknown as Record<string, string | number>)[column];
+
+    // Bridge: Signal -> imperatives API von MatTableDataSource
     effect(() => {
-      const data = this.items(); // kein ?? [] nötig bei required
-      this.dataSource.data = data;
+      this.dataSource.data = this.items();
     });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator();
+    this.dataSource.sort = this.sort();
   }
 
-
-  selectRow(rowId: string) {
-    this.router.navigate(['/ausgabe/edit', rowId]);
-  }
-
-  zahlenderNameVorname(zahlenderName: string,  zahlenderVorname: string): string {
-    if (zahlenderName && zahlenderVorname) {
-      return zahlenderName + ' ' + zahlenderVorname;
-    }
-    return '';
+  protected selectRow(ausgabe: AusgabeViewDto): void {
+    this.ausgabeSelected.emit(ausgabe.id);
   }
 }

@@ -1,0 +1,30 @@
+/* Gemeinsame Styles für klickbare Tabellenzeilen (in styleUrls der Listen eingebunden) */
+.table-wrap {
+  overflow: auto; /* falls viele Spalten/kleine Screens */
+}
+
+.right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+mat-chip {
+  font-weight: 500;
+}
+
+tr.clickable-row {
+  cursor: pointer;
+}
+
+tr.clickable-row:hover {
+  background: whitesmoke;
+}
+
+tr.clickable-row:active {
+  background: #efefef;
+}
+
+tr.clickable-row:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}

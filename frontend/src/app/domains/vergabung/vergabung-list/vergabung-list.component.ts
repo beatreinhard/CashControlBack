@@ -1,14 +1,11 @@
-import {AfterViewInit, Component, effect, input, ViewChild} from '@angular/core';
-import {VergabungDto} from '../../../generated';
-import {DatePipe} from '@angular/common';
+import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, viewChild} from '@angular/core';
+import {DatePipe, DecimalPipe} from '@angular/common';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatFooterCell,
-  MatFooterCellDef,
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow,
@@ -18,48 +15,50 @@ import {
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
+import {VergabungDto} from '../../../generated';
 
+/** Vergabungen sind nur lesbar (sie entstehen aus Ausgaben), daher keine klickbaren Zeilen. */
 @Component({
   selector: 'app-vergabung-list',
   imports: [
-    MatPaginator,
-    MatTable,
-    MatHeaderCellDef,
+    DatePipe,
+    DecimalPipe,
+    MatCell,
     MatCellDef,
-    MatFooterCellDef,
-    MatHeaderRowDef,
-    MatRowDef,
     MatColumnDef,
     MatHeaderCell,
-    MatSort,
-    MatCell,
-    MatFooterCell,
+    MatHeaderCellDef,
     MatHeaderRow,
+    MatHeaderRowDef,
+    MatPaginator,
     MatRow,
-    DatePipe
+    MatRowDef,
+    MatSort,
+    MatSortHeader,
+    MatTable
   ],
   templateUrl: './vergabung-list.component.html',
-  styleUrl: './vergabung-list.component.css'
+  styleUrls: ['../../../shared/list-styles.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VergabungListComponent implements AfterViewInit{
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  protected displayedColumns: string[] = ['jahr', 'datum','empfaenger', 'betrag'];
-  protected dataSource = new MatTableDataSource<VergabungDto>([]);
-
+export class VergabungListComponent implements AfterViewInit {
   readonly items = input.required<VergabungDto[]>();
-  // readonly error = signal<string | undefined>(undefined);
+
+  private readonly paginator = viewChild.required(MatPaginator);
+  private readonly sort = viewChild.required(MatSort);
+
+  protected readonly displayedColumns: string[] = ['jahr', 'zahlungsDatum', 'empfaenger', 'betrag'];
+  protected readonly dataSource = new MatTableDataSource<VergabungDto>([]);
 
   constructor() {
-    // Bridge: Signal -> Imperative API von MatTableDataSource
+    // Bridge: Signal -> imperatives API von MatTableDataSource
     effect(() => {
-      const data = this.items(); // kein ?? [] nötig bei required
-      this.dataSource.data = data;
+      this.dataSource.data = this.items();
     });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator();
+    this.dataSource.sort = this.sort();
   }
 }

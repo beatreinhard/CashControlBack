@@ -1,0 +1,9 @@
+<app-year-filter (jahrChange)="jahr.set($event)"></app-year-filter>
+
+@if (loading()) {
+  <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+} @else if (error()) {
+  <p class="error">{{ error() }}</p>
+} @else {
+  <app-vergabung-list [items]="result()"></app-vergabung-list>
+}

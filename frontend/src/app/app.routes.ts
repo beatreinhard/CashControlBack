@@ -1,35 +1,17 @@
 import {Routes} from '@angular/router';
-import {DashboardComponent} from './domains/dashboard/dashboard/dashboard.component';
-import {AusgabeComponent} from './domains/ausgabe/ausgabe/ausgabe.component';
-import {AusgabeEditComponent} from './domains/ausgabe/ausgabe-edit/ausgabe-edit.component';
-import {VergabungComponent} from './domains/vergabung/vergabung/vergabung/vergabung.component';
-import {SchuldComponent} from './domains/schuld/schuld/schuld.component';
-import {SchuldEditComponent} from './domains/schuld/schuld-edit/schuld-edit.component';
-import {KostenComponent} from './domains/kosten/kosten/kosten.component';
-import {KostenEditComponent} from './domains/kosten/kosten-edit/kosten-edit.component';
-import {ReportingComponent} from './domains/reporting/reporting/reporting.component';
 
 export const routes: Routes = [
-  { path: '', component: DashboardComponent },
-  { path: 'ausgabe', component: AusgabeComponent },
   {
-    path: 'ausgabe/edit/:ausgabeId',
-    component: AusgabeEditComponent
+    path: '',
+    loadComponent: () => import('./domains/dashboard/dashboard/dashboard.component').then(m => m.DashboardComponent)
   },
-  { path: 'ausgabe/create', component: AusgabeEditComponent },
-  { path: 'vergabung', component: VergabungComponent },
-  { path: 'schuld', component: SchuldComponent },
-  { path: 'kosten', component: KostenComponent },
-  {
-    path: 'kosten/edit/:kostenId',
-    component: KostenEditComponent
-  },
-  { path: 'kosten/create', component: KostenEditComponent },
-  {
-    path: 'schuld/edit/:schuldId',
-    component: SchuldEditComponent,
-  },
-  { path: 'schuld/create', component: SchuldEditComponent },
   { path: 'person', loadChildren: () => import('./domains/person/person.routes').then(m => m.PERSON_ROUTES) },
-  { path: 'reporting', component: ReportingComponent },
+  { path: 'ausgabe', loadChildren: () => import('./domains/ausgabe/ausgabe.routes').then(m => m.AUSGABE_ROUTES) },
+  { path: 'vergabung', loadChildren: () => import('./domains/vergabung/vergabung.routes').then(m => m.VERGABUNG_ROUTES) },
+  { path: 'schuld', loadChildren: () => import('./domains/schuld/schuld.routes').then(m => m.SCHULD_ROUTES) },
+  { path: 'kosten', loadChildren: () => import('./domains/kosten/kosten.routes').then(m => m.KOSTEN_ROUTES) },
+  {
+    path: 'reporting',
+    loadComponent: () => import('./domains/reporting/reporting/reporting.component').then(m => m.ReportingComponent)
+  },
 ];
