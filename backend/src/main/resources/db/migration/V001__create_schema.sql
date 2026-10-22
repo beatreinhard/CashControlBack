@@ -72,6 +72,15 @@ create table beruf (
     ansatz_auswaertige_verpflegung    decimal   not null,
     bemerkung                   varchar(255)
 );
+alter table beruf
+    add constraint fk_beruf_arbeitnehmer_person
+        foreign key (arbeitnehmer)
+            references person(id)
+            on delete restrict;
+
+-- Index für Join-Performance
+create index if not exists idx_beruf_arbeitnehmer
+    on beruf (arbeitnehmer);
 
 create table erbschaft (
     id                          varchar(255)    not null primary key,

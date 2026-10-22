@@ -10,6 +10,7 @@ export const routes: Routes = [
   { path: 'vergabung', loadChildren: () => import('./domains/vergabung/vergabung.routes').then(m => m.VERGABUNG_ROUTES) },
   { path: 'schuld', loadChildren: () => import('./domains/schuld/schuld.routes').then(m => m.SCHULD_ROUTES) },
   { path: 'kosten', loadChildren: () => import('./domains/kosten/kosten.routes').then(m => m.KOSTEN_ROUTES) },
+  { path: 'beruf', loadChildren: () => import('./domains/beruf/beruf.routes').then(m => m.BERUF_ROUTES) },
   {
     path: 'reporting',
     loadComponent: () => import('./domains/reporting/reporting/reporting.component').then(m => m.ReportingComponent)

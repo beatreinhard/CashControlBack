@@ -1005,8 +1005,8 @@ components:
           example: 2025
         arbeitnehmer:
           type: string
-          description: Name des Arbeitnehmers
-          example: "Beat Reinhard"
+          description: Id zur Person (Fremdschlüssel)
+          example: "a8f1c7d2-1b3e-4f0a-97f9-1b1e9f6b5c2a"
         arbeitgeber:
           type: string
           description: Name des Arbeitgebers
