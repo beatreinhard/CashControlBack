@@ -13,6 +13,7 @@ export const routes: Routes = [
   { path: 'beruf', loadChildren: () => import('./domains/beruf/beruf.routes').then(m => m.BERUF_ROUTES) },
   { path: 'erbschaft', loadChildren: () => import('./domains/erbschaft/erbschaft.routes').then(m => m.ERBSCHAFT_ROUTES) },
   { path: 'grundstueckunterhalt', loadChildren: () => import('./domains/grundstueckunterhalt/grundstueckunterhalt.routes').then(m => m.GRUNDSTUECKUNTERHALT_ROUTES) },
+  { path: 'vermoegenswert', loadChildren: () => import('./domains/vermoegenswert/vermoegenswert.routes').then(m => m.VERMOEGENSWERT_ROUTES) },
   {
     path: 'reporting',
     loadComponent: () => import('./domains/reporting/reporting/reporting.component').then(m => m.ReportingComponent)

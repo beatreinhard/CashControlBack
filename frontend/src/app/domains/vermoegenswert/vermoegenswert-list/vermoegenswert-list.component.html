@@ -1,0 +1,43 @@
+<div class="table-wrap">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Jahr -->
+    <ng-container matColumnDef="jahr">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Jahr</th>
+      <td mat-cell *matCellDef="let v">{{ v.jahr }}</td>
+    </ng-container>
+
+    <!-- Bezeichnung -->
+    <ng-container matColumnDef="bezeichnung">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Bezeichnung</th>
+      <td mat-cell *matCellDef="let v">{{ v.bezeichnung }}</td>
+    </ng-container>
+
+    <!-- Anschaffungsjahr -->
+    <ng-container matColumnDef="anschaffungsjahr">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Anschaffungsjahr</th>
+      <td mat-cell *matCellDef="let v">{{ v.anschaffungsjahr }}</td>
+    </ng-container>
+
+    <!-- Anschaffungspreis -->
+    <ng-container matColumnDef="anschaffungspreis">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="right">Anschaffungspreis</th>
+      <td mat-cell *matCellDef="let v" class="right">{{ v.anschaffungspreis | number:'1.2-2' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      class="clickable-row"
+      *matRowDef="let row; columns: displayedColumns;"
+      tabindex="0"
+      [attr.aria-label]="'Vermögenswert ' + row.bezeichnung + ' (' + row.jahr + ') bearbeiten'"
+      (click)="selectRow(row)"
+      (keydown.enter)="selectRow(row)"
+      (keydown.space)="$event.preventDefault(); selectRow(row)">
+    </tr>
+
+  </table>
+
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+</div>
