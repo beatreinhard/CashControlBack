@@ -1,15 +1,20 @@
 <nav th:fragment="vergabung">
     <h2>Vergabungen</h2>
-    <table>
+    <p class="leer" th:if="${var.getVergabungen().isEmpty()}">Keine Einträge</p>
+    <table th:unless="${var.getVergabungen().isEmpty()}">
         <tr>
             <th>Datum</th>
             <th>Empfänger</th>
-            <th>Betrag</th>
+            <th class="right">Betrag</th>
         </tr>
         <tr th:each="vergabung : ${var.getVergabungen()}">
             <td th:text="${#temporals.format(vergabung.getZahlungsDatum(),'dd.MM.yyyy')}"></td>
             <td th:text="${vergabung.getEmpfaenger()}"></td>
-            <td th:text="${vergabung.getBetrag()}"></td>
+            <td class="right" th:text="${var.chf(vergabung.getBetrag())}"></td>
+        </tr>
+        <tr class="total">
+            <td colspan="2">Total</td>
+            <td class="right" th:text="${var.chf(var.getVergabungenTotal())}"></td>
         </tr>
     </table>
 </nav>

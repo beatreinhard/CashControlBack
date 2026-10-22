@@ -1,0 +1,20 @@
+<nav th:fragment="vermoegenswert">
+    <h2>Vermögenswerte</h2>
+    <p class="leer" th:if="${var.getVermoegenswerte().isEmpty()}">Keine Einträge</p>
+    <table th:unless="${var.getVermoegenswerte().isEmpty()}">
+        <tr>
+            <th>Bezeichnung</th>
+            <th>Anschaffungsjahr</th>
+            <th class="right">Anschaffungspreis</th>
+        </tr>
+        <tr th:each="v : ${var.getVermoegenswerte()}">
+            <td th:text="${v.getBezeichnung()}"></td>
+            <td th:text="${v.getAnschaffungsjahr()}"></td>
+            <td class="right" th:text="${var.chf(v.getAnschaffungspreis())}"></td>
+        </tr>
+        <tr class="total">
+            <td colspan="2">Total</td>
+            <td class="right" th:text="${var.chf(var.getVermoegenswerteTotal())}"></td>
+        </tr>
+    </table>
+</nav>

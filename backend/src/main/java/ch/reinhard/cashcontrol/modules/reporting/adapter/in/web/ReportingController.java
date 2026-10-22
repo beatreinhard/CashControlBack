@@ -18,14 +18,14 @@ public class ReportingController implements ReportingControllerApi {
 
 
     @Override
-    public ResponseEntity<Resource> generateReport() {
-        byte[] pdf = reportingServicePort.generatePdf();
+    public ResponseEntity<Resource> generateReport(Integer jahr) {
+        byte[] pdf = reportingServicePort.generatePdf(jahr);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDisposition(
                 ContentDisposition.inline()
-                        .filename("report.pdf")
+                        .filename("steuerrechnung-" + jahr + ".pdf")
                         .build()
         );
 

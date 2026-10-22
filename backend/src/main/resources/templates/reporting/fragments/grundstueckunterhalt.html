@@ -1,0 +1,28 @@
+<nav th:fragment="grundstueckunterhalt">
+    <h2>Grundstückunterhalt</h2>
+    <p class="leer" th:if="${var.getGrundstueckunterhalte().isEmpty()}">Keine Einträge</p>
+    <table th:unless="${var.getGrundstueckunterhalte().isEmpty()}">
+        <tr>
+            <th>Rechnungsdatum</th>
+            <th>Ausführende Firma</th>
+            <th>Arbeitsart</th>
+            <th class="right">Betrag netto</th>
+            <th class="right">Andere Kosten</th>
+            <th class="right">Unterhalt</th>
+        </tr>
+        <tr th:each="g : ${var.getGrundstueckunterhalte()}">
+            <td th:text="${#temporals.format(g.getRgDatum(),'dd.MM.yyyy')}"></td>
+            <td th:text="${g.getAusfuehrendeFirma()}"></td>
+            <td th:text="${g.getArbeitsArt()}"></td>
+            <td class="right" th:text="${var.chf(g.getBetragNetto())}"></td>
+            <td class="right" th:text="${var.chf(g.getAnteilAndereKosten())}"></td>
+            <td class="right" th:text="${var.chf(g.getAnteilUnterhalt())}"></td>
+        </tr>
+        <tr class="total">
+            <td colspan="3">Total</td>
+            <td class="right" th:text="${var.chf(var.getGrundstueckunterhaltNettoTotal())}"></td>
+            <td class="right" th:text="${var.chf(var.getGrundstueckunterhaltAndereKostenTotal())}"></td>
+            <td class="right" th:text="${var.chf(var.getGrundstueckunterhaltUnterhaltTotal())}"></td>
+        </tr>
+    </table>
+</nav>

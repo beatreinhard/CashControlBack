@@ -1,0 +1,22 @@
+<nav th:fragment="beruf">
+    <h2>Beruf</h2>
+    <p class="leer" th:if="${var.getBerufe().isEmpty()}">Keine Einträge</p>
+    <!-- Viele Attribute pro Beruf: eine Detailtabelle (Feld / Wert) je Beruf statt einer breiten Tabelle -->
+    <div th:each="beruf : ${var.getBerufe()}">
+        <h3 th:text="${var.personName(beruf.getArbeitnehmer())} + ' – ' + ${beruf.getArbeitgeber()}"></h3>
+        <table class="detail">
+            <tr><th>Arbeitnehmer</th><td th:text="${var.personName(beruf.getArbeitnehmer())}"></td></tr>
+            <tr><th>Arbeitgeber</th><td th:text="${beruf.getArbeitgeber()}"></td></tr>
+            <tr><th>Arbeitsort</th><td th:text="${beruf.getArbeitsort()}"></td></tr>
+            <tr><th>Beschäftigungsgrad</th><td th:text="${beruf.getBeschaeftigungsgrad()} + ' %'"></td></tr>
+            <tr><th>Arbeitstage pro Jahr</th><td th:text="${beruf.getArbeitstage()}"></td></tr>
+            <tr><th>Fahrtkilometer pro Tag</th><td th:text="${beruf.getFahrtkilometerProTag()}"></td></tr>
+            <tr><th>Grund für Autobenutzung</th><td th:text="${beruf.getGrundAutobenutzung()}"></td></tr>
+            <tr>
+                <th>Ansatz auswärtige Verpflegung</th>
+                <td th:text="${var.chf(beruf.getAnsatzAuswaertigeVerpflegung())}"></td>
+            </tr>
+            <tr><th>Bemerkung</th><td th:text="${beruf.getBemerkung()}"></td></tr>
+        </table>
+    </div>
+</nav>

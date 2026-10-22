@@ -1,0 +1,24 @@
+<nav th:fragment="kosten">
+    <h2>Kosten</h2>
+    <p class="leer" th:if="${var.getKosten().isEmpty()}">Keine Einträge</p>
+    <table th:unless="${var.getKosten().isEmpty()}">
+        <tr>
+            <th>Art</th>
+            <th>Empfänger</th>
+            <th>Zahlender</th>
+            <th>Bemerkung</th>
+            <th class="right">Betrag</th>
+        </tr>
+        <tr th:each="k : ${var.getKosten()}">
+            <td th:text="${k.getArt()}"></td>
+            <td th:text="${k.getEmpfaenger()}"></td>
+            <td th:text="${k.getPersonName()} + ' ' + ${k.getPersonVorname()}"></td>
+            <td th:text="${k.getBemerkung()}"></td>
+            <td class="right" th:text="${var.chf(k.getBetrag())}"></td>
+        </tr>
+        <tr class="total">
+            <td colspan="4">Total</td>
+            <td class="right" th:text="${var.chf(var.getKostenTotal())}"></td>
+        </tr>
+    </table>
+</nav>

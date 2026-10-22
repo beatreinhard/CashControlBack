@@ -1,5 +1,5 @@
 package ch.reinhard.cashcontrol.modules.reporting.application.port.in;
 
 public interface ReportingServicePort {
-    byte[] generatePdf();
+    byte[] generatePdf(Integer jahr);
 }

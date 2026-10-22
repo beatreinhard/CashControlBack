@@ -1,0 +1,28 @@
+<nav th:fragment="erbschaft">
+    <h2>Erbschaften und Schenkungen</h2>
+    <p class="leer" th:if="${var.getErbschaften().isEmpty()}">Keine Einträge</p>
+    <table th:unless="${var.getErbschaften().isEmpty()}">
+        <tr>
+            <th>Datum</th>
+            <th>Art</th>
+            <th>Geber</th>
+            <th>Verwandtschaft</th>
+            <th>Gegenstand</th>
+            <th>Bemerkung</th>
+            <th class="right">Betrag</th>
+        </tr>
+        <tr th:each="e : ${var.getErbschaften()}">
+            <td th:text="${#temporals.format(e.getDatum(),'dd.MM.yyyy')}"></td>
+            <td th:text="${e.getArt()}"></td>
+            <td th:text="${e.getGeber()}"></td>
+            <td th:text="${e.getVerwandtschaftsverhaeltnis()}"></td>
+            <td th:text="${e.getGegenstand()}"></td>
+            <td th:text="${e.getBemerkung()}"></td>
+            <td class="right" th:text="${var.chf(e.getBetrag())}"></td>
+        </tr>
+        <tr class="total">
+            <td colspan="6">Total</td>
+            <td class="right" th:text="${var.chf(var.getErbschaftenTotal())}"></td>
+        </tr>
+    </table>
+</nav>

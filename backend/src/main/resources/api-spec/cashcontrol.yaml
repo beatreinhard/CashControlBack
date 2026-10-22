@@ -798,6 +798,13 @@ paths:
       tags: [ReportingController]
       operationId: generateReport
       summary: PDF wird generiert
+      parameters:
+      - in: query
+        name: jahr
+        required: true
+        schema:
+          type: integer
+        description: Steuerjahr, für das der Report erstellt wird
       responses:
         '200':
           description: PDF erfolgreich generiert

@@ -1,14 +1,17 @@
 <nav th:fragment="person">
     <h2>Steuerzahler</h2>
-    <table>
+    <p class="leer" th:if="${var.getPersonen().isEmpty()}">Keine Einträge</p>
+    <table th:unless="${var.getPersonen().isEmpty()}">
         <tr>
             <th>Name</th>
             <th>Vorname</th>
-            <th>Ahv-Nummer</th>
+            <th>Geburtsdatum</th>
+            <th>AHV-Nummer</th>
         </tr>
         <tr th:each="person : ${var.getPersonen()}">
             <td th:text="${person.getName()}"></td>
             <td th:text="${person.getVorname()}"></td>
+            <td th:text="${#temporals.format(person.getGeburtsdatum(),'dd.MM.yyyy')}"></td>
             <td th:text="${person.getAhvnummer()}"></td>
         </tr>
     </table>
