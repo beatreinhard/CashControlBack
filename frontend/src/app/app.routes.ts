@@ -11,6 +11,7 @@ export const routes: Routes = [
   { path: 'schuld', loadChildren: () => import('./domains/schuld/schuld.routes').then(m => m.SCHULD_ROUTES) },
   { path: 'kosten', loadChildren: () => import('./domains/kosten/kosten.routes').then(m => m.KOSTEN_ROUTES) },
   { path: 'beruf', loadChildren: () => import('./domains/beruf/beruf.routes').then(m => m.BERUF_ROUTES) },
+  { path: 'erbschaft', loadChildren: () => import('./domains/erbschaft/erbschaft.routes').then(m => m.ERBSCHAFT_ROUTES) },
   {
     path: 'reporting',
     loadComponent: () => import('./domains/reporting/reporting/reporting.component').then(m => m.ReportingComponent)

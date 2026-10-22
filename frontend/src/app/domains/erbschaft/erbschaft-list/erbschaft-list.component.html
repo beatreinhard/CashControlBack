@@ -1,0 +1,65 @@
+<div class="table-wrap">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Jahr -->
+    <ng-container matColumnDef="jahr">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Jahr</th>
+      <td mat-cell *matCellDef="let e">{{ e.jahr }}</td>
+    </ng-container>
+
+    <!-- Datum -->
+    <ng-container matColumnDef="datum">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Datum</th>
+      <td mat-cell *matCellDef="let e">{{ e.datum | date:'dd.MM.yyyy' }}</td>
+    </ng-container>
+
+    <!-- Art -->
+    <ng-container matColumnDef="art">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Art</th>
+      <td mat-cell *matCellDef="let e">
+        <mat-chip-set>
+          <mat-chip>{{ e.art }}</mat-chip>
+        </mat-chip-set>
+      </td>
+    </ng-container>
+
+    <!-- Geber -->
+    <ng-container matColumnDef="geber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Geber</th>
+      <td mat-cell *matCellDef="let e">{{ e.geber }}</td>
+    </ng-container>
+
+    <!-- Verwandtschaftsverhältnis -->
+    <ng-container matColumnDef="verwandtschaftsverhaeltnis">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Verwandtschaft</th>
+      <td mat-cell *matCellDef="let e">{{ e.verwandtschaftsverhaeltnis }}</td>
+    </ng-container>
+
+    <!-- Gegenstand -->
+    <ng-container matColumnDef="gegenstand">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Gegenstand</th>
+      <td mat-cell *matCellDef="let e">{{ e.gegenstand }}</td>
+    </ng-container>
+
+    <!-- Betrag -->
+    <ng-container matColumnDef="betrag">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="right">Betrag</th>
+      <td mat-cell *matCellDef="let e" class="right">{{ e.betrag | number:'1.2-2' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      class="clickable-row"
+      *matRowDef="let row; columns: displayedColumns;"
+      tabindex="0"
+      [attr.aria-label]="'Erbschaft ' + row.jahr + ' von ' + row.geber + ' bearbeiten'"
+      (click)="selectRow(row)"
+      (keydown.enter)="selectRow(row)"
+      (keydown.space)="$event.preventDefault(); selectRow(row)">
+    </tr>
+
+  </table>
+
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+</div>

@@ -1,0 +1,131 @@
+<form class="edit-form" [formGroup]="form" (ngSubmit)="save()">
+  <mat-card>
+
+    <mat-card-title>{{ title() }}</mat-card-title>
+    <mat-card-content>
+
+      @if (isLoading()) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+      @if (loadError(); as error) {
+        <p class="error">{{ error }}</p>
+      }
+
+      <!-- Jahr -->
+      <mat-form-field class="full-width">
+        <mat-label>Jahr</mat-label>
+        <input matInput type="number" formControlName="jahr" />
+        <mat-error>
+          @if (form.controls.jahr.hasError('required')) {
+            Jahr ist erforderlich
+          } @else {
+            Jahr muss {{ minYear }} oder grösser sein
+          }
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Art -->
+      <mat-form-field class="full-width">
+        <mat-label>Art</mat-label>
+        <mat-select formControlName="art">
+          @for (a of artValues; track a) {
+            <mat-option [value]="a">{{ a }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>Art ist erforderlich</mat-error>
+      </mat-form-field>
+
+      <!-- Datum -->
+      <mat-form-field class="full-width">
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="datum" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>
+          @if (form.controls.datum.hasError('matDatepickerParse')) {
+            Ungültiges Datum
+          } @else if (form.controls.datum.hasError('required')) {
+            Datum ist erforderlich
+          } @else if (form.controls.datum.hasError('futureDate')) {
+            Datum darf nicht in der Zukunft liegen
+          }
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Betrag -->
+      <mat-form-field class="full-width">
+        <mat-label>Betrag</mat-label>
+        <input matInput type="number" formControlName="betrag" />
+        <span matTextSuffix>CHF</span>
+        <mat-error>
+          @if (form.controls.betrag.hasError('required')) {
+            Betrag ist erforderlich
+          } @else {
+            Betrag muss grösser als 0 sein
+          }
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Geber -->
+      <mat-form-field class="full-width">
+        <mat-label>Geber</mat-label>
+        <input matInput formControlName="geber" />
+        <mat-error>
+          @if (form.controls.geber.hasError('required')) {
+            Geber ist erforderlich
+          } @else {
+            Maximal {{ maxTextLength }} Zeichen
+          }
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Verwandtschaftsverhältnis -->
+      <mat-form-field class="full-width">
+        <mat-label>Verwandtschaftsverhältnis</mat-label>
+        <input matInput formControlName="verwandtschaftsverhaeltnis" />
+        <mat-error>
+          @if (form.controls.verwandtschaftsverhaeltnis.hasError('required')) {
+            Verwandtschaftsverhältnis ist erforderlich
+          } @else {
+            Maximal {{ maxTextLength }} Zeichen
+          }
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Gegenstand -->
+      <mat-form-field class="full-width">
+        <mat-label>Gegenstand</mat-label>
+        <input matInput formControlName="gegenstand" />
+        <mat-error>
+          @if (form.controls.gegenstand.hasError('required')) {
+            Gegenstand ist erforderlich
+          } @else {
+            Maximal {{ maxTextLength }} Zeichen
+          }
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Bemerkung -->
+      <mat-form-field class="full-width">
+        <mat-label>Bemerkung</mat-label>
+        <textarea matInput rows="3" formControlName="bemerkung"></textarea>
+        <mat-error>Maximal {{ maxTextLength }} Zeichen</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <a mat-button routerLink="/erbschaft">
+        Abbrechen
+      </a>
+      @if (isEditMode()) {
+        <button mat-button type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
+          Löschen
+        </button>
+      }
+      <button mat-flat-button color="primary" type="submit" [disabled]="isSaving() || isLoading() || !!loadError()">
+        Speichern
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+</form>
