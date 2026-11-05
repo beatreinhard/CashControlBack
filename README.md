@@ -100,6 +100,8 @@ docker build -t cashcontrol .
 
 Die Datenbank-Migrationen laufen beim Start der App automatisch mit Flyway.
 
+Die App zeigt oben rechts die Version aus der `pom.xml`. Der Maven-Build schreibt sie ins Jar. Beim Start aus der IDE ohne vorherigen Maven-Build steht dort `unbekannt`.
+
 #### Erreichbarkeit
 
 | Was | URL |

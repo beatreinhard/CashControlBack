@@ -6,7 +6,7 @@
     <parent>
         <groupId>ch.reinhard</groupId>
         <artifactId>cashcontrol-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
 
@@ -220,6 +220,8 @@
                         <goals>
                             <!-- Damit ein Manifest File erstellt wird und das Jar-File executable wird-->
                             <goal>repackage</goal>
+                            <!-- Schreibt die pom-Version nach META-INF/build-info.properties, siehe VersionController -->
+                            <goal>build-info</goal>
                         </goals>
                     </execution>
                 </executions>

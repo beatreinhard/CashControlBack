@@ -24,6 +24,8 @@ tags:
     description: Endpoints für Vermoegenswert
   - name: ReportingController
     description: Endpoints für Reporting
+  - name: VersionController
+    description: Endpoints für die Applikationsversion
 
 paths:
   /api/v1/ausgabe:
@@ -814,8 +816,31 @@ paths:
                 type: string
                 format: binary
 
+  /api/v1/version:
+    get:
+      tags: [VersionController]
+      operationId: getVersion
+      summary: Aktuelle Version der Applikation
+      responses:
+        '200':
+          description: Version gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionDto'
+
 components:
   schemas:
+    VersionDto:
+      title: Version
+      type: object
+      description: Version der Applikation aus der pom.xml
+      properties:
+        version:
+          type: string
+      required:
+        - version
+
     AusgabeDto:
       title: Ausgabe
       type: object

@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "gen:api": "openapi-generator-cli generate -i ../backend/src/main/resources/api-spec/cashcontrol.yaml -g typescript-angular -o src/app/generated --additional-properties=ngVersion=19.0.0,withInterfaces=true,stringEnums=true,providedInRoot=true,serviceSuffix=Api --skip-validate-spec",

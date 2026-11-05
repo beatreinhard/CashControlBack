@@ -15,3 +15,12 @@
   padding: 20px;
   background-color: #f0f0f0;
 }
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.app-version {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
