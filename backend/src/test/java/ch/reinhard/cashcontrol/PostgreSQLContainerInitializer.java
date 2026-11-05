@@ -11,7 +11,7 @@ public class PostgreSQLContainerInitializer implements ApplicationContextInitial
 
     private static PostgreSQLContainer<?> getDatabase() {
         if (database == null) {
-            database = new PostgreSQLContainer<>("postgres:latest");
+            database = new PostgreSQLContainer<>("postgres:16");
             database.start();
         }
         return database;

@@ -3,15 +3,11 @@ spring:
     name: cashcontrol-service
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/cashcontrol
-    username: cashcontrol
-    password: secret
   flyway:
     locations: classpath:db/migration/
     clean-on-validation-error: false
     default-schema: cashcontrol
   jpa:
-    show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -21,7 +17,6 @@ spring:
     suffix: .html
     mode: HTML
     encoding: UTF-8
-    cache: false
 server:
   port: 8080
   servlet:
@@ -32,7 +27,3 @@ server:
 logging:
   pattern:
     level: '[%X{correlationId}] %5p'
-  level:
-    ch.reinhard: DEBUG
-#    org.springframework: DEBUG
-#    org.flywaydb: DEBUG

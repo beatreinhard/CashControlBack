@@ -1,0 +1,3 @@
+# Das Image braucht nur das gebundelte Jar.
+*
+!backend/target/backend-*-exec.jar

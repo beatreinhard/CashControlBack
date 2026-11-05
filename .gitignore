@@ -14,3 +14,7 @@ target/
 .log
 
 /frontend/node/*
+
+### #Docker
+
+docker/.env

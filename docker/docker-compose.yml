@@ -1,12 +1,69 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:latest
-    container_name: cashcontrol-db
+  # Lokale Entwicklung: nur mit Profil 'dev' aktiv.
+  # Start: docker compose --profile dev up
+  postgres-dev:
+    profiles:
+      - dev
+    image: postgres:16
+    container_name: cashcontrol-db-dev
     ports:
-      - 5432:5432
+      - 5431:5432
     environment:
       - POSTGRES_PASSWORD=secret
       - POSTGRES_USER=cashcontrol
       - POSTGRES_DB=cashcontrol
+    volumes:
+      - cashcontrol-db-dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cashcontrol -d cashcontrol"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Betrieb: eigene Datenbank, nur mit Profil 'betrieb' aktiv.
+  postgres-betrieb:
+    profiles:
+      - betrieb
+    image: postgres:16
+    container_name: cashcontrol-db-betrieb
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=${BETRIEB_DB_PASSWORD:?In docker/.env setzen, siehe .env.example}
+      - POSTGRES_USER=cashcontrol
+      - POSTGRES_DB=cashcontrol
+    volumes:
+      - cashcontrol-db-betrieb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cashcontrol -d cashcontrol"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Betrieb: nur mit Profil 'betrieb' aktiv. Compose baut nichts, darum vorher im Repo-Root Jar und Image bauen:
+  #   sh backend/mvnw clean install
+  #   docker build -t cashcontrol .
+  # Start: docker compose --profile betrieb up
+  app:
+    profiles:
+      - betrieb
+    image: cashcontrol:latest
+    pull_policy: never
+    container_name: cashcontrol-app
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-betrieb:5432/cashcontrol
+      - SPRING_DATASOURCE_USERNAME=cashcontrol
+      - SPRING_DATASOURCE_PASSWORD=${BETRIEB_DB_PASSWORD:?In docker/.env setzen, siehe .env.example}
+    depends_on:
+      postgres-betrieb:
+        condition: service_healthy
+
+volumes:
+  cashcontrol-db-dev:
+    name: cashcontrol-db-dev
+  cashcontrol-db-betrieb:
+    name: cashcontrol-db-betrieb

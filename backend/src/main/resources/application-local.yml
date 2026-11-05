@@ -1,0 +1,19 @@
+# Nur fuer die lokale Entwicklung, aktiv mit dem Spring-Profil "local".
+# Enthaelt nur, was von application.yml abweicht.
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5431/cashcontrol
+    username: cashcontrol
+    password: secret
+  jpa:
+    show-sql: true
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    ch.reinhard: DEBUG
+#    org.springframework: DEBUG
+#    org.flywaydb: DEBUG
