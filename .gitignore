@@ -17,4 +17,5 @@ target/
 
 ### #Docker
 
-docker/.env
+betrieb/.env
+betrieb/backups/

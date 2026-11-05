@@ -55,34 +55,52 @@ docker build -t cashcontrol .
 |---|---|---|
 | App | 8081 | 8080 |
 | Frontend | 4200 | 8080, in der App enthalten |
-| Datenbank | 5431 | 5432 |
+| Datenbank | 5431 | nicht freigegeben |
 
-Die Ports gelten auf dem eigenen Rechner. Lokal und Betrieb haben je eine eigene Datenbank. Innerhalb von Docker erreicht die App ihre Datenbank über `postgres-betrieb:5432`.
+Die Ports gelten auf dem eigenen Rechner. Lokal und Betrieb haben je eine eigene Datenbank. Im Betrieb ist die App nur auf diesem Mac erreichbar. Die Datenbank hat keinen freigegebenen Port, die App erreicht sie innerhalb von Docker über `postgres-betrieb:5432`.
 
-### Komplett in Docker
+### Betrieb
 
-Startet die Betriebs-Datenbank und die App. Im Repo-Root zuerst Jar und Image bauen, sonst läuft die App mit einem alten Stand:
+Der Betrieb liegt im Verzeichnis `betrieb/`. Dieses Verzeichnis lässt sich an einen beliebigen Ort auf dem Mac kopieren und von dort benutzen.
+
+| Datei | Zweck |
+|---|---|
+| `CashControl starten.command` | Startet Docker Desktop, Datenbank und App und öffnet die App im Browser |
+| `CashControl stoppen.command` | Stoppt App und Datenbank, die Daten bleiben erhalten |
+| `CashControl Backup.command` | Schreibt ein Backup der Datenbank nach `backups/` |
+| `docker-compose.yml` | Definiert App und Betriebs-Datenbank |
+| `.env` | Passwort der Datenbank und Compose-Projektname, liegt nicht im Git |
+| `_gemeinsam.zsh` | Hilfsfunktionen der Scripts |
+
+Die `.command`-Dateien werden im Finder per Doppelklick gestartet.
+
+#### Einrichten
+
+1. Jar und Image bauen, siehe [Build](#build). Das Image liegt danach in Docker, nicht im Verzeichnis `betrieb/`.
+2. Im Verzeichnis `betrieb/` die Datei `.env` anlegen und das Passwort setzen:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Das Verzeichnis `betrieb/` an den gewünschten Ort kopieren. `.env` ist im Finder versteckt, wird aber mitkopiert.
+
+Postgres übernimmt das Passwort nur beim ersten Anlegen der Datenbank. Ein späterer Wechsel braucht zusätzlich ein `ALTER USER` in der Datenbank.
+
+#### Neue Version einspielen
+
+Im Repo-Root Jar und Image neu bauen und CashControl neu starten. Der kopierte Ordner bleibt dabei unverändert, Compose erkennt das neue Image beim Start selbst:
 
 ```bash
 sh backend/mvnw clean install
 docker build -t cashcontrol .
 ```
 
-Beim ersten Mal im Repo-Root die Datei `docker/.env` anlegen und darin das Passwort der Betriebs-Datenbank setzen:
+Ändert sich `betrieb/docker-compose.yml` oder ein Script im Repo, muss die Datei von Hand an den Einsatzort kopiert werden.
 
-```bash
-cp docker/.env.example docker/.env
-```
+Die Datenbank-Migrationen laufen beim Start der App automatisch mit Flyway.
 
-Dann im Ordner `docker/` ausführen:
-
-```bash
-docker compose --profile betrieb up
-```
-
-Das Profil `betrieb` startet die App und die Betriebs-Datenbank. Ohne Profil startet Compose nichts. Compose baut selbst nichts, sondern startet das vorhandene Image `cashcontrol:latest`.
-
-Die App ist danach hier erreichbar:
+#### Erreichbarkeit
 
 | Was | URL |
 |---|---|
@@ -90,24 +108,27 @@ Die App ist danach hier erreichbar:
 | Swagger UI | http://localhost:8080/cash-control/swagger-ui/index.html |
 | OpenAPI-Spec | http://localhost:8080/cash-control/v3/api-docs |
 
-Die Datenbank-Migrationen laufen beim Start der App automatisch mit Flyway.
+#### Daten und Backup
 
-Beenden im Ordner `docker/`:
+Die Daten liegen im Docker-Volume `cashcontrol-db-betrieb`, nicht im kopierten Verzeichnis. Sie überstehen `docker compose down`. Mit `docker compose down -v` oder einem Zurücksetzen von Docker Desktop werden sie gelöscht.
+
+Das Backup läuft auch bei gestoppter App. Die Dateien in `backups/` enthalten die Daten unverschlüsselt und werden nie automatisch gelöscht. Sie liegen auf demselben Mac, darum eine Kopie zusätzlich extern ablegen.
+
+Backup einspielen: App stoppen und im kopierten Verzeichnis ausführen. Dabei werden die aktuellen Daten ersetzt:
 
 ```bash
-docker compose --profile betrieb stop
+docker compose up -d postgres-betrieb
+gunzip -c backups/cashcontrol-DATUM.sql.gz | docker compose exec -T postgres-betrieb psql -q -v ON_ERROR_STOP=1 -U cashcontrol -d cashcontrol
 ```
-
-> **Achtung:** Die Daten liegen in den Volumes `cashcontrol-db-dev` und `cashcontrol-db-betrieb` und überstehen `docker compose --profile dev down` und `docker compose --profile betrieb down`. Erst mit `-v` werden sie gelöscht.
 
 ### Lokale Entwicklung
 
 Hier läuft nur die lokale Datenbank in Docker, Backend und Frontend laufen lokal.
 
-1. Lokale Datenbank starten, im Ordner `docker/`. Das Compose-Profil `dev` startet nur diese Datenbank:
+1. Lokale Datenbank starten, im Ordner `docker/`:
 
    ```bash
-   docker compose --profile dev up
+   docker compose up
    ```
 
 2. Backend mit dem Spring-Profil `local` starten: in IntelliJ bei `CashcontrolApplication` unter *Active profiles* `local` eintragen oder im Repo-Root:
@@ -127,12 +148,14 @@ Das Frontend ist dann unter http://localhost:4200 erreichbar. Anfragen an `/cash
 Die lokale Datenbank beenden, im Ordner `docker/`:
 
 ```bash
-docker compose --profile dev stop
+docker compose stop
 ```
 
-Wird die Datenbank aus IntelliJ gestartet, braucht die Run-Config `docker: Compose Deployment` die Umgebungsvariable `COMPOSE_PROFILES=dev`.
+In IntelliJ startet die Run-Config `docker: Compose Deployment` diese Datenbank.
 
-> **Hinweis:** Es gibt zwei Arten von Profilen. `dev` und `betrieb` sind Compose-Profile und bestimmen, welche Container starten. `local` ist ein Spring-Profil und bestimmt die Konfiguration der App.
+Die Daten liegen im Volume `cashcontrol-db-dev`. Sie überstehen `docker compose down`, erst mit `-v` werden sie gelöscht.
+
+`docker/.env` setzt den Compose-Projektnamen `cashcontrol`, damit das Projekt von anderen Apps mit einem Ordner `docker/` getrennt bleibt. Die Datei enthält keine Geheimnisse und liegt im Git.
 
 ### Konfiguration
 
@@ -149,12 +172,6 @@ Ohne das Profil `local` braucht die App die DB-Zugangsdaten als Umgebungsvariabl
 |---|---|
 | `SPRING_DATASOURCE_URL` | `jdbc:postgresql://postgres-betrieb:5432/cashcontrol` |
 | `SPRING_DATASOURCE_USERNAME` | `cashcontrol` |
-| `SPRING_DATASOURCE_PASSWORD` | Passwort des DB-Benutzers, in Docker aus `docker/.env` |
+| `SPRING_DATASOURCE_PASSWORD` | Passwort des DB-Benutzers, in Docker aus `betrieb/.env` |
 
-Im `docker-compose.yml` sind diese Variablen für den Service `app` bereits gesetzt.
-
-`docker/.env` liegt nicht im Git und wird für jeden `docker compose`-Befehl gebraucht, auch für die lokale Datenbank. Fehlt die Datei, bricht Compose mit einer Fehlermeldung ab.
-
-Postgres übernimmt das Passwort nur beim ersten Anlegen der Datenbank. Ein späterer Wechsel braucht zusätzlich ein `ALTER USER` in der Datenbank.
-
-`docker/.env` setzt ausserdem den Compose-Projektnamen `cashcontrol`. So bleibt das Projekt von anderen Apps mit einem Ordner `docker/` getrennt.
+In `betrieb/docker-compose.yml` sind diese Variablen für den Service `app` bereits gesetzt.

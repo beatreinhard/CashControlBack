@@ -1,0 +1,40 @@
+version: '3.8'
+
+# Betrieb: App und eigene Datenbank. Dieses Verzeichnis wird an den Einsatzort kopiert.
+# Gestartet wird mit "CashControl starten.command".
+# Compose baut nichts, das Image cashcontrol:latest muss in Docker vorhanden sein (siehe README).
+services:
+  # Ohne freigegebenen Port: Die Datenbank ist nur fuer die App erreichbar.
+  postgres-betrieb:
+    image: postgres:16
+    container_name: cashcontrol-db-betrieb
+    environment:
+      - POSTGRES_PASSWORD=${BETRIEB_DB_PASSWORD:?In .env setzen, siehe .env.example}
+      - POSTGRES_USER=cashcontrol
+      - POSTGRES_DB=cashcontrol
+    volumes:
+      - cashcontrol-db-betrieb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cashcontrol -d cashcontrol"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    image: cashcontrol:latest
+    pull_policy: never
+    container_name: cashcontrol-app
+    # Nur auf diesem Mac erreichbar, nicht aus dem Netzwerk.
+    ports:
+      - 127.0.0.1:8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-betrieb:5432/cashcontrol
+      - SPRING_DATASOURCE_USERNAME=cashcontrol
+      - SPRING_DATASOURCE_PASSWORD=${BETRIEB_DB_PASSWORD:?In .env setzen, siehe .env.example}
+    depends_on:
+      postgres-betrieb:
+        condition: service_healthy
+
+volumes:
+  cashcontrol-db-betrieb:
+    name: cashcontrol-db-betrieb
