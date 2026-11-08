@@ -27,3 +27,7 @@ server:
 logging:
   pattern:
     level: '[%X{correlationId}] %5p'
+
+cashcontrol:
+  import:
+    verzeichnis: /import

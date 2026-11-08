@@ -1,5 +1,6 @@
 package ch.reinhard.cashcontrol.core.exception;
 
+import ch.reinhard.cashcontrol.modules.finanzen.application.service.ImportLaeuftBereitsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,5 +13,10 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ImportLaeuftBereitsException.class)
+    public ResponseEntity<Object> handleImportLaeuftBereitsException(ImportLaeuftBereitsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

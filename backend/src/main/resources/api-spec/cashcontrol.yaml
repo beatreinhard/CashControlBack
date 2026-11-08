@@ -26,6 +26,8 @@ tags:
     description: Endpoints für Reporting
   - name: VersionController
     description: Endpoints für die Applikationsversion
+  - name: AusgabeVorschlagController
+    description: Endpoints für AusgabenVorschlag
 
 paths:
   /api/v1/ausgabe:
@@ -829,6 +831,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/VersionDto'
 
+  /api/v1/ausgabevorschlag/import:
+    post:
+      tags: [AusgabeVorschlagController]
+      operationId: importAusgabeVorschlag
+      summary: Importiert Ausgaben-Vorschläge aus Json-Dateien
+      responses:
+        '204':
+          description: Import durchgeführt
+        '409':
+          description: Ein Import läuft bereits
 components:
   schemas:
     VersionDto:

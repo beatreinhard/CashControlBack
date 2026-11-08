@@ -12,6 +12,10 @@ spring:
   thymeleaf:
     cache: false
 
+cashcontrol:
+  import:
+    verzeichnis: /Users/beatreinhard/Documents/_Claude/CashControl/import
+
 logging:
   level:
     ch.reinhard: DEBUG
