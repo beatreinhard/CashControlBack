@@ -4,35 +4,47 @@
     <!-- Datum -->
     <ng-container matColumnDef="datum">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Datum</th>
-      <td mat-cell *matCellDef="let a">{{ a.datum | date:'EEE, dd.MM.yyyy' }}</td>
-    </ng-container>
-
-    <!-- Zahlender -->
-    <ng-container matColumnDef="zahlender">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Zahlender</th>
-      <td mat-cell *matCellDef="let a">{{ a.zahlenderName | fullName:a.zahlenderVorname }}</td>
+      <td mat-cell *matCellDef="let a">
+        <div class="cc-cell-row">
+          <span class="cc-date" [attr.aria-label]="a.datum | date:'dd.MM.yyyy'">
+            <span class="d">{{ a.datum | date:'dd' }}</span>
+            <span class="m">{{ a.datum | date:'MMM' }}</span>
+          </span>
+          <span class="muted">{{ a.datum | date:'EEE, yyyy' }}</span>
+        </div>
+      </td>
     </ng-container>
 
     <!-- Empfänger -->
     <ng-container matColumnDef="empfaenger">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Empfänger</th>
-      <td mat-cell *matCellDef="let a">{{ a.empfaenger }}</td>
+      <td mat-cell *matCellDef="let a">
+        <span class="cc-strong">{{ a.empfaenger }}</span>
+      </td>
+    </ng-container>
+
+    <!-- Zahlender -->
+    <ng-container matColumnDef="zahlender">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Zahlender</th>
+      <td mat-cell *matCellDef="let a" class="muted">{{ (a.zahlenderName | fullName:a.zahlenderVorname) || '–' }}</td>
     </ng-container>
 
     <!-- Kategorie -->
     <ng-container matColumnDef="kategorie">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Kategorie</th>
       <td mat-cell *matCellDef="let a">
-        <mat-chip-set>
-          <mat-chip>{{ a.kategorie }}</mat-chip>
-        </mat-chip-set>
+        @if (meta(a.kategorie); as m) {
+          <span class="cc-cat" [style.--cat]="m.color" [style.--cat-bg]="m.color + '1c'"><mat-icon>{{ m.icon }}</mat-icon>{{ m.label }}</span>
+        }
       </td>
     </ng-container>
 
     <!-- Betrag -->
     <ng-container matColumnDef="betrag">
       <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="right">Betrag</th>
-      <td mat-cell *matCellDef="let a" class="right">{{ a.betrag | number:'1.2-2' }}</td>
+      <td mat-cell *matCellDef="let a" class="right">
+        <span class="cc-amount num"><span class="cur">CHF</span>{{ a.betrag | number:'1.2-2' }}</span>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -47,7 +59,15 @@
       (keydown.space)="$event.preventDefault(); selectRow(row)">
     </tr>
 
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+        <div class="state"><mat-icon>receipt_long</mat-icon>Keine Buchungen gefunden</div>
+      </td>
+    </tr>
+
   </table>
 
-  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+  <div class="cc-panel-foot">
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>

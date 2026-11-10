@@ -18,6 +18,7 @@ import {parseBackendDate, toBackendDate} from '../../../shared/date-utils';
 import {NotificationService} from '../../../shared/notification.service';
 import {notInFutureValidator} from '../../../shared/validators';
 import {MIN_YEAR} from '../../../shared/year-filter/year-filter.component';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
 
 const MAX_TEXT_LENGTH = 255;
 
@@ -53,11 +54,13 @@ type ErbschaftForm = FormGroup<{
     MatSelect,
     MatSuffix,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    PageHeaderComponent
   ],
   templateUrl: './erbschaft-edit.component.html',
   styleUrl: './erbschaft-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class ErbschaftEditComponent {
   /** undefined/null => Create, string => Edit */

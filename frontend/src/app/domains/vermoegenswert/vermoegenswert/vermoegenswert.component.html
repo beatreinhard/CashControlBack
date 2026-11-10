@@ -1,9 +1,10 @@
-<h1 class="page-title">Vermögenswerte</h1>
-
-<app-vermoegenswert-search></app-vermoegenswert-search>
-
-<div>
+<app-page-header title="Vermögenswerte" subtitle="Vermögenswerte und Anschaffungen">
   <a mat-flat-button routerLink="/vermoegenswert/create">
+    <mat-icon>add</mat-icon>
     Vermögenswert erfassen
   </a>
+</app-page-header>
+
+<div class="cc-content">
+  <app-vermoegenswert-search></app-vermoegenswert-search>
 </div>

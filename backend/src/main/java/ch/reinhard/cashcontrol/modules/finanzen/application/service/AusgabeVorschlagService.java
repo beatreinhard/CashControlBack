@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Service
 public class AusgabeVorschlagService implements AusgabeVorschlagServicePort {
 
+    // TODO Namen passen mir nicht so richtig, aber ich finde keine besseren. Vorschläge?
     private final AusgabeVorschlagQuellePort quellePort;
     private final AusgabeVorschlagDateiImport dateiImport; // andere Bean, damit @Transactional über den Proxy greift
     private final AtomicBoolean importLaeuft = new AtomicBoolean(false);

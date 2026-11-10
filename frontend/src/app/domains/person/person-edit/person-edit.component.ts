@@ -15,6 +15,7 @@ import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm
 import {NotificationService} from '../../../shared/notification.service';
 import {parseBackendDate, toBackendDate} from '../../../shared/date-utils';
 import {AHV_PATTERN, notInFutureValidator} from '../../../shared/validators';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
 
 const MAX_TEXT_LENGTH = 255;
 
@@ -45,11 +46,13 @@ type PersonForm = FormGroup<{
     MatProgressBar,
     MatSuffix,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    PageHeaderComponent
   ],
   templateUrl: './person-edit.component.html',
   styleUrl: './person-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class PersonEditComponent {
   /** undefined/null => Create, string => Edit */

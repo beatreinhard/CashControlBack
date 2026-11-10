@@ -1,5 +1,9 @@
-<form class="person-form" [formGroup]="form" (ngSubmit)="save()">
-  <mat-card>
+<app-page-header [narrow]="true"
+                 [crumbs]="[{ label: 'Personen', link: '/person' }, { label: isEditMode() ? 'Bearbeiten' : 'Neu' }]">
+</app-page-header>
+
+<form class="cc-form" [formGroup]="form" (ngSubmit)="save()">
+  <mat-card class="cc-card">
 
     <mat-card-title>{{ title() }}</mat-card-title>
     <mat-card-content>
@@ -11,64 +15,66 @@
         <p class="error">{{ error }}</p>
       }
 
-      <!-- Name -->
-      <mat-form-field class="full-width">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" />
-        <mat-error>
-          @if (form.controls.name.hasError('required')) {
-            Name ist erforderlich
-          } @else if (form.controls.name.hasError('maxlength')) {
-            Maximal {{ maxTextLength }} Zeichen
-          }
-        </mat-error>
-      </mat-form-field>
+      <div class="form-grid">
+        <!-- Name -->
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+          <mat-error>
+            @if (form.controls.name.hasError('required')) {
+              Name ist erforderlich
+            } @else if (form.controls.name.hasError('maxlength')) {
+              Maximal {{ maxTextLength }} Zeichen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Vorname -->
-      <mat-form-field class="full-width">
-        <mat-label>Vorname</mat-label>
-        <input matInput formControlName="vorname" />
-        <mat-error>
-          @if (form.controls.vorname.hasError('required')) {
-            Vorname ist erforderlich
-          } @else if (form.controls.vorname.hasError('maxlength')) {
-            Maximal {{ maxTextLength }} Zeichen
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Vorname -->
+        <mat-form-field>
+          <mat-label>Vorname</mat-label>
+          <input matInput formControlName="vorname" />
+          <mat-error>
+            @if (form.controls.vorname.hasError('required')) {
+              Vorname ist erforderlich
+            } @else if (form.controls.vorname.hasError('maxlength')) {
+              Maximal {{ maxTextLength }} Zeichen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Geburtsdatum -->
-      <mat-form-field class="full-width">
-        <mat-label>Geburtsdatum</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="geburtsdatum" />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error>
-          @if (form.controls.geburtsdatum.hasError('matDatepickerParse')) {
-            Ungültiges Datum
-          } @else if (form.controls.geburtsdatum.hasError('required')) {
-            Geburtsdatum ist erforderlich
-          } @else if (form.controls.geburtsdatum.hasError('futureDate')) {
-            Geburtsdatum darf nicht in der Zukunft liegen
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Geburtsdatum -->
+        <mat-form-field>
+          <mat-label>Geburtsdatum</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="geburtsdatum" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>
+            @if (form.controls.geburtsdatum.hasError('matDatepickerParse')) {
+              Ungültiges Datum
+            } @else if (form.controls.geburtsdatum.hasError('required')) {
+              Geburtsdatum ist erforderlich
+            } @else if (form.controls.geburtsdatum.hasError('futureDate')) {
+              Geburtsdatum darf nicht in der Zukunft liegen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- AHV-Nummer -->
-      <mat-form-field class="full-width">
-        <mat-label>AHV-Nummer</mat-label>
-        <input matInput formControlName="ahvnummer" />
-        <mat-hint>Format: 756.1234.5678.90</mat-hint>
-        <mat-error>Format: 756.1234.5678.90</mat-error>
-      </mat-form-field>
+        <!-- AHV-Nummer -->
+        <mat-form-field>
+          <mat-label>AHV-Nummer</mat-label>
+          <input matInput formControlName="ahvnummer" />
+          <mat-hint>Format: 756.1234.5678.90</mat-hint>
+          <mat-error>Format: 756.1234.5678.90</mat-error>
+        </mat-form-field>
+      </div>
     </mat-card-content>
 
-    <mat-card-actions align="end">
+    <mat-card-actions>
       <a mat-button routerLink="/person">
         Abbrechen
       </a>
       @if (isEditMode()) {
-        <button mat-button type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
+        <button mat-button class="cc-danger" type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
           Löschen
         </button>
       }

@@ -1,9 +1,10 @@
-<h1 class="page-title">Ausgaben</h1>
-
-<app-ausgabe-search></app-ausgabe-search>
-
-<div>
+<app-page-header title="Ausgaben" subtitle="Alle erfassten Zahlungen auf einen Blick">
   <a mat-flat-button routerLink="/ausgabe/create">
+    <mat-icon>add</mat-icon>
     Ausgabe erfassen
   </a>
+</app-page-header>
+
+<div class="cc-content">
+  <app-ausgabe-search></app-ausgabe-search>
 </div>

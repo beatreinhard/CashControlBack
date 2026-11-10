@@ -4,13 +4,15 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {VergabungControllerApi} from '../../../generated';
 import {VergabungListComponent} from '../vergabung-list/vergabung-list.component';
 import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-vergabung-search',
   imports: [
     MatProgressSpinner,
     VergabungListComponent,
-    YearFilterComponent
+    YearFilterComponent,
+    MatIcon
   ],
   templateUrl: './vergabung-search.component.html',
   styleUrl: './vergabung-search.component.css',

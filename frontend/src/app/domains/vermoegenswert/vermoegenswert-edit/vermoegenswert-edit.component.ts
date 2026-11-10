@@ -21,6 +21,7 @@ import {VermoegenswertControllerApi, VermoegenswertDto} from '../../../generated
 import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm-dialog/confirm-dialog.component';
 import {NotificationService} from '../../../shared/notification.service';
 import {MIN_YEAR} from '../../../shared/year-filter/year-filter.component';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
 
 const MAX_TEXT_LENGTH = 255;
 const MIN_ANSCHAFFUNGSJAHR = 1900;
@@ -55,11 +56,13 @@ function nichtNachSteuerjahr(control: AbstractControl<number | null>): Validatio
     MatProgressBar,
     MatSuffix,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    PageHeaderComponent
   ],
   templateUrl: './vermoegenswert-edit.component.html',
   styleUrl: './vermoegenswert-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class VermoegenswertEditComponent {
   /** undefined/null => Create, string => Edit */

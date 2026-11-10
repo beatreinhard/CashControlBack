@@ -1,6 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
 import {DatePipe, DecimalPipe} from '@angular/common';
-import {MatChip, MatChipSet} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
@@ -11,12 +10,14 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
 import {ErbschaftDto} from '../../../generated';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-erbschaft-list',
@@ -25,8 +26,6 @@ import {ErbschaftDto} from '../../../generated';
     DecimalPipe,
     MatCell,
     MatCellDef,
-    MatChip,
-    MatChipSet,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderCellDef,
@@ -37,10 +36,11 @@ import {ErbschaftDto} from '../../../generated';
     MatRowDef,
     MatSort,
     MatSortHeader,
-    MatTable
+    MatTable,
+    MatNoDataRow,
+    MatIcon
   ],
   templateUrl: './erbschaft-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErbschaftListComponent implements AfterViewInit {

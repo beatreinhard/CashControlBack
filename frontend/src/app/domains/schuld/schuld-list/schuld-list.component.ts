@@ -1,6 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
 import {DecimalPipe} from '@angular/common';
-import {MatChip, MatChipSet} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
@@ -11,12 +10,14 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
 import {SchuldDto} from '../../../generated';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-schuld-list',
@@ -24,8 +25,6 @@ import {SchuldDto} from '../../../generated';
     DecimalPipe,
     MatCell,
     MatCellDef,
-    MatChip,
-    MatChipSet,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderCellDef,
@@ -36,10 +35,11 @@ import {SchuldDto} from '../../../generated';
     MatRowDef,
     MatSort,
     MatSortHeader,
-    MatTable
+    MatTable,
+    MatNoDataRow,
+    MatIcon
   ],
   templateUrl: './schuld-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SchuldListComponent implements AfterViewInit {

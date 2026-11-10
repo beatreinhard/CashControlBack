@@ -1,6 +1,8 @@
-<form class="edit-form" [formGroup]="form" (ngSubmit)="save()">
-  <mat-card>
+<app-page-header [narrow]="true" [crumbs]="[{ label: 'Ausgaben', link: '/ausgabe' }, { label: isEditMode() ? 'Bearbeiten' : 'Neu' }]">
+</app-page-header>
 
+<form class="cc-form" [formGroup]="form" (ngSubmit)="save()">
+  <mat-card class="cc-card">
     <mat-card-title>{{ title() }}</mat-card-title>
     <mat-card-content>
 
@@ -11,94 +13,96 @@
         <p class="error">{{ error }}</p>
       }
 
-      <!-- Datum -->
-      <mat-form-field class="full-width">
-        <mat-label>Datum</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="datum" />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error>
-          @if (form.controls.datum.hasError('matDatepickerParse')) {
-            Ungültiges Datum
-          } @else {
-            Datum ist erforderlich
-          }
-        </mat-error>
-      </mat-form-field>
+      <div class="cc-section-label">Zahlung</div>
+      <div class="form-grid">
+        <!-- Betrag -->
+        <mat-form-field class="cc-amount-field">
+          <mat-label>Betrag</mat-label>
+          <span matTextPrefix>CHF&nbsp;</span>
+          <input matInput type="number" formControlName="betrag" />
+          <mat-error>
+            @if (form.controls.betrag.hasError('required')) {
+              Betrag ist erforderlich
+            } @else {
+              Betrag muss grösser als 0 sein
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Zahlender -->
-      <mat-form-field class="full-width">
-        <mat-label>Zahlender</mat-label>
-        <mat-select formControlName="zahlender">
-          <mat-option [value]="null">–</mat-option>
-          @for (z of zahlender(); track z.value) {
-            <mat-option [value]="z.value">{{ z.viewValue }}</mat-option>
-          }
-        </mat-select>
-        @if (zahlenderError(); as error) {
-          <mat-hint class="error">{{ error }}</mat-hint>
-        }
-      </mat-form-field>
+        <!-- Datum -->
+        <mat-form-field>
+          <mat-label>Datum</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="datum" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>
+            @if (form.controls.datum.hasError('matDatepickerParse')) {
+              Ungültiges Datum
+            } @else {
+              Datum ist erforderlich
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Empfänger -->
-      <mat-form-field class="full-width">
-        <mat-label>Empfänger</mat-label>
-        <input matInput formControlName="empfaenger" />
-        <mat-error>
-          @if (form.controls.empfaenger.hasError('required')) {
-            Empfänger ist erforderlich
-          } @else {
-            Maximal {{ maxTextLength }} Zeichen
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Empfänger -->
+        <mat-form-field>
+          <mat-label>Empfänger</mat-label>
+          <mat-icon matPrefix class="muted">storefront</mat-icon>
+          <input matInput formControlName="empfaenger" />
+          <mat-error>
+            @if (form.controls.empfaenger.hasError('required')) {
+              Empfänger ist erforderlich
+            } @else {
+              Maximal {{ maxTextLength }} Zeichen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Kategorie -->
-      <mat-form-field class="full-width">
-        <mat-label>Kategorie</mat-label>
-        <mat-select formControlName="kategorie">
-          @for (k of kategorien; track k) {
-            <mat-option [value]="k">{{ k }}</mat-option>
+        <!-- Zahlender -->
+        <mat-form-field>
+          <mat-label>Zahlender</mat-label>
+          <mat-icon matPrefix class="muted">person</mat-icon>
+          <mat-select formControlName="zahlender">
+            <mat-option [value]="null">–</mat-option>
+            @for (z of zahlender(); track z.value) {
+              <mat-option [value]="z.value">{{ z.viewValue }}</mat-option>
+            }
+          </mat-select>
+          @if (zahlenderError(); as error) {
+            <mat-hint class="error">{{ error }}</mat-hint>
           }
-        </mat-select>
-        <mat-error>Kategorie ist erforderlich</mat-error>
-      </mat-form-field>
+        </mat-form-field>
+      </div>
 
-      <!-- Beschreibung / Notiz -->
-      <mat-form-field class="full-width">
-        <mat-label>Beschreibung</mat-label>
-        <textarea matInput rows="3" formControlName="text"></textarea>
-        <mat-error>Maximal {{ maxTextLength }} Zeichen</mat-error>
-      </mat-form-field>
+      <div class="cc-section-label">Einordnung</div>
+      <div class="form-grid">
+        <!-- Kategorie -->
+        <mat-form-field class="span-2">
+          <mat-label>Kategorie</mat-label>
+          <mat-select formControlName="kategorie">
+            @for (k of kategorien; track k) {
+              <mat-option [value]="k">{{ meta(k)?.label ?? k }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>Kategorie ist erforderlich</mat-error>
+        </mat-form-field>
 
-      <!-- Betrag -->
-      <mat-form-field class="full-width">
-        <mat-label>Betrag</mat-label>
-        <input matInput type="number" formControlName="betrag" />
-        <span matTextSuffix>CHF</span>
-        <mat-error>
-          @if (form.controls.betrag.hasError('required')) {
-            Betrag ist erforderlich
-          } @else {
-            Betrag muss grösser als 0 sein
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Beschreibung / Notiz -->
+        <mat-form-field class="span-2">
+          <mat-label>Beschreibung</mat-label>
+          <textarea matInput rows="3" formControlName="text"></textarea>
+          <mat-error>Maximal {{ maxTextLength }} Zeichen</mat-error>
+        </mat-form-field>
+      </div>
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <a mat-button routerLink="/ausgabe">
-        Abbrechen
-      </a>
+    <mat-card-actions>
       @if (isEditMode()) {
-        <button mat-button type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
-          Löschen
-        </button>
+        <button mat-button class="cc-danger" type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">Löschen</button>
       }
-      <button mat-flat-button color="primary" type="submit" [disabled]="isSaving() || isLoading() || !!loadError()">
-        Speichern
-      </button>
+      <span class="spacer"></span>
+      <a mat-button routerLink="/ausgabe">Abbrechen</a>
+      <button mat-flat-button type="submit" [disabled]="isSaving() || isLoading() || !!loadError()">Speichern</button>
     </mat-card-actions>
-
   </mat-card>
 </form>

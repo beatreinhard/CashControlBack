@@ -16,6 +16,7 @@ import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm
 import {NotificationService} from '../../../shared/notification.service';
 import {injectPersonOptions} from '../../../shared/person-options';
 import {MIN_YEAR} from '../../../shared/year-filter/year-filter.component';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
 
 const MAX_TEXT_LENGTH = 255;
 const MAX_ARBEITSTAGE = 366;
@@ -52,11 +53,13 @@ type BerufForm = FormGroup<{
     MatSelect,
     MatSuffix,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    PageHeaderComponent
   ],
   templateUrl: './beruf-edit.component.html',
   styleUrl: './beruf-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class BerufEditComponent {
   /** undefined/null => Create, string => Edit */

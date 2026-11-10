@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
 import {DatePipe, DecimalPipe} from '@angular/common';
-import {MatChip, MatChipSet} from '@angular/material/chips';
+import {MatIcon} from '@angular/material/icon';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
@@ -11,12 +11,14 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
-import {AusgabeViewDto} from '../../../generated';
+import {AusgabeKategorieDto, AusgabeViewDto} from '../../../generated';
+import {kategorieMeta} from '../ausgabe-kategorie-meta';
 import {FullNamePipe} from '../../../shared/full-name.pipe';
 
 @Component({
@@ -27,13 +29,13 @@ import {FullNamePipe} from '../../../shared/full-name.pipe';
     FullNamePipe,
     MatCell,
     MatCellDef,
-    MatChip,
-    MatChipSet,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderCellDef,
     MatHeaderRow,
     MatHeaderRowDef,
+    MatIcon,
+    MatNoDataRow,
     MatPaginator,
     MatRow,
     MatRowDef,
@@ -42,7 +44,6 @@ import {FullNamePipe} from '../../../shared/full-name.pipe';
     MatTable
   ],
   templateUrl: './ausgabe-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AusgabeListComponent implements AfterViewInit {
@@ -52,7 +53,7 @@ export class AusgabeListComponent implements AfterViewInit {
   private readonly paginator = viewChild.required(MatPaginator);
   private readonly sort = viewChild.required(MatSort);
 
-  protected readonly displayedColumns: string[] = ['datum', 'zahlender', 'empfaenger', 'kategorie', 'betrag'];
+  protected readonly displayedColumns: string[] = ['datum', 'empfaenger', 'zahlender', 'kategorie', 'betrag'];
   protected readonly dataSource = new MatTableDataSource<AusgabeViewDto>([]);
 
   constructor() {
@@ -71,6 +72,10 @@ export class AusgabeListComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator();
     this.dataSource.sort = this.sort();
+  }
+
+  protected meta(kategorie: AusgabeKategorieDto) {
+    return kategorieMeta(kategorie);
   }
 
   protected selectRow(ausgabe: AusgabeViewDto): void {

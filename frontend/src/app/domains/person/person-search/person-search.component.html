@@ -1,15 +1,29 @@
-<mat-form-field class="search">
-  <mat-label>Suchen (Name, Vorname, AHV-Nummer)</mat-label>
-  <input matInput type="search" [value]="searchTerm()" (input)="onSearch($event)" />
-</mat-form-field>
+<section class="cc-panel">
+  <div class="cc-panel-head">
+    <h2>Alle Personen</h2>
+    @if (!loading() && !error()) {
+      <span class="cc-count">{{ result().length }}</span>
+    }
+    <div class="cc-panel-tools">
+      <label class="search-pill">
+        <mat-icon>search</mat-icon>
+        <input type="search" placeholder="Name, Vorname, AHV-Nummer" aria-label="Suchen (Name, Vorname, AHV-Nummer)"
+               [value]="searchTerm()" (input)="onSearch($event)" />
+      </label>
+    </div>
+  </div>
 
-@if (loading()) {
-  <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
-} @else if (error()) {
-  <p class="error">{{ error() }}</p>
-} @else {
-  <app-person-list
-    [items]="result()"
-    (personSelected)="openPerson($event)">
-  </app-person-list>
-}
+  @if (loading()) {
+    <div class="state">
+      <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+      Daten werden geladen …
+    </div>
+  } @else if (error()) {
+    <div class="state"><mat-icon>error_outline</mat-icon><p class="error">{{ error() }}</p></div>
+  } @else {
+    <app-person-list
+      [items]="result()"
+      (personSelected)="openPerson($event)">
+    </app-person-list>
+  }
+</section>

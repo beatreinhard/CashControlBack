@@ -10,12 +10,14 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
 import {VermoegenswertDto} from '../../../generated';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-vermoegenswert-list',
@@ -33,10 +35,11 @@ import {VermoegenswertDto} from '../../../generated';
     MatRowDef,
     MatSort,
     MatSortHeader,
-    MatTable
+    MatTable,
+    MatNoDataRow,
+    MatIcon
   ],
   templateUrl: './vermoegenswert-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VermoegenswertListComponent implements AfterViewInit {

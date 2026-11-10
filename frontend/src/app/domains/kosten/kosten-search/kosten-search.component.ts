@@ -5,13 +5,15 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {KostenControllerApi} from '../../../generated';
 import {KostenListComponent} from '../kosten-list/kosten-list.component';
 import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-kosten-search',
   imports: [
     KostenListComponent,
     MatProgressSpinner,
-    YearFilterComponent
+    YearFilterComponent,
+    MatIcon
   ],
   templateUrl: './kosten-search.component.html',
   styleUrl: './kosten-search.component.css',

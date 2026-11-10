@@ -1,5 +1,9 @@
-<form class="edit-form" [formGroup]="form" (ngSubmit)="save()">
-  <mat-card>
+<app-page-header [narrow]="true"
+                 [crumbs]="[{ label: 'Grundstückunterhalt', link: '/grundstueckunterhalt' }, { label: isEditMode() ? 'Bearbeiten' : 'Neu' }]">
+</app-page-header>
+
+<form class="cc-form" [formGroup]="form" (ngSubmit)="save()">
+  <mat-card class="cc-card">
 
     <mat-card-title>{{ title() }}</mat-card-title>
     <mat-card-content>
@@ -11,106 +15,108 @@
         <p class="error">{{ error }}</p>
       }
 
-      <!-- Jahr -->
-      <mat-form-field class="full-width">
-        <mat-label>Jahr</mat-label>
-        <input matInput type="number" formControlName="jahr" />
-        <mat-error>
-          @if (form.controls.jahr.hasError('required')) {
-            Jahr ist erforderlich
-          } @else {
-            Jahr muss {{ minYear }} oder grösser sein
-          }
-        </mat-error>
-      </mat-form-field>
+      <div class="form-grid">
+        <!-- Jahr -->
+        <mat-form-field>
+          <mat-label>Jahr</mat-label>
+          <input matInput type="number" formControlName="jahr" />
+          <mat-error>
+            @if (form.controls.jahr.hasError('required')) {
+              Jahr ist erforderlich
+            } @else {
+              Jahr muss {{ minYear }} oder grösser sein
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Rechnungsdatum -->
-      <mat-form-field class="full-width">
-        <mat-label>Rechnungsdatum</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="rgDatum" />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error>
-          @if (form.controls.rgDatum.hasError('matDatepickerParse')) {
-            Ungültiges Datum
-          } @else if (form.controls.rgDatum.hasError('required')) {
-            Rechnungsdatum ist erforderlich
-          } @else if (form.controls.rgDatum.hasError('futureDate')) {
-            Rechnungsdatum darf nicht in der Zukunft liegen
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Rechnungsdatum -->
+        <mat-form-field>
+          <mat-label>Rechnungsdatum</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="rgDatum" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>
+            @if (form.controls.rgDatum.hasError('matDatepickerParse')) {
+              Ungültiges Datum
+            } @else if (form.controls.rgDatum.hasError('required')) {
+              Rechnungsdatum ist erforderlich
+            } @else if (form.controls.rgDatum.hasError('futureDate')) {
+              Rechnungsdatum darf nicht in der Zukunft liegen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Ausführende Firma -->
-      <mat-form-field class="full-width">
-        <mat-label>Ausführende Firma</mat-label>
-        <input matInput formControlName="ausfuehrendeFirma" />
-        <mat-error>
-          @if (form.controls.ausfuehrendeFirma.hasError('required')) {
-            Ausführende Firma ist erforderlich
-          } @else {
-            Maximal {{ maxTextLength }} Zeichen
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Ausführende Firma -->
+        <mat-form-field>
+          <mat-label>Ausführende Firma</mat-label>
+          <input matInput formControlName="ausfuehrendeFirma" />
+          <mat-error>
+            @if (form.controls.ausfuehrendeFirma.hasError('required')) {
+              Ausführende Firma ist erforderlich
+            } @else {
+              Maximal {{ maxTextLength }} Zeichen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Arbeitsart -->
-      <mat-form-field class="full-width">
-        <mat-label>Arbeitsart</mat-label>
-        <input matInput formControlName="arbeitsArt" />
-        <mat-error>
-          @if (form.controls.arbeitsArt.hasError('required')) {
-            Arbeitsart ist erforderlich
-          } @else {
-            Maximal {{ maxTextLength }} Zeichen
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Arbeitsart -->
+        <mat-form-field>
+          <mat-label>Arbeitsart</mat-label>
+          <input matInput formControlName="arbeitsArt" />
+          <mat-error>
+            @if (form.controls.arbeitsArt.hasError('required')) {
+              Arbeitsart ist erforderlich
+            } @else {
+              Maximal {{ maxTextLength }} Zeichen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Betrag netto -->
-      <mat-form-field class="full-width">
-        <mat-label>Betrag netto</mat-label>
-        <input matInput type="number" formControlName="betragNetto" />
-        <span matTextSuffix>CHF</span>
-        <mat-error>
-          @if (form.controls.betragNetto.hasError('required')) {
-            Betrag netto ist erforderlich
-          } @else {
-            Betrag netto muss grösser als 0 sein
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Betrag netto -->
+        <mat-form-field>
+          <mat-label>Betrag netto</mat-label>
+          <input matInput type="number" formControlName="betragNetto" />
+          <span matTextSuffix>CHF</span>
+          <mat-error>
+            @if (form.controls.betragNetto.hasError('required')) {
+              Betrag netto ist erforderlich
+            } @else {
+              Betrag netto muss grösser als 0 sein
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Anteil andere Kosten -->
-      <mat-form-field class="full-width">
-        <mat-label>Anteil andere Kosten</mat-label>
-        <input matInput type="number" formControlName="anteilAndereKosten" />
-        <span matTextSuffix>CHF</span>
-        <mat-hint>Nicht für die Steuerrechnung relevanter Anteil</mat-hint>
-        <mat-error>
-          @if (form.controls.anteilAndereKosten.hasError('required')) {
-            Anteil andere Kosten ist erforderlich
-          } @else if (form.controls.anteilAndereKosten.hasError('groesserAlsNetto')) {
-            Anteil andere Kosten darf nicht grösser als der Betrag netto sein
-          } @else {
-            Anteil andere Kosten darf nicht negativ sein
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Anteil andere Kosten -->
+        <mat-form-field>
+          <mat-label>Anteil andere Kosten</mat-label>
+          <input matInput type="number" formControlName="anteilAndereKosten" />
+          <span matTextSuffix>CHF</span>
+          <mat-hint>Nicht für die Steuerrechnung relevanter Anteil</mat-hint>
+          <mat-error>
+            @if (form.controls.anteilAndereKosten.hasError('required')) {
+              Anteil andere Kosten ist erforderlich
+            } @else if (form.controls.anteilAndereKosten.hasError('groesserAlsNetto')) {
+              Anteil andere Kosten darf nicht grösser als der Betrag netto sein
+            } @else {
+              Anteil andere Kosten darf nicht negativ sein
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Anteil Unterhalt (berechnet) -->
-      <p class="anteil-unterhalt">
-        Anteil Unterhalt (steuerlich relevant):
-        <strong>{{ anteilUnterhalt() | number:'1.2-2' }} CHF</strong>
-      </p>
+        <!-- Anteil Unterhalt (berechnet) -->
+        <div class="cc-callout anteil-unterhalt span-2">
+          <span class="k">Anteil Unterhalt (steuerlich relevant)</span>
+          <span class="v num"><span class="cur">CHF</span>{{ anteilUnterhalt() | number:'1.2-2' }}</span>
+        </div>
+      </div>
     </mat-card-content>
 
-    <mat-card-actions align="end">
+    <mat-card-actions>
       <a mat-button routerLink="/grundstueckunterhalt">
         Abbrechen
       </a>
       @if (isEditMode()) {
-        <button mat-button type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
+        <button mat-button class="cc-danger" type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
           Löschen
         </button>
       }

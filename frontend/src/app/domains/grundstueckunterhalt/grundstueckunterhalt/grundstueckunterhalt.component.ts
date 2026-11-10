@@ -4,17 +4,22 @@ import {RouterLink} from '@angular/router';
 import {
   GrundstueckunterhaltSearchComponent
 } from '../grundstueckunterhalt-search/grundstueckunterhalt-search.component';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-grundstueckunterhalt',
   imports: [
     GrundstueckunterhaltSearchComponent,
     MatAnchor,
-    RouterLink
+    RouterLink,
+    PageHeaderComponent,
+    MatIcon
   ],
   templateUrl: './grundstueckunterhalt.component.html',
   styleUrl: './grundstueckunterhalt.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class GrundstueckunterhaltComponent {
 

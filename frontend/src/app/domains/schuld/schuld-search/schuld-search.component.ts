@@ -5,13 +5,15 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {SchuldControllerApi} from '../../../generated';
 import {SchuldListComponent} from '../schuld-list/schuld-list.component';
 import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-schuld-search',
   imports: [
     SchuldListComponent,
     MatProgressSpinner,
-    YearFilterComponent
+    YearFilterComponent,
+    MatIcon
   ],
   templateUrl: './schuld-search.component.html',
   styleUrl: './schuld-search.component.css',

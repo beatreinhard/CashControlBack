@@ -5,13 +5,15 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {VermoegenswertControllerApi} from '../../../generated';
 import {VermoegenswertListComponent} from '../vermoegenswert-list/vermoegenswert-list.component';
 import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-vermoegenswert-search',
   imports: [
     VermoegenswertListComponent,
     MatProgressSpinner,
-    YearFilterComponent
+    YearFilterComponent,
+    MatIcon
   ],
   templateUrl: './vermoegenswert-search.component.html',
   styleUrl: './vermoegenswert-search.component.css',

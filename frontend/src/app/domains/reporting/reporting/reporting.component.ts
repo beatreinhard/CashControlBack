@@ -9,6 +9,7 @@ import {MatProgressBar} from '@angular/material/progress-bar';
 import {finalize} from 'rxjs';
 import {ReportingControllerApi} from '../../../generated';
 import {NotificationService} from '../../../shared/notification.service';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
 import {MIN_YEAR} from '../../../shared/year-filter/year-filter.component';
 
 const REVOKE_URL_DELAY_MS = 10_000;
@@ -27,11 +28,13 @@ const REVOKE_URL_DELAY_MS = 10_000;
     MatInput,
     MatLabel,
     MatProgressBar,
+    PageHeaderComponent,
     ReactiveFormsModule
   ],
   templateUrl: './reporting.component.html',
   styleUrl: './reporting.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class ReportingComponent {
 

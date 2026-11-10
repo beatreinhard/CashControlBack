@@ -1,9 +1,10 @@
-<h1 class="page-title">Schulden</h1>
-
-<app-schuld-search></app-schuld-search>
-
-<div>
+<app-page-header title="Schulden" subtitle="Schulden und Schuldzinsen pro Steuerjahr">
   <a mat-flat-button routerLink="/schuld/create">
+    <mat-icon>add</mat-icon>
     Schuld erfassen
   </a>
+</app-page-header>
+
+<div class="cc-content">
+  <app-schuld-search></app-schuld-search>
 </div>

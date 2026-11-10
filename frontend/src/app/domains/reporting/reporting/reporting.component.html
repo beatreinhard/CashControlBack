@@ -1,7 +1,7 @@
-<h1 class="page-title">Reporting</h1>
+<app-page-header title="Reporting" subtitle="Berichte für die Steuererklärung" [narrow]="true"></app-page-header>
 
-<form [formGroup]="form" (ngSubmit)="pdfGenerieren()">
-  <mat-card class="reporting-card">
+<form class="cc-form" [formGroup]="form" (ngSubmit)="pdfGenerieren()">
+  <mat-card class="cc-card">
     <mat-card-title>Steuerrechnung als PDF</mat-card-title>
     <mat-card-content>
       <p>
@@ -9,25 +9,27 @@
         Steuerzahler, Beruf, Kosten, Vergabungen, Schulden, Vermögenswerte, Erbschaften und Grundstückunterhalt.
       </p>
 
-      <mat-form-field class="full-width">
-        <mat-label>Steuerjahr</mat-label>
-        <input matInput type="number" formControlName="jahr" />
-        <mat-hint>Zwischen {{ minYear }} und {{ maxYear }}</mat-hint>
-        <mat-error>
-          @if (form.controls.jahr.hasError('required')) {
-            Steuerjahr ist erforderlich
-          } @else {
-            Steuerjahr muss zwischen {{ minYear }} und {{ maxYear }} liegen
-          }
-        </mat-error>
-      </mat-form-field>
+      <div class="form-grid">
+        <mat-form-field>
+          <mat-label>Steuerjahr</mat-label>
+          <input matInput type="number" formControlName="jahr" />
+          <mat-hint>Zwischen {{ minYear }} und {{ maxYear }}</mat-hint>
+          <mat-error>
+            @if (form.controls.jahr.hasError('required')) {
+              Steuerjahr ist erforderlich
+            } @else {
+              Steuerjahr muss zwischen {{ minYear }} und {{ maxYear }} liegen
+            }
+          </mat-error>
+        </mat-form-field>
+      </div>
 
       @if (generatePdfInProgress()) {
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       }
     </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-flat-button color="primary" type="submit" [disabled]="generatePdfInProgress()">
+    <mat-card-actions>
+      <button mat-flat-button type="submit" [disabled]="generatePdfInProgress()">
         PDF generieren
       </button>
     </mat-card-actions>

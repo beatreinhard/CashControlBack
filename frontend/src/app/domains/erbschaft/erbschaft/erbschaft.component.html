@@ -1,9 +1,10 @@
-<h1 class="page-title">Erbschaften</h1>
-
-<app-erbschaft-search></app-erbschaft-search>
-
-<div>
+<app-page-header title="Erbschaften" subtitle="Erbschaften, Schenkungen und Erbvorbezüge">
   <a mat-flat-button routerLink="/erbschaft/create">
+    <mat-icon>add</mat-icon>
     Erbschaft erfassen
   </a>
+</app-page-header>
+
+<div class="cc-content">
+  <app-erbschaft-search></app-erbschaft-search>
 </div>

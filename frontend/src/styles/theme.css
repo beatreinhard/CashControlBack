@@ -1,0 +1,89 @@
+/*
+ * CashControl-Theme «Alpin» – helles Schweizer E-Banking, Akzent Rot.
+ * Gilt für alle Seiten (.cc-page) und für Overlays (Dropdowns, Datepicker, Dialoge).
+ * Die Navigation (Toolbar/Sidenav) bleibt bewusst im bisherigen Stil.
+ */
+.cc-page,
+.cdk-overlay-container {
+  --cc-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --cc-bg: #f4f5f7;
+  --cc-ink: #15171c;
+  --cc-muted: #646b78;
+  --cc-faint: #8a909c;
+  --cc-line: #e6e8ec;
+  --cc-head: #fafbfc;
+  --cc-red: #c8102e;
+  --cc-red-soft: #fdecef;
+  --cc-dark: #1b1e25;
+  --cc-dark-2: #2b2f38;
+  --cc-focus-ring: rgba(200, 16, 46, .18);
+  --cc-radius: 16px;
+  --cc-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+
+  /* Material-Systemfarben */
+  --mat-sys-primary: var(--cc-red);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: var(--cc-red-soft);
+  --mat-sys-on-primary-container: #7a0019;
+  --mat-sys-secondary-container: #f1f2f4;
+  --mat-sys-on-secondary-container: var(--cc-ink);
+  --mat-sys-surface: #ffffff;
+  --mat-sys-surface-container-lowest: #ffffff;
+  --mat-sys-surface-container-low: #ffffff;
+  --mat-sys-surface-container: #f6f7f9;
+  --mat-sys-surface-container-high: #ffffff;
+  --mat-sys-surface-container-highest: #e9ebef;
+  --mat-sys-on-surface: var(--cc-ink);
+  --mat-sys-on-surface-variant: var(--cc-muted);
+  --mat-sys-outline: #c3c8d1;
+  --mat-sys-outline-variant: var(--cc-line);
+
+  /* Material-Typografie: Systemschrift */
+  --mat-sys-body-large-font: var(--cc-font);
+  --mat-sys-body-medium-font: var(--cc-font);
+  --mat-sys-body-small-font: var(--cc-font);
+  --mat-sys-label-large-font: var(--cc-font);
+  --mat-sys-label-medium-font: var(--cc-font);
+  --mat-sys-label-small-font: var(--cc-font);
+  --mat-sys-title-large-font: var(--cc-font);
+  --mat-sys-title-medium-font: var(--cc-font);
+  --mat-sys-title-small-font: var(--cc-font);
+  --mat-sys-headline-small-font: var(--cc-font);
+  --mat-sys-headline-medium-font: var(--cc-font);
+  --mat-sys-body-large: 400 1rem / 1.5rem var(--cc-font);
+  --mat-sys-body-medium: 400 0.875rem / 1.25rem var(--cc-font);
+  --mat-sys-body-small: 400 0.75rem / 1rem var(--cc-font);
+  --mat-sys-label-large: 600 0.875rem / 1.25rem var(--cc-font);
+  --mat-sys-label-medium: 600 0.75rem / 1rem var(--cc-font);
+  --mat-sys-label-small: 600 0.6875rem / 1rem var(--cc-font);
+  --mat-sys-title-large: 600 1.375rem / 1.75rem var(--cc-font);
+  --mat-sys-title-medium: 600 1rem / 1.5rem var(--cc-font);
+  --mat-sys-title-small: 600 0.875rem / 1.25rem var(--cc-font);
+  --mat-sys-headline-small: 700 1.375rem / 1.75rem var(--cc-font);
+
+  /* Komponenten-Tokens */
+  --mdc-filled-button-container-shape: 10px;
+  --mdc-outlined-button-container-shape: 10px;
+  --mdc-text-button-container-shape: 10px;
+  --mdc-filled-button-container-height: 42px;
+  --mdc-filled-button-label-text-weight: 600;
+  --mdc-outlined-button-label-text-weight: 600;
+  --mdc-text-button-label-text-weight: 600;
+  --mdc-outlined-text-field-container-shape: 10px;
+  --mdc-elevated-card-container-color: #ffffff;
+  --mdc-elevated-card-container-shape: var(--cc-radius);
+  --mdc-elevated-card-container-elevation: none;
+  --mdc-dialog-container-shape: var(--cc-radius);
+  --mat-select-panel-background-color: #ffffff;
+  --mat-datepicker-calendar-container-shape: var(--cc-radius);
+
+  --mat-table-header-container-height: 44px;
+  --mat-table-row-item-container-height: 56px;
+  --mat-table-header-headline-color: var(--cc-muted);
+  --mat-table-header-headline-size: 0.75rem;
+  --mat-table-header-headline-weight: 600;
+  --mat-table-row-item-outline-color: var(--cc-line);
+
+  font-family: var(--cc-font);
+  -webkit-font-smoothing: antialiased;
+}

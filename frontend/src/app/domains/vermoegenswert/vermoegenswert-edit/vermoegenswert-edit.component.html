@@ -1,5 +1,9 @@
-<form class="edit-form" [formGroup]="form" (ngSubmit)="save()">
-  <mat-card>
+<app-page-header [narrow]="true"
+                 [crumbs]="[{ label: 'Vermögenswerte', link: '/vermoegenswert' }, { label: isEditMode() ? 'Bearbeiten' : 'Neu' }]">
+</app-page-header>
+
+<form class="cc-form" [formGroup]="form" (ngSubmit)="save()">
+  <mat-card class="cc-card">
 
     <mat-card-title>{{ title() }}</mat-card-title>
     <mat-card-content>
@@ -11,68 +15,70 @@
         <p class="error">{{ error }}</p>
       }
 
-      <!-- Jahr -->
-      <mat-form-field class="full-width">
-        <mat-label>Jahr</mat-label>
-        <input matInput type="number" formControlName="jahr" />
-        <mat-error>
-          @if (form.controls.jahr.hasError('required')) {
-            Jahr ist erforderlich
-          } @else {
-            Jahr muss {{ minYear }} oder grösser sein
-          }
-        </mat-error>
-      </mat-form-field>
+      <div class="form-grid">
+        <!-- Jahr -->
+        <mat-form-field>
+          <mat-label>Jahr</mat-label>
+          <input matInput type="number" formControlName="jahr" />
+          <mat-error>
+            @if (form.controls.jahr.hasError('required')) {
+              Jahr ist erforderlich
+            } @else {
+              Jahr muss {{ minYear }} oder grösser sein
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Bezeichnung -->
-      <mat-form-field class="full-width">
-        <mat-label>Bezeichnung</mat-label>
-        <input matInput formControlName="bezeichnung" />
-        <mat-error>
-          @if (form.controls.bezeichnung.hasError('required')) {
-            Bezeichnung ist erforderlich
-          } @else {
-            Maximal {{ maxTextLength }} Zeichen
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Bezeichnung -->
+        <mat-form-field>
+          <mat-label>Bezeichnung</mat-label>
+          <input matInput formControlName="bezeichnung" />
+          <mat-error>
+            @if (form.controls.bezeichnung.hasError('required')) {
+              Bezeichnung ist erforderlich
+            } @else {
+              Maximal {{ maxTextLength }} Zeichen
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Anschaffungsjahr -->
-      <mat-form-field class="full-width">
-        <mat-label>Anschaffungsjahr</mat-label>
-        <input matInput type="number" formControlName="anschaffungsjahr" />
-        <mat-error>
-          @if (form.controls.anschaffungsjahr.hasError('required')) {
-            Anschaffungsjahr ist erforderlich
-          } @else if (form.controls.anschaffungsjahr.hasError('nachSteuerjahr')) {
-            Anschaffungsjahr darf nicht nach dem Steuerjahr liegen
-          } @else {
-            Anschaffungsjahr muss {{ minAnschaffungsjahr }} oder grösser sein
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Anschaffungsjahr -->
+        <mat-form-field>
+          <mat-label>Anschaffungsjahr</mat-label>
+          <input matInput type="number" formControlName="anschaffungsjahr" />
+          <mat-error>
+            @if (form.controls.anschaffungsjahr.hasError('required')) {
+              Anschaffungsjahr ist erforderlich
+            } @else if (form.controls.anschaffungsjahr.hasError('nachSteuerjahr')) {
+              Anschaffungsjahr darf nicht nach dem Steuerjahr liegen
+            } @else {
+              Anschaffungsjahr muss {{ minAnschaffungsjahr }} oder grösser sein
+            }
+          </mat-error>
+        </mat-form-field>
 
-      <!-- Anschaffungspreis -->
-      <mat-form-field class="full-width">
-        <mat-label>Anschaffungspreis</mat-label>
-        <input matInput type="number" formControlName="anschaffungspreis" />
-        <span matTextSuffix>CHF</span>
-        <mat-error>
-          @if (form.controls.anschaffungspreis.hasError('required')) {
-            Anschaffungspreis ist erforderlich
-          } @else {
-            Anschaffungspreis darf nicht negativ sein
-          }
-        </mat-error>
-      </mat-form-field>
+        <!-- Anschaffungspreis -->
+        <mat-form-field>
+          <mat-label>Anschaffungspreis</mat-label>
+          <input matInput type="number" formControlName="anschaffungspreis" />
+          <span matTextSuffix>CHF</span>
+          <mat-error>
+            @if (form.controls.anschaffungspreis.hasError('required')) {
+              Anschaffungspreis ist erforderlich
+            } @else {
+              Anschaffungspreis darf nicht negativ sein
+            }
+          </mat-error>
+        </mat-form-field>
+      </div>
     </mat-card-content>
 
-    <mat-card-actions align="end">
+    <mat-card-actions>
       <a mat-button routerLink="/vermoegenswert">
         Abbrechen
       </a>
       @if (isEditMode()) {
-        <button mat-button type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
+        <button mat-button class="cc-danger" type="button" [disabled]="isSaving() || isLoading()" (click)="delete()">
           Löschen
         </button>
       }

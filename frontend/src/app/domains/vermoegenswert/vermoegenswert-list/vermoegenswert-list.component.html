@@ -4,7 +4,7 @@
     <!-- Jahr -->
     <ng-container matColumnDef="jahr">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Jahr</th>
-      <td mat-cell *matCellDef="let v">{{ v.jahr }}</td>
+      <td mat-cell *matCellDef="let v"><span class="cc-year">{{ v.jahr }}</span></td>
     </ng-container>
 
     <!-- Bezeichnung -->
@@ -22,7 +22,7 @@
     <!-- Anschaffungspreis -->
     <ng-container matColumnDef="anschaffungspreis">
       <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="right">Anschaffungspreis</th>
-      <td mat-cell *matCellDef="let v" class="right">{{ v.anschaffungspreis | number:'1.2-2' }}</td>
+      <td mat-cell *matCellDef="let v" class="right"><span class="cc-amount num"><span class="cur">CHF</span>{{ v.anschaffungspreis | number:'1.2-2' }}</span></td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -37,7 +37,15 @@
       (keydown.space)="$event.preventDefault(); selectRow(row)">
     </tr>
 
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+        <div class="state"><mat-icon>inbox</mat-icon>Keine Einträge gefunden</div>
+      </td>
+    </tr>
+
   </table>
 
-  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+  <div class="cc-panel-foot">
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>

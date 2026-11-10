@@ -16,6 +16,7 @@ import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm
 import {NotificationService} from '../../../shared/notification.service';
 import {injectPersonOptions} from '../../../shared/person-options';
 import {MIN_YEAR} from '../../../shared/year-filter/year-filter.component';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
 
 const MAX_TEXT_LENGTH = 255;
 
@@ -47,11 +48,13 @@ type KostenForm = FormGroup<{
     MatSelect,
     MatSuffix,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    PageHeaderComponent
   ],
   templateUrl: './kosten-edit.component.html',
   styleUrl: './kosten-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class KostenEditComponent {
   /** undefined/null => Create, string => Edit */

@@ -1,19 +1,17 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {rxResource} from '@angular/core/rxjs-interop';
 import {Router} from '@angular/router';
-import {MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
+import {MatIcon} from '@angular/material/icon';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {AusgabeControllerApi} from '../../../generated';
 import {AusgabeListComponent} from '../ausgabe-list/ausgabe-list.component';
+import {KATEGORIE_META} from '../ausgabe-kategorie-meta';
 
 @Component({
   selector: 'app-ausgabe-search',
   imports: [
     AusgabeListComponent,
-    MatFormField,
-    MatInput,
-    MatLabel,
+    MatIcon,
     MatProgressSpinner
   ],
   templateUrl: './ausgabe-search.component.html',
@@ -40,7 +38,7 @@ export class AusgabeSearchComponent {
     const term = this.searchTerm().trim().toLowerCase();
     if (!term) return ausgaben;
     return ausgaben.filter(a =>
-      [a.empfaenger, a.kategorie, a.zahlenderName, a.zahlenderVorname]
+      [a.empfaenger, a.kategorie, KATEGORIE_META[a.kategorie]?.label, a.zahlenderName, a.zahlenderVorname]
         .some(value => value?.toLowerCase().includes(term))
     );
   });

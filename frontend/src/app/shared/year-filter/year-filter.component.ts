@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, inject, output} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
-import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
 import {MatInput} from '@angular/material/input';
 
 export const MIN_YEAR = 2000;
@@ -12,36 +12,22 @@ export const MIN_YEAR = 2000;
   selector: 'app-year-filter',
   imports: [
     MatButton,
-    MatCard,
-    MatCardActions,
-    MatCardContent,
-    MatCardTitle,
     MatError,
     MatFormField,
+    MatIcon,
     MatInput,
     MatLabel,
     ReactiveFormsModule
   ],
   template: `
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <mat-card>
-        <mat-card-title>Filter</mat-card-title>
-        <mat-card-content>
-          <mat-form-field class="full-width">
-            <mat-label>Jahr</mat-label>
-            <input matInput type="number" formControlName="jahr" />
-            <mat-error>Jahr muss {{ minYear }} oder grösser sein</mat-error>
-          </mat-form-field>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-flat-button color="primary" type="submit">Filtern</button>
-        </mat-card-actions>
-      </mat-card>
+    <form class="cc-year-filter" [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Jahr</mat-label>
+        <input matInput type="number" formControlName="jahr" placeholder="Alle" />
+        <mat-error>Jahr muss {{ minYear }} oder grösser sein</mat-error>
+      </mat-form-field>
+      <button mat-flat-button type="submit"><mat-icon>filter_alt</mat-icon>Filtern</button>
     </form>
-  `,
-  styles: `
-    .full-width { width: 100%; }
-    form { margin-bottom: 16px; }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

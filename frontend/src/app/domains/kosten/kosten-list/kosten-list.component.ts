@@ -1,6 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, effect, input, output, viewChild} from '@angular/core';
 import {DecimalPipe} from '@angular/common';
-import {MatChip, MatChipSet} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {
@@ -11,6 +10,7 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
@@ -18,6 +18,7 @@ import {
 } from '@angular/material/table';
 import {KostenViewDto} from '../../../generated';
 import {FullNamePipe} from '../../../shared/full-name.pipe';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-kosten-list',
@@ -26,8 +27,6 @@ import {FullNamePipe} from '../../../shared/full-name.pipe';
     FullNamePipe,
     MatCell,
     MatCellDef,
-    MatChip,
-    MatChipSet,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderCellDef,
@@ -38,10 +37,11 @@ import {FullNamePipe} from '../../../shared/full-name.pipe';
     MatRowDef,
     MatSort,
     MatSortHeader,
-    MatTable
+    MatTable,
+    MatNoDataRow,
+    MatIcon
   ],
   templateUrl: './kosten-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KostenListComponent implements AfterViewInit {

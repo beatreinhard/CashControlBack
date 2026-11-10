@@ -10,6 +10,7 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
@@ -18,6 +19,8 @@ import {
 import {VergabungDto} from '../../../generated';
 
 /** Vergabungen sind nur lesbar (sie entstehen aus Ausgaben), daher keine klickbaren Zeilen. */
+import {MatIcon} from '@angular/material/icon';
+
 @Component({
   selector: 'app-vergabung-list',
   imports: [
@@ -35,10 +38,11 @@ import {VergabungDto} from '../../../generated';
     MatRowDef,
     MatSort,
     MatSortHeader,
-    MatTable
+    MatTable,
+    MatNoDataRow,
+    MatIcon
   ],
   templateUrl: './vergabung-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VergabungListComponent implements AfterViewInit {

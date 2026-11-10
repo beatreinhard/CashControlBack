@@ -6,13 +6,15 @@ import {BerufControllerApi} from '../../../generated';
 import {BerufListComponent, BerufRow} from '../beruf-list/beruf-list.component';
 import {injectPersonOptions} from '../../../shared/person-options';
 import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-beruf-search',
   imports: [
     BerufListComponent,
     MatProgressSpinner,
-    YearFilterComponent
+    YearFilterComponent,
+    MatIcon
   ],
   templateUrl: './beruf-search.component.html',
   styleUrl: './beruf-search.component.css',

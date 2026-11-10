@@ -9,6 +9,7 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
@@ -16,6 +17,7 @@ import {
 } from '@angular/material/table';
 import {PersonDto} from '../../../generated';
 import {DatePipe} from '@angular/common';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-person-list',
@@ -33,10 +35,11 @@ import {DatePipe} from '@angular/common';
     MatRowDef,
     MatSort,
     MatSortHeader,
-    MatTable
+    MatTable,
+    MatNoDataRow,
+    MatIcon
   ],
   templateUrl: './person-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonListComponent implements AfterViewInit {

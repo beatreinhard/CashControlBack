@@ -1,9 +1,10 @@
-<h1 class="page-title">Kosten</h1>
-
-<app-kosten-search></app-kosten-search>
-
-<div>
+<app-page-header title="Kosten" subtitle="Abzugsfähige Kosten pro Steuerjahr">
   <a mat-flat-button routerLink="/kosten/create">
+    <mat-icon>add</mat-icon>
     Kosten erfassen
   </a>
+</app-page-header>
+
+<div class="cc-content">
+  <app-kosten-search></app-kosten-search>
 </div>

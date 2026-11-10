@@ -4,16 +4,14 @@
     <!-- Jahr -->
     <ng-container matColumnDef="jahr">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Jahr</th>
-      <td mat-cell *matCellDef="let s">{{ s.jahr }}</td>
+      <td mat-cell *matCellDef="let s"><span class="cc-year">{{ s.jahr }}</span></td>
     </ng-container>
 
     <!-- Art -->
     <ng-container matColumnDef="art">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Art</th>
       <td mat-cell *matCellDef="let s">
-        <mat-chip-set>
-          <mat-chip>{{ s.art }}</mat-chip>
-        </mat-chip-set>
+        <span class="cc-tag">{{ s.art }}</span>
       </td>
     </ng-container>
 
@@ -32,13 +30,13 @@
     <!-- Betrag -->
     <ng-container matColumnDef="betrag">
       <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="right">Betrag</th>
-      <td mat-cell *matCellDef="let s" class="right">{{ s.betrag | number:'1.2-2' }}</td>
+      <td mat-cell *matCellDef="let s" class="right"><span class="cc-amount num"><span class="cur">CHF</span>{{ s.betrag | number:'1.2-2' }}</span></td>
     </ng-container>
 
     <!-- Zinsen -->
     <ng-container matColumnDef="zinsen">
       <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="right">Zinsen</th>
-      <td mat-cell *matCellDef="let s" class="right">{{ s.zinsen | number:'1.2-2' }}</td>
+      <td mat-cell *matCellDef="let s" class="right"><span class="cc-amount num"><span class="cur">CHF</span>{{ s.zinsen | number:'1.2-2' }}</span></td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -53,7 +51,15 @@
       (keydown.space)="$event.preventDefault(); selectRow(row)">
     </tr>
 
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+        <div class="state"><mat-icon>inbox</mat-icon>Keine Einträge gefunden</div>
+      </td>
+    </tr>
+
   </table>
 
-  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+  <div class="cc-panel-foot">
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,25,50]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>

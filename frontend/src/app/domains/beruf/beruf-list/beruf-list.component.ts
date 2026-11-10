@@ -10,12 +10,14 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
 import {BerufDto} from '../../../generated';
+import {MatIcon} from '@angular/material/icon';
 
 /** Beruf mit aufgelöstem Namen des Arbeitnehmers (Person). */
 export type BerufRow = BerufDto & { arbeitnehmerName: string };
@@ -36,10 +38,11 @@ export type BerufRow = BerufDto & { arbeitnehmerName: string };
     MatRowDef,
     MatSort,
     MatSortHeader,
-    MatTable
+    MatTable,
+    MatNoDataRow,
+    MatIcon
   ],
   templateUrl: './beruf-list.component.html',
-  styleUrls: ['../../../shared/list-styles.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BerufListComponent implements AfterViewInit {

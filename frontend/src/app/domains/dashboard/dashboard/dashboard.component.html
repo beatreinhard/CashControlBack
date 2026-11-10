@@ -1,1 +1,153 @@
-<h1>Dashboard</h1>
+<app-page-header title="Übersicht" [subtitle]="'Ihre Finanzen im Steuerjahr ' + jahr()" [hideCrumbs]="true">
+  <div class="cc-stepper" role="group" aria-label="Steuerjahr wählen">
+    <button mat-icon-button type="button" aria-label="Vorheriges Jahr" [disabled]="jahr() <= minYear" (click)="vorherigesJahr()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span class="cc-stepper-value num" aria-live="polite">{{ jahr() }}</span>
+    <button mat-icon-button type="button" aria-label="Nächstes Jahr" [disabled]="jahr() >= maxYear" (click)="naechstesJahr()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</app-page-header>
+
+<div class="cc-content">
+
+  <!-- Kennzahlen -->
+  <section class="cc-kpis" aria-label="Kennzahlen">
+    <a class="cc-kpi hero" routerLink="/ausgabe">
+      <div class="cc-kpi-label">Ausgaben {{ jahr() }}</div>
+      @if (ausgabenError()) {
+        <div class="cc-kpi-value">–</div>
+        <div class="cc-kpi-sub">Konnte Ausgaben nicht laden.</div>
+      } @else {
+        <div class="cc-kpi-value num"><span class="cur">CHF</span>{{ ausgabenLoading() ? '…' : (ausgabenTotal() | number:'1.2-2') }}</div>
+        <div class="cc-kpi-sub">
+          {{ ausgabenCount() }} Buchungen
+          @if (ausgabenTrend(); as t) {
+            · <span class="cc-trend" [class.up]="t > 0" [class.down]="t < 0">
+                <mat-icon>{{ t > 0 ? 'north_east' : 'south_east' }}</mat-icon>{{ t > 0 ? '+' : '' }}{{ t | number:'1.0-1' }} % ggü. Vorjahr
+              </span>
+          }
+        </div>
+      }
+    </a>
+    <a class="cc-kpi" routerLink="/kosten">
+      <div class="cc-kpi-label"><mat-icon>receipt_long</mat-icon>Abzugsfähige Kosten</div>
+      <div class="cc-kpi-value num"><span class="cur">CHF</span>{{ kostenTotal() === null ? '–' : (kostenTotal() | number:'1.2-2') }}</div>
+      <div class="cc-kpi-sub">{{ kostenCount() }} Einträge</div>
+    </a>
+    <a class="cc-kpi" routerLink="/vergabung">
+      <div class="cc-kpi-label"><mat-icon>volunteer_activism</mat-icon>Vergabungen</div>
+      <div class="cc-kpi-value num"><span class="cur">CHF</span>{{ vergabungenTotal() === null ? '–' : (vergabungenTotal() | number:'1.2-2') }}</div>
+      <div class="cc-kpi-sub">{{ vergabungenCount() }} Zahlungen</div>
+    </a>
+    <a class="cc-kpi" routerLink="/schuld">
+      <div class="cc-kpi-label"><mat-icon>account_balance</mat-icon>Schulden</div>
+      <div class="cc-kpi-value num"><span class="cur">CHF</span>{{ schuldenTotal() === null ? '–' : (schuldenTotal() | number:'1.2-2') }}</div>
+      <div class="cc-kpi-sub num">Zinsen CHF {{ schuldzinsen() | number:'1.2-2' }}</div>
+    </a>
+  </section>
+
+  <!-- Diagramme -->
+  <div class="cc-dash-grid">
+    <section class="cc-panel">
+      <div class="cc-panel-head">
+        <h2>Ausgaben pro Monat</h2>
+        <span class="cc-panel-tools muted num">Höchster Monat: CHF {{ monatMax() | number:'1.0-0' }}</span>
+      </div>
+      <div class="cc-panel-body">
+        @if (ausgabenCount() === 0) {
+          <div class="state"><mat-icon>bar_chart</mat-icon>Keine Ausgaben im Jahr {{ jahr() }}</div>
+        } @else {
+          <div class="cc-columns" role="list" aria-label="Ausgaben pro Monat">
+            @for (m of monate(); track m.label) {
+              <div class="cc-column" role="listitem" tabindex="0"
+                   [attr.aria-label]="m.label + ': CHF ' + (m.total | number:'1.2-2')">
+                <span class="cc-tip num">{{ m.label }} · CHF {{ m.total | number:'1.2-2' }}</span>
+                <div class="cc-column-track">
+                  <div class="cc-column-bar" [class.max]="m.total > 0 && m.total === monatMax()" [style.height.%]="m.height"></div>
+                </div>
+                <span class="cc-column-label">{{ m.label }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="cc-panel">
+      <div class="cc-panel-head">
+        <h2>Nach Kategorie</h2>
+      </div>
+      <div class="cc-panel-body">
+        @if (kategorien().length === 0) {
+          <div class="state"><mat-icon>donut_large</mat-icon>Keine Daten</div>
+        } @else {
+          <ul class="cc-hbars">
+            @for (k of kategorien(); track k.meta.label) {
+              <li>
+                <div class="cc-hbar-head">
+                  <span class="cc-cat" [style.--cat]="k.meta.color" [style.--cat-bg]="k.meta.color + '1c'"><mat-icon>{{ k.meta.icon }}</mat-icon>{{ k.meta.label }}</span>
+                  <span class="cc-hbar-values num"><strong>CHF {{ k.total | number:'1.0-0' }}</strong><span class="muted">{{ k.share | number:'1.0-0' }} %</span></span>
+                </div>
+                <div class="cc-hbar-track" aria-hidden="true"><div class="cc-hbar" [style.width.%]="k.width"></div></div>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+  </div>
+
+  <!-- Listen -->
+  <div class="cc-dash-grid">
+    <section class="cc-panel">
+      <div class="cc-panel-head">
+        <h2>Letzte Buchungen</h2>
+        <a class="cc-panel-tools cc-link" routerLink="/ausgabe">Alle anzeigen <mat-icon>arrow_forward</mat-icon></a>
+      </div>
+      @if (letzteBuchungen().length === 0) {
+        <div class="state"><mat-icon>receipt_long</mat-icon>Keine Buchungen im Jahr {{ jahr() }}</div>
+      } @else {
+        <ul class="cc-list">
+          @for (a of letzteBuchungen(); track a.id) {
+            <li>
+              <a [routerLink]="['/ausgabe/edit', a.id]">
+                <span class="cc-date">
+                  <span class="d">{{ a.datum | date:'dd' }}</span>
+                  <span class="m">{{ a.datum | date:'MMM' }}</span>
+                </span>
+                <span class="cc-list-main">
+                  <span class="cc-strong">{{ a.empfaenger }}</span>
+                  <span class="muted">{{ meta(a.kategorie).label }}</span>
+                </span>
+                <span class="cc-amount num"><span class="cur">CHF</span>{{ a.betrag | number:'1.2-2' }}</span>
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="cc-panel">
+      <div class="cc-panel-head">
+        <h2>Weitere Bereiche</h2>
+      </div>
+      <ul class="cc-list">
+        @for (b of bereiche(); track b.link) {
+          <li>
+            <a [routerLink]="b.link">
+              <span class="cc-list-icon"><mat-icon>{{ b.icon }}</mat-icon></span>
+              <span class="cc-list-main">
+                <span class="cc-strong">{{ b.label }}</span>
+                <span class="muted">{{ b.hint }}</span>
+              </span>
+              <span class="cc-strong num">{{ b.value }}</span>
+              <mat-icon class="cc-chevron">chevron_right</mat-icon>
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+  </div>
+</div>

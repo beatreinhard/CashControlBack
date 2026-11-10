@@ -6,7 +6,8 @@ import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/ma
 import {MatOption} from '@angular/material/core';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatDialog} from '@angular/material/dialog';
-import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
 import {MatInput} from '@angular/material/input';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatSelect} from '@angular/material/select';
@@ -17,6 +18,8 @@ import {ConfirmDialogComponent, ConfirmDialogData} from '../../../shared/confirm
 import {NotificationService} from '../../../shared/notification.service';
 import {parseBackendDate, toBackendDate} from '../../../shared/date-utils';
 import {injectPersonOptions} from '../../../shared/person-options';
+import {kategorieMeta} from '../ausgabe-kategorie-meta';
+import {PageHeaderComponent} from '../../../shared/page-header/page-header.component';
 
 const MAX_TEXT_LENGTH = 255;
 
@@ -44,18 +47,22 @@ type AusgabeForm = FormGroup<{
     MatError,
     MatFormField,
     MatHint,
+    MatIcon,
     MatInput,
     MatLabel,
     MatOption,
+    MatPrefix,
     MatProgressBar,
     MatSelect,
     MatSuffix,
+    PageHeaderComponent,
     ReactiveFormsModule,
     RouterLink
   ],
   templateUrl: './ausgabe-edit.component.html',
   styleUrl: './ausgabe-edit.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'cc-page' }
 })
 export class AusgabeEditComponent {
   /** undefined/null => Create, string => Edit */
@@ -91,6 +98,8 @@ export class AusgabeEditComponent {
 
   protected readonly maxTextLength = MAX_TEXT_LENGTH;
   protected readonly form: AusgabeForm = this.buildForm();
+
+  protected readonly meta = kategorieMeta;
 
   constructor() {
     // Bridge: Resource-Signal -> imperatives Reactive-Forms-API

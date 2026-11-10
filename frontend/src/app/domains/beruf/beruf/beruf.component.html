@@ -1,9 +1,10 @@
-<h1 class="page-title">Berufe</h1>
-
-<app-beruf-search></app-beruf-search>
-
-<div>
+<app-page-header title="Berufe" subtitle="Anstellungen, Pensum und Arbeitsweg pro Steuerjahr">
   <a mat-flat-button routerLink="/beruf/create">
+    <mat-icon>add</mat-icon>
     Beruf erfassen
   </a>
+</app-page-header>
+
+<div class="cc-content">
+  <app-beruf-search></app-beruf-search>
 </div>

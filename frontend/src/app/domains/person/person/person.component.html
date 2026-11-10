@@ -1,9 +1,10 @@
-<h1 class="page-title">Person</h1>
-
-<app-person-search></app-person-search>
-
-<div>
+<app-page-header title="Personen" subtitle="Personen Ihres Haushalts">
   <a mat-flat-button routerLink="/person/create">
+    <mat-icon>add</mat-icon>
     Person erfassen
   </a>
+</app-page-header>
+
+<div class="cc-content">
+  <app-person-search></app-person-search>
 </div>

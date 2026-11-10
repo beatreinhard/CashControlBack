@@ -1,12 +1,25 @@
-<app-year-filter (jahrChange)="jahr.set($event)"></app-year-filter>
+<section class="cc-panel">
+  <div class="cc-panel-head">
+    <h2>Rechnungen</h2>
+    @if (!loading() && !error()) {
+      <span class="cc-count">{{ result().length }}</span>
+    }
+    <div class="cc-panel-tools">
+      <app-year-filter (jahrChange)="jahr.set($event)"></app-year-filter>
+    </div>
+  </div>
 
-@if (loading()) {
-  <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
-} @else if (error()) {
-  <p class="error">{{ error() }}</p>
-} @else {
-  <app-grundstueckunterhalt-list
-    [items]="result()"
-    (grundstueckunterhaltSelected)="openGrundstueckunterhalt($event)">
-  </app-grundstueckunterhalt-list>
-}
+  @if (loading()) {
+    <div class="state">
+      <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+      Daten werden geladen …
+    </div>
+  } @else if (error()) {
+    <div class="state"><mat-icon>error_outline</mat-icon><p class="error">{{ error() }}</p></div>
+  } @else {
+    <app-grundstueckunterhalt-list
+      [items]="result()"
+      (grundstueckunterhaltSelected)="openGrundstueckunterhalt($event)">
+    </app-grundstueckunterhalt-list>
+  }
+</section>

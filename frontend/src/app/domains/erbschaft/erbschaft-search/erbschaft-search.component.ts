@@ -5,13 +5,15 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {ErbschaftControllerApi} from '../../../generated';
 import {ErbschaftListComponent} from '../erbschaft-list/erbschaft-list.component';
 import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-erbschaft-search',
   imports: [
     ErbschaftListComponent,
     MatProgressSpinner,
-    YearFilterComponent
+    YearFilterComponent,
+    MatIcon
   ],
   templateUrl: './erbschaft-search.component.html',
   styleUrl: './erbschaft-search.component.css',

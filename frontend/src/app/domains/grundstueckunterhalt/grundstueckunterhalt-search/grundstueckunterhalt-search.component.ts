@@ -5,13 +5,15 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {GrundstueckunterhaltControllerApi} from '../../../generated';
 import {GrundstueckunterhaltListComponent} from '../grundstueckunterhalt-list/grundstueckunterhalt-list.component';
 import {YearFilterComponent} from '../../../shared/year-filter/year-filter.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-grundstueckunterhalt-search',
   imports: [
     GrundstueckunterhaltListComponent,
     MatProgressSpinner,
-    YearFilterComponent
+    YearFilterComponent,
+    MatIcon
   ],
   templateUrl: './grundstueckunterhalt-search.component.html',
   styleUrl: './grundstueckunterhalt-search.component.css',
